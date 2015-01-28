@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
 import fvs.taxe.dialog.DialogEndGame;
 import gamelogic.Game;
@@ -28,6 +29,7 @@ public class GameScreen extends ScreenAdapter {
     private Tooltip tooltip;
     private Context context;
 
+
     private StationController stationController;
     private TopBarController topBarController;
     private ResourceController resourceController;
@@ -36,12 +38,15 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(TaxeGame game) {
         this.game = game;
-        stage = new Stage();
+        stage = new Stage( new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
 
         gameLogic = Game.getInstance();
         context = new Context(stage, skin, game, gameLogic);
         Gdx.input.setInputProcessor(stage);
+
+
 
         mapTexture = new Texture(Gdx.files.internal("game-map.png"));
         map = gameLogic.getMap();
@@ -84,7 +89,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(mapTexture, 0, 0);
+        game.batch.draw(mapTexture, 0, 0, TaxeGame.WIDTH, TaxeGame.HEIGHT);
         game.batch.end();
 
         topBarController.drawBackground();
@@ -131,6 +136,13 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         mapTexture.dispose();
         stage.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height){
+        stage.getViewport().update(width, height, true);
+
+
     }
 
 }

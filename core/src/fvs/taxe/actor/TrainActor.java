@@ -66,4 +66,7 @@ public class TrainActor extends Image {
     public Rectangle getBounds() {
         return bounds;
     }
+
+
 }
+

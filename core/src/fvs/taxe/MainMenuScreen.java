@@ -6,30 +6,48 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 public class MainMenuScreen extends ScreenAdapter {
-    TaxeGame game;
-    OrthographicCamera camera;
-    Rectangle playBounds;
-    Rectangle exitBounds;
-    Vector3 touchPoint;
-    Texture mapTexture;
-    Image mapImage;
+    private TaxeGame game;
+    private OrthographicCamera camera;
+    private Rectangle playBounds;
+    private Rectangle exitBounds;
+    private Vector3 touchPoint;
+    private Sprite mapSprite;
+    private Viewport viewport;
+
+
+
+
+
+
 
     public MainMenuScreen(TaxeGame game) {
         this.game = game;
-        camera = new OrthographicCamera(TaxeGame.WIDTH, TaxeGame.HEIGHT);
-        camera.setToOrtho(false);
 
-        playBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 350, 400, 100);
-        exitBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 200, 400, 100);
+
+        playBounds = new Rectangle(TaxeGame.WIDTH/2 -200 , 350, 400, 100);
+        exitBounds = new Rectangle(TaxeGame.WIDTH/2 - 200, 200, 400, 100);
         touchPoint = new Vector3();
-        mapTexture = new Texture(Gdx.files.internal("game-map.png"));
-        mapImage = new Image(mapTexture);
+        mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
+        mapSprite.setPosition(0,0);
+
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT, camera);
+        viewport.apply();
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+
+
+
+
+
     }
 
     public void update() {
@@ -51,13 +69,14 @@ public class MainMenuScreen extends ScreenAdapter {
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Draw transparent map in the background
+
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
         Color c = game.batch.getColor();
         game.batch.setColor(c.r, c.g, c.b, (float) 0.3);
-        game.batch.draw(mapTexture, 0, 0);
+        game.batch.draw(mapSprite, 0, 0, TaxeGame.WIDTH, TaxeGame.HEIGHT);
         game.batch.setColor(c);
         game.batch.end();
 
@@ -88,4 +107,11 @@ public class MainMenuScreen extends ScreenAdapter {
         update();
         draw();
     }
+
+    @Override
+    public void resize(int width, int height){
+        viewport.update(width, height, true);
+        camera.update();
+    }
+
 }

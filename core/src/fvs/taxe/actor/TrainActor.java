@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import gamelogic.Game;
 import gamelogic.GameState;
-import gamelogic.map.IPositionable;
+import gamelogic.map.Position;
 import gamelogic.resource.Train;
 
 public class TrainActor extends Image {
@@ -24,7 +24,7 @@ public class TrainActor extends Image {
         leftDrawable = getDrawable();
         rightDrawable = new Image(new Texture(Gdx.files.internal(train.getRightImage()))).getDrawable();
 
-        IPositionable position = train.getPosition();
+        Position position = train.getPosition();
 
         train.setActor(this);
         this.train = train;

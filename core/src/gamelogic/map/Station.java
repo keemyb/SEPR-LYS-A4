@@ -4,10 +4,10 @@ import fvs.taxe.actor.StationActor;
 
 public class Station {
     private String name;
-    private IPositionable location;
+    private Position location;
     private StationActor actor;
 
-    public Station(String name, IPositionable location) {
+    public Station(String name, Position location) {
         this.name = name;
         this.location = location;
     }
@@ -20,11 +20,11 @@ public class Station {
         this.name = name;
     }
 
-    public IPositionable getLocation() {
+    public Position getLocation() {
         return location;
     }
 
-    public void setLocation(IPositionable location) {
+    public void setLocation(Position location) {
         this.location = location;
     }
 

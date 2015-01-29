@@ -16,7 +16,7 @@ import gamelogic.GameState;
 import gamelogic.Player;
 import gamelogic.map.Junction;
 import gamelogic.map.Connection;
-import gamelogic.map.IPositionable;
+import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
@@ -129,8 +129,8 @@ public class StationController {
         game.shapeRenderer.setColor(color);
 
         for (Connection connection : connections) {
-            IPositionable start = connection.getStation1().getLocation();
-            IPositionable end = connection.getStation2().getLocation();
+            Position start = connection.getStation1().getLocation();
+            Position end = connection.getStation2().getLocation();
             game.shapeRenderer.rectLine(start.getX(), start.getY(), end.getX(), end.getY(), CONNECTION_LINE_WIDTH);
         }
         game.shapeRenderer.end();

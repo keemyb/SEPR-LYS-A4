@@ -1,7 +1,7 @@
 package gamelogic.resource;
 
 import fvs.taxe.actor.TrainActor;
-import gamelogic.map.IPositionable;
+import gamelogic.map.Position;
 import gamelogic.map.Station;
 import util.Tuple;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class Train extends Resource {
     private String leftImage;
     private String rightImage;
-    private IPositionable position;
+    private Position position;
     private TrainActor actor;
     private int speed;
     // Final destination should be set to null after firing the arrival event
@@ -49,11 +49,11 @@ public class Train extends Resource {
         return "trains/cursor/" + leftImage;
     }
 
-    public IPositionable getPosition() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPosition(IPositionable position) {
+    public void setPosition(Position position) {
         this.position = position;
         changed();
     }

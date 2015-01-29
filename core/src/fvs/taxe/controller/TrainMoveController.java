@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.Player;
 import gamelogic.map.Junction;
-import gamelogic.map.IPositionable;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Resource;
@@ -72,11 +71,11 @@ public class TrainMoveController {
 
     public void addMoveActions() {
         SequenceAction action = Actions.sequence();
-        IPositionable current = train.getPosition();
+        Position current = train.getPosition();
         action.addAction(beforeAction());
 
         for (final Station station : train.getRoute()) {
-            IPositionable next = station.getLocation();
+            Position next = station.getLocation();
             float duration = getDistance(current, next) / train.getSpeed();
             action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
             action.addAction(perStationAction(station));
@@ -90,7 +89,7 @@ public class TrainMoveController {
         train.getActor().addAction(action);
     }
 
-    private float getDistance(IPositionable a, IPositionable b) {
+    private float getDistance(Position a, Position b) {
         return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
     }
 

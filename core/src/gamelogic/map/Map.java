@@ -146,7 +146,7 @@ public class Map {
         return null;
     }
 
-    public Station getStationFromPosition(IPositionable position) {
+    public Station getStationFromPosition(Position position) {
         for (Station station : stations) {
             if (station.getLocation().equals(position)) {
                 return station;
@@ -156,10 +156,10 @@ public class Map {
         throw new RuntimeException("Station does not exist for that position");
     }
 
-    public List<Station> createRoute(List<IPositionable> positions) {
+    public List<Station> createRoute(List<Position> positions) {
         List<Station> route = new ArrayList<Station>();
 
-        for (IPositionable position : positions) {
+        for (Position position : positions) {
             route.add(getStationFromPosition(position));
         }
 

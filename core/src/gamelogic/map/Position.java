@@ -1,6 +1,6 @@
 package gamelogic.map;
 
-public class Position extends IPositionable {
+public class Position {
     private int x;
     private int y;
 
@@ -9,27 +9,22 @@ public class Position extends IPositionable {
         this.y = y;
     }
 
-    @Override
     public int getX() {
         return x;
     }
 
-    @Override
     public void setX(int x) {
         this.x = x;
     }
 
-    @Override
     public int getY() {
         return y;
     }
 
-    @Override
     public void setY(int y) {
         this.y = y;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (o instanceof Position) {
             Position pos = (Position) o;

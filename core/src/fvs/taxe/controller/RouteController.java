@@ -10,7 +10,7 @@ import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import gamelogic.GameState;
 import gamelogic.map.Junction;
-import gamelogic.map.IPositionable;
+import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class RouteController {
     private Context context;
     private Group routingButtons = new Group();
-    private List<IPositionable> positions;
+    private List<Position> positions;
     private boolean isRouting = false;
     private Train train;
     private boolean canEndRouting = true;
@@ -41,7 +41,7 @@ public class RouteController {
     public void begin(Train train) {
         this.train = train;
         isRouting = true;
-        positions = new ArrayList<IPositionable>();
+        positions = new ArrayList<Position>();
         positions.add(train.getPosition());
         context.getGameLogic().setState(GameState.ROUTING);
         addRoutingButtons();
@@ -53,7 +53,7 @@ public class RouteController {
 
     private void addStationToRoute(Station station) {
         // the latest position chosen in the positions so far
-        IPositionable lastPosition = positions.get(positions.size() - 1);
+        Position lastPosition = positions.get(positions.size() - 1);
         Station lastStation = context.getGameLogic().getMap().getStationFromPosition(lastPosition);
 
         boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(station.getName(), lastStation.getName());
@@ -118,11 +118,11 @@ public class RouteController {
     public void drawRoute(Color color) {
         TaxeGame game = context.getTaxeGame();
 
-        IPositionable previousPosition = null;
+        Position previousPosition = null;
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.setColor(color);
 
-        for (IPositionable position : positions) {
+        for (Position position : positions) {
             if (previousPosition != null) {
                 game.shapeRenderer.rectLine(previousPosition.getX(), previousPosition.getY(), position.getX(),
                         position.getY(), StationController.CONNECTION_LINE_WIDTH);

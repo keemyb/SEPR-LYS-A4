@@ -14,7 +14,6 @@ public class TrainActor extends Image {
     public static int width = 36;
     public static int height = 36;
     public Train train;
-    public boolean facingLeft;
     private Rectangle bounds;
     private float previousX;
     private Drawable leftDrawable;
@@ -33,7 +32,6 @@ public class TrainActor extends Image {
         bounds = new Rectangle();
         setPosition(position.getX() - width / 2, position.getY() - height / 2);
         previousX = getX();
-        facingLeft = true;
     }
 
     @Override
@@ -50,16 +48,7 @@ public class TrainActor extends Image {
     }
 
     public void updateFacingDirection() {
-        float currentX = getX();
-
-        if (facingLeft && previousX < currentX) {
-            setDrawable(rightDrawable);
-            facingLeft = false;
-        } else if (!facingLeft && previousX > currentX) {
-            setDrawable(leftDrawable);
-            facingLeft = true;
-        }
-
+        setDrawable((previousX < getX()) ? rightDrawable : leftDrawable);
         previousX = getX();
     }
 

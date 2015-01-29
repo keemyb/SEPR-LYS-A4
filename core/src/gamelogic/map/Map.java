@@ -1,21 +1,27 @@
 package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import fvs.taxe.controller.TrainMoveController;
+import util.Tuple;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class Map {
     private List<Station> stations;
     private List<Connection> connections;
+    private List<List<Float>> distances;
     private Random random = new Random();
 
     public Map() {
         stations = new ArrayList<Station>();
         connections = new ArrayList<Connection>();
+        distances = new ArrayList<>();
 
         initialise();
     }
@@ -26,6 +32,8 @@ public class Map {
 
         parseStations(jsonVal);
         parseConnections(jsonVal);
+
+        computeDistances();
     }
 
     private void parseConnections(JsonValue jsonVal) {
@@ -165,4 +173,53 @@ public class Map {
 
         return route;
     }
+
+    /**
+     * Uses Floyd-Warshall algorithm to compute shortest distances between every pair of stations.
+     */
+    private void computeDistances() {
+
+        // Setting all initial distances to infinity or 0, if stations are / aren't the same
+        for (int i = 0; i < stations.size(); i++) {
+            distances.add(new ArrayList<Float>());
+            for (int j = 0; j < stations.size(); j++) {
+                Station si = stations.get(i);
+                Station sj = stations.get(j);
+                if (i == j) {
+                    distances.get(i).add(0f);
+                }
+                else if (doesConnectionExist(si.getName(), sj.getName())) {
+                    Position loci = si.getLocation();
+                    Position locj = sj.getLocation();
+                    distances.get(i).add(Vector2.dst(loci.getX(), loci.getY(), locj.getX(), locj.getY()));
+                }
+                else {
+                    distances.get(i).add(Float.MAX_VALUE);
+                }
+            }
+        }
+
+        // Execute Floyd-Warshall algorithm
+        for (int k = 0; k < stations.size(); k++) {
+            for (int i = 0; i < stations.size(); i++) {
+                for (int j = 0; j < stations.size(); j++) {
+                    if (distances.get(i).get(k) != Float.MAX_VALUE && distances.get(k).get(j) != Float.MAX_VALUE) {
+                        if (distances.get(i).get(j) > distances.get(i).get(k) + distances.get(k).get(j)) {
+                            distances.get(i).set(j, distances.get(i).get(k) + distances.get(k).get(j));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Debug info: printing distances
+//        for (int i = 0; i < stations.size(); i++) {
+//            for (int j = 0; j < stations.size(); j++) {
+//                System.out.println(stations.get(i).getName() + " > " +
+//                        stations.get(j).getName() + ": " +
+//                        distances.get(i).get(j));
+//            }
+//        }
+    }
+
 }

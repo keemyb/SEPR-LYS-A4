@@ -41,7 +41,7 @@ public class GoalController {
         goalButtons.remove();
         goalButtons.clear();
 
-        float top = (float) TaxeGame.WORLD_HEIGTH;
+        float top = (float) TaxeGame.WORLD_HEIGHT;
         float x = 10.0f;
         float y = top - 10.0f - TopBarController.CONTROLS_HEIGHT;
 

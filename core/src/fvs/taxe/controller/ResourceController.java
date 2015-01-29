@@ -30,13 +30,13 @@ public class ResourceController {
 
         game.batch.begin();
         game.fontSmall.setColor(Color.BLACK);
-        game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGTH - 250.0f);
+        game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
         game.batch.end();
     }
 
     public void drawPlayerResources(Player player) {
 
-        float top = (float) TaxeGame.WORLD_HEIGTH;
+        float top = (float) TaxeGame.WORLD_HEIGHT;
         float x = 10.0f;
         float y = top - 250.0f;
         y -= 50;

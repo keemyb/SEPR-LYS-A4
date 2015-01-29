@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class TaxeGame extends Game {
 
-    //public static final int WORLD_WIDTH=1366,WORLD_HEIGTH=768;
+    //public static final int WORLD_WIDTH=1366,WORLD_HEIGHT=768;
     // Using native res of the map image we are using at the moment
-    public static final int WORLD_WIDTH = 1200, WORLD_HEIGTH = 700;
+    public static final int WORLD_WIDTH = 1200, WORLD_HEIGHT = 700;
 
     public SpriteBatch batch;
     public BitmapFont font;

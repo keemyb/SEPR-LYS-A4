@@ -35,7 +35,7 @@ public class MainMenuScreen extends ScreenAdapter {
         mapSprite.setPosition(0, 0);
 
         camera = new OrthographicCamera();
-        viewport = new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGTH, camera);
+        viewport = new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT, camera);
         viewport.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
@@ -68,7 +68,7 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batch.begin();
         Color c = game.batch.getColor();
         game.batch.setColor(c.r, c.g, c.b, (float) 0.3);
-        game.batch.draw(mapSprite, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGTH);
+        game.batch.draw(mapSprite, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT);
         game.batch.setColor(c);
         game.batch.end();
 

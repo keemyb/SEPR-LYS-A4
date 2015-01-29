@@ -13,7 +13,7 @@ public class TaxeGame extends Game {
 
     //public static final int WORLD_WIDTH=1366,WORLD_HEIGHT=768;
     // Using native res of the map image we are using at the moment
-    public static final int WORLD_WIDTH = 1200, WORLD_HEIGHT = 700;
+    public static final int WORLD_WIDTH = 1000, WORLD_HEIGHT = 750;
 
     public SpriteBatch batch;
     public BitmapFont font;

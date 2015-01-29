@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
 import fvs.taxe.dialog.DialogEndGame;
-import gamelogic.Game;
-import gamelogic.GameState;
-import gamelogic.GameStateListener;
-import gamelogic.TurnListener;
+import gamelogic.*;
 import gamelogic.map.Map;
 
 
@@ -38,7 +35,7 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(TaxeGame game) {
         this.game = game;
-        stage = new Stage(new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT));
+        stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
 
@@ -88,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(mapTexture, 0, 0, TaxeGame.WIDTH, TaxeGame.HEIGHT);
+        game.batch.draw(mapTexture, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT);
         game.batch.end();
 
         topBarController.drawBackground();
@@ -115,7 +112,12 @@ public class GameScreen extends ScreenAdapter {
         stage.draw();
 
         game.batch.begin();
-        game.fontSmall.draw(game.batch, "Turn " + (gameLogic.getPlayerManager().getTurnNumber() + 1) + "/" + gameLogic.TOTAL_TURNS, (float) TaxeGame.WIDTH - 90.0f, 20.0f);
+        float x = 10, y = 80;
+        for (Player p: gameLogic.getPlayerManager().getAllPlayers()) {
+            game.fontSmall.draw(game.batch, "Player one: " + p.getScore(), x, y);
+            y -= 20;
+        }
+        game.fontSmall.draw(game.batch, "Turn " + (gameLogic.getPlayerManager().getTurnNumber() + 1) + "/" + gameLogic.TOTAL_TURNS, (float) x, y);
         game.batch.end();
 
         resourceController.drawHeaderText();

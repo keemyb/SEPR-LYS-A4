@@ -53,6 +53,7 @@ public class TopBarController {
     public void displayFlashMessage(String message, Color color, float time) {
         flashMessage.setText(message);
         flashMessage.setColor(color);
+        flashMessage.setPosition(TaxeGame.WORLD_WIDTH / 2 - flashMessage.getTextBounds().width / 2, TaxeGame.WORLD_HEIGHT - 24);
         flashMessage.addAction(sequence(delay(time), fadeOut(0.25f)));
 
     }

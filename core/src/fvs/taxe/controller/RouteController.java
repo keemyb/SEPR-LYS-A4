@@ -60,7 +60,11 @@ public class RouteController {
 
         if (!hasConnection) {
             context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
-        } else {
+        }
+        else if (positions.contains(station.getLocation())) {
+            context.getTopBarController().displayFlashMessage("You can not visit the same station twice in one route.", Color.RED);
+        }
+        else {
             positions.add(station.getLocation());
             canEndRouting = !(station instanceof Junction);
         }

@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
 import fvs.taxe.dialog.DialogEndGame;
-import gamelogic.Game;
-import gamelogic.GameState;
-import gamelogic.GameStateListener;
-import gamelogic.TurnListener;
+import gamelogic.*;
 import gamelogic.map.Map;
 
 
@@ -38,7 +35,7 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(TaxeGame game) {
         this.game = game;
-        stage = new Stage(new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT));
+        stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
 
@@ -88,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(mapTexture, 0, 0, TaxeGame.WIDTH, TaxeGame.HEIGHT);
+        game.batch.draw(mapTexture, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT);
         game.batch.end();
 
         topBarController.drawBackground();

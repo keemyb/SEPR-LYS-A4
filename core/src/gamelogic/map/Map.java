@@ -186,30 +186,24 @@ public class Map {
                 Station sj = stations.get(j);
                 if (i == j) {
                     distances.get(i).add(0f);
-                }
-                else if (doesConnectionExist(si.getName(), sj.getName())) {
+                } else if (doesConnectionExist(si.getName(), sj.getName())) {
                     Position loci = si.getLocation();
                     Position locj = sj.getLocation();
                     distances.get(i).add(Vector2.dst(loci.getX(), loci.getY(), locj.getX(), locj.getY()));
-                }
-                else {
+                } else {
                     distances.get(i).add(Float.MAX_VALUE);
                 }
             }
         }
 
         // Execute Floyd-Warshall algorithm
-        for (int k = 0; k < stations.size(); k++) {
-            for (int i = 0; i < stations.size(); i++) {
-                for (int j = 0; j < stations.size(); j++) {
-                    if (distances.get(i).get(k) != Float.MAX_VALUE && distances.get(k).get(j) != Float.MAX_VALUE) {
+        for (int k = 0; k < stations.size(); k++)
+            for (int i = 0; i < stations.size(); i++)
+                for (int j = 0; j < stations.size(); j++)
+                    if (distances.get(i).get(k) != Float.MAX_VALUE && distances.get(k).get(j) != Float.MAX_VALUE)
                         if (distances.get(i).get(j) > distances.get(i).get(k) + distances.get(k).get(j)) {
                             distances.get(i).set(j, distances.get(i).get(k) + distances.get(k).get(j));
                         }
-                    }
-                }
-            }
-        }
 
         // Debug info: printing distances
 //        for (int i = 0; i < stations.size(); i++) {
@@ -219,6 +213,10 @@ public class Map {
 //                        distances.get(i).get(j));
 //            }
 //        }
+    }
+
+    public float getDistance(Station a, Station b) {
+        return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
     }
 
 }

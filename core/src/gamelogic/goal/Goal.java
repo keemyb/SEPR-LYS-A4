@@ -1,10 +1,12 @@
 package gamelogic.goal;
 
+import gamelogic.Game;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
 import util.Tuple;
 
 public class Goal {
+    private int score;
     private Station origin;
     private Station destination;
     private int turnIssued;
@@ -16,6 +18,7 @@ public class Goal {
         this.origin = origin;
         this.destination = destination;
         this.turnIssued = turn;
+        updateScore();
     }
 
     public void addConstraint(String name, String value) {
@@ -49,7 +52,7 @@ public class Goal {
         if (trainName != null) {
             trainString = trainName;
         }
-        return "Send a " + trainString + " from " + origin.getName() + " to " + destination.getName();
+        return "Send a " + trainString + " from " + origin.getName() + " to " + destination.getName() + " (" + score + ")";
     }
 
     public void setComplete() {
@@ -59,4 +62,14 @@ public class Goal {
     public boolean getComplete() {
         return complete;
     }
+
+    public void updateScore() {
+        int distance = (int)Game.getInstance().getMap().getDistance(origin, destination);
+        score = Math.max(50, distance - distance % 50);
+    }
+
+    public int getScore() {
+        return score;
+    }
+
 }

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import gamelogic.GameState;
-import gamelogic.map.CollisionStation;
+import gamelogic.map.Junction;
 import gamelogic.map.IPositionable;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
@@ -62,7 +62,7 @@ public class RouteController {
             context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
         } else {
             positions.add(station.getLocation());
-            canEndRouting = !(station instanceof CollisionStation);
+            canEndRouting = !(station instanceof Junction);
         }
     }
 

@@ -2,7 +2,7 @@ package gamelogic.goal;
 
 import gamelogic.Game;
 import gamelogic.Player;
-import gamelogic.map.CollisionStation;
+import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.resource.ResourceManager;
@@ -24,12 +24,12 @@ public class GoalManager {
         Station origin;
         do {
             origin = map.getRandomStation();
-        } while (origin instanceof CollisionStation);
+        } while (origin instanceof Junction);
         Station destination;
         do {
             destination = map.getRandomStation();
             // always true, really?
-        } while (destination == origin || destination instanceof CollisionStation);
+        } while (destination == origin || destination instanceof Junction);
 
         Goal goal = new Goal(origin, destination, turn);
 

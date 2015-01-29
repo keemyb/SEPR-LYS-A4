@@ -8,13 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
-import fvs.taxe.actor.CollisionStationActor;
+import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogStationMultitrain;
 import gamelogic.Game;
 import gamelogic.GameState;
 import gamelogic.Player;
-import gamelogic.map.CollisionStation;
+import gamelogic.map.Junction;
 import gamelogic.map.Connection;
 import gamelogic.map.IPositionable;
 import gamelogic.map.Station;
@@ -87,9 +87,9 @@ public class StationController {
     }
 
     private void renderCollisionStation(final Station collisionStation) {
-        final CollisionStationActor collisionStationActor = new CollisionStationActor(collisionStation.getLocation());
+        final JunctionActor junctionActor = new JunctionActor(collisionStation.getLocation());
 
-        collisionStationActor.addListener(new ClickListener() {
+        junctionActor.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stationClicked(collisionStation);
@@ -97,7 +97,7 @@ public class StationController {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                tooltip.setPosition(collisionStationActor.getX() + 10, collisionStationActor.getY() + 10);
+                tooltip.setPosition(junctionActor.getX() + 10, junctionActor.getY() + 10);
                 tooltip.show("Junction");
             }
 
@@ -107,14 +107,14 @@ public class StationController {
             }
         });
 
-        context.getStage().addActor(collisionStationActor);
+        context.getStage().addActor(junctionActor);
     }
 
     public void renderStations() {
         List<Station> stations = context.getGameLogic().getMap().getStations();
 
         for (Station station : stations) {
-            if (station instanceof CollisionStation) {
+            if (station instanceof Junction) {
                 renderCollisionStation(station);
             } else {
                 renderStation(station);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.Player;
-import gamelogic.map.CollisionStation;
+import gamelogic.map.Junction;
 import gamelogic.map.IPositionable;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
@@ -96,7 +96,7 @@ public class TrainMoveController {
 
     private void collisions(Station station) {
         //test for train collisions at Junction point
-        if (!(station instanceof CollisionStation)) {
+        if (!(station instanceof Junction)) {
             return;
         }
 

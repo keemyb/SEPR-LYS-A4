@@ -38,14 +38,13 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(TaxeGame game) {
         this.game = game;
-        stage = new Stage( new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT));
+        stage = new Stage(new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
 
         gameLogic = Game.getInstance();
         context = new Context(stage, skin, game, gameLogic);
         Gdx.input.setInputProcessor(stage);
-
 
 
         mapTexture = new Texture(Gdx.files.internal("game-map.png"));
@@ -139,7 +138,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
 
 

@@ -42,7 +42,7 @@ public class TopBarController {
 
     private void createFlashActor() {
         flashMessage = new Label("", context.getSkin());
-        flashMessage.setPosition(TaxeGame.WIDTH/2- 50, TaxeGame.HEIGHT - 24);
+        flashMessage.setPosition(TaxeGame.WIDTH / 2 - 50, TaxeGame.HEIGHT - 24);
         context.getStage().addActor(flashMessage);
     }
 

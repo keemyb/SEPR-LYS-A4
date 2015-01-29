@@ -2,23 +2,23 @@ package test;
 
 import gamelogic.Player;
 import gamelogic.PlayerManager;
-import gamelogic.resource.ResourceManager;
+import gamelogic.resource.TrainManager;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class ResourceManagerTest extends LibGdxTest {
+public class TrainManagerTest extends LibGdxTest {
     @Test
-    public void testAddResourceToPlayer() throws Exception {
+    public void testAddTrainToPlayer() throws Exception {
         PlayerManager pm = new PlayerManager();
         Player player = new Player(pm, 1);
-        ResourceManager rm = new ResourceManager();
+        TrainManager rm = new TrainManager();
 
         // add enough resources to exceed maximum
         for (int i = 0; i < 20; i++) {
-            rm.addRandomResourceToPlayer(player);
+            rm.addRandomTrainToPlayer(player);
         }
 
-        assertTrue(player.getResources().size() == rm.CONFIG_MAX_RESOURCES);
+        assertTrue(player.getResources().size() == rm.CONFIG_MAX_TRAINS);
     }
 }

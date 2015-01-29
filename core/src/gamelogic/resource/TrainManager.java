@@ -9,12 +9,12 @@ import util.Tuple;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ResourceManager {
-    public final int CONFIG_MAX_RESOURCES = 7;
+public class TrainManager {
+    public final int CONFIG_MAX_TRAINS = 7;
     private Random random = new Random();
     private ArrayList<Tuple<String, Integer>> trains;
 
-    public ResourceManager() {
+    public TrainManager() {
         initialise();
     }
 
@@ -49,7 +49,7 @@ public class ResourceManager {
         return trains;
     }
 
-    private Resource getRandomResource() {
+    private Train getRandomTrain() {
 
         int index = random.nextInt(trains.size());
         Tuple<String, Integer> train = trains.get(index);
@@ -59,16 +59,16 @@ public class ResourceManager {
 
     }
 
-    public void addRandomResourceToPlayer(Player player) {
-        addResourceToPlayer(player, getRandomResource());
+    public void addRandomTrainToPlayer(Player player) {
+        addTrainToPlayer(player, getRandomTrain());
     }
 
-    private void addResourceToPlayer(Player player, Resource resource) {
-        if (player.getResources().size() >= CONFIG_MAX_RESOURCES) {
+    private void addTrainToPlayer(Player player, Train train) {
+        if (player.getResources().size() >= CONFIG_MAX_TRAINS) {
             return;
         }
 
-        resource.setPlayer(player);
-        player.addResource(resource);
+        train.setPlayer(player);
+        player.addResource(train);
     }
 }

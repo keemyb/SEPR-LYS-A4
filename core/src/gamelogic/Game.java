@@ -2,7 +2,7 @@ package gamelogic;
 
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
-import gamelogic.resource.ResourceManager;
+import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class Game {
     private final int CONFIG_PLAYERS = 2;
     private PlayerManager playerManager;
     private GoalManager goalManager;
-    private ResourceManager resourceManager;
+    private TrainManager trainManager;
     private Map map;
     private GameState state;
     private List<GameStateListener> gameStateListeners = new ArrayList<GameStateListener>();
@@ -22,8 +22,8 @@ public class Game {
         playerManager = new PlayerManager();
         playerManager.createPlayers(CONFIG_PLAYERS);
 
-        resourceManager = new ResourceManager();
-        goalManager = new GoalManager(resourceManager);
+        trainManager = new TrainManager();
+        goalManager = new GoalManager(trainManager);
 
         map = new Map();
 
@@ -34,8 +34,8 @@ public class Game {
             public void changed() {
                 Player currentPlayer = playerManager.getCurrentPlayer();
                 goalManager.addRandomGoalToPlayer(currentPlayer);
-                resourceManager.addRandomResourceToPlayer(currentPlayer);
-                resourceManager.addRandomResourceToPlayer(currentPlayer);
+                trainManager.addRandomTrainToPlayer(currentPlayer);
+                trainManager.addRandomTrainToPlayer(currentPlayer);
             }
         });
     }
@@ -56,8 +56,8 @@ public class Game {
     private void initialisePlayers() {
         Player player = playerManager.getAllPlayers().get(0);
         goalManager.addRandomGoalToPlayer(player);
-        resourceManager.addRandomResourceToPlayer(player);
-        resourceManager.addRandomResourceToPlayer(player);
+        trainManager.addRandomTrainToPlayer(player);
+        trainManager.addRandomTrainToPlayer(player);
     }
 
     public PlayerManager getPlayerManager() {
@@ -68,8 +68,8 @@ public class Game {
         return goalManager;
     }
 
-    public ResourceManager getResourceManager() {
-        return resourceManager;
+    public TrainManager getTrainManager() {
+        return trainManager;
     }
 
     public Map getMap() {

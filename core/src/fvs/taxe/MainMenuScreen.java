@@ -24,28 +24,20 @@ public class MainMenuScreen extends ScreenAdapter {
     private Viewport viewport;
 
 
-
-
-
-
-
     public MainMenuScreen(TaxeGame game) {
         this.game = game;
 
 
-        playBounds = new Rectangle(TaxeGame.WIDTH/2 -200 , 350, 400, 100);
-        exitBounds = new Rectangle(TaxeGame.WIDTH/2 - 200, 200, 400, 100);
+        playBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 350, 400, 100);
+        exitBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 200, 400, 100);
         touchPoint = new Vector3();
         mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
-        mapSprite.setPosition(0,0);
+        mapSprite.setPosition(0, 0);
 
         camera = new OrthographicCamera();
         viewport = new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT, camera);
         viewport.apply();
-        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
-
-
-
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
 
     }
@@ -109,7 +101,7 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     @Override
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         viewport.update(width, height, true);
         camera.update();
     }

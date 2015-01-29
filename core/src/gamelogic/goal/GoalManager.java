@@ -5,18 +5,18 @@ import gamelogic.Player;
 import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
-import gamelogic.resource.ResourceManager;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class GoalManager {
     public final static int CONFIG_MAX_PLAYER_GOALS = 3;
-    private ResourceManager resourceManager;
+    private TrainManager trainManager;
 
-    public GoalManager(ResourceManager resourceManager) {
-        this.resourceManager = resourceManager;
+    public GoalManager(TrainManager trainManager) {
+        this.trainManager = trainManager;
     }
 
     private Goal generateRandom(int turn) {
@@ -36,7 +36,7 @@ public class GoalManager {
         // Goal with a specific train
         Random random = new Random();
         if (random.nextInt(2) == 1) {
-            goal.addConstraint("train", resourceManager.getTrainNames().get(random.nextInt(resourceManager.getTrainNames().size())));
+            goal.addConstraint("train", trainManager.getTrainNames().get(random.nextInt(trainManager.getTrainNames().size())));
         }
 
         return goal;

@@ -7,8 +7,8 @@ import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
-import gamelogic.resource.ResourceManager;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class GoalManagerTest extends LibGdxTest {
 
     @Before
     public void setup() throws Exception {
-        ResourceManager rs = new ResourceManager();
+        TrainManager rs = new TrainManager();
         gm = new GoalManager(rs);
         pm = new PlayerManager();
 

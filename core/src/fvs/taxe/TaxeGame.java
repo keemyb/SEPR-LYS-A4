@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
-
 public class TaxeGame extends Game {
 
     //public static final int WIDTH=1366,HEIGHT=768;
@@ -51,7 +50,6 @@ public class TaxeGame extends Game {
         font.dispose();
         shapeRenderer.dispose();
     }
-
 
 
 }

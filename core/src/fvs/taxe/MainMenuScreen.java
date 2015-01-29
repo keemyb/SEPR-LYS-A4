@@ -28,14 +28,14 @@ public class MainMenuScreen extends ScreenAdapter {
         this.game = game;
 
 
-        playBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 350, 400, 100);
-        exitBounds = new Rectangle(TaxeGame.WIDTH / 2 - 200, 200, 400, 100);
+        playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 350, 400, 100);
+        exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 200, 400, 100);
         touchPoint = new Vector3();
         mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
         mapSprite.setPosition(0, 0);
 
         camera = new OrthographicCamera();
-        viewport = new StretchViewport(TaxeGame.WIDTH, TaxeGame.HEIGHT, camera);
+        viewport = new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGTH, camera);
         viewport.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
@@ -68,7 +68,7 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batch.begin();
         Color c = game.batch.getColor();
         game.batch.setColor(c.r, c.g, c.b, (float) 0.3);
-        game.batch.draw(mapSprite, 0, 0, TaxeGame.WIDTH, TaxeGame.HEIGHT);
+        game.batch.draw(mapSprite, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGTH);
         game.batch.setColor(c);
         game.batch.end();
 

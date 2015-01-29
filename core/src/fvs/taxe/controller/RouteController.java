@@ -70,8 +70,8 @@ public class RouteController {
         TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
         TextButton cancel = new TextButton("Cancel", context.getSkin());
 
-        doneRouting.setPosition(TaxeGame.WIDTH - 250, TaxeGame.HEIGHT - 33);
-        cancel.setPosition(TaxeGame.WIDTH - 100, TaxeGame.HEIGHT - 33);
+        doneRouting.setPosition(TaxeGame.WORLD_WIDTH - 250, TaxeGame.WORLD_HEIGTH - 33);
+        cancel.setPosition(TaxeGame.WORLD_WIDTH - 100, TaxeGame.WORLD_HEIGTH - 33);
 
         cancel.addListener(new ClickListener() {
             @Override

@@ -9,7 +9,7 @@ public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         //Set window size
-        config.width = 900;
+        config.width = 800;
         config.height = 600;
         config.title = "TaxE";
         config.resizable = true;
@@ -18,7 +18,7 @@ public class DesktopLauncher {
         config.addIcon("icon/fvs64.png", FileType.Internal);
         config.addIcon("icon/fvs32.png", FileType.Internal);
         config.addIcon("icon/fvs16.png", FileType.Internal);
-        config.fullscreen = false;
+       // config.fullscreen = true;
         new LwjglApplication(new TaxeGame(), config);
     }
 }

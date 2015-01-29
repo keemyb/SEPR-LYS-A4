@@ -42,7 +42,7 @@ public class TopBarController {
 
     private void createFlashActor() {
         flashMessage = new Label("", context.getSkin());
-        flashMessage.setPosition(TaxeGame.WIDTH / 2 - 50, TaxeGame.HEIGHT - 24);
+        flashMessage.setPosition(TaxeGame.WORLD_WIDTH / 2 - 50, TaxeGame.WORLD_HEIGTH - 24);
         context.getStage().addActor(flashMessage);
     }
 
@@ -62,15 +62,15 @@ public class TopBarController {
 
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.setColor(controlsColor);
-        game.shapeRenderer.rect(0, TaxeGame.HEIGHT - CONTROLS_HEIGHT, TaxeGame.WIDTH, CONTROLS_HEIGHT);
+        game.shapeRenderer.rect(0, TaxeGame.WORLD_HEIGTH - CONTROLS_HEIGHT, TaxeGame.WORLD_WIDTH, CONTROLS_HEIGHT);
         game.shapeRenderer.setColor(Color.BLACK);
-        game.shapeRenderer.rect(0, TaxeGame.HEIGHT - CONTROLS_HEIGHT, TaxeGame.WIDTH, 1);
+        game.shapeRenderer.rect(0, TaxeGame.WORLD_HEIGTH - CONTROLS_HEIGHT, TaxeGame.WORLD_WIDTH, 1);
         game.shapeRenderer.end();
     }
 
     public void addEndTurnButton() {
         endTurnButton = new TextButton("End Turn", context.getSkin());
-        endTurnButton.setPosition(TaxeGame.WIDTH - 100.0f, TaxeGame.HEIGHT - 33.0f);
+        endTurnButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGTH - 33.0f);
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -114,7 +114,7 @@ public class GameScreen extends ScreenAdapter {
         game.batch.begin();
         float x = 10, y = 80;
         for (Player p: gameLogic.getPlayerManager().getAllPlayers()) {
-            game.fontSmall.draw(game.batch, "Player one: " + p.getScore(), x, y);
+            game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + p.getScore(), x, y);
             y -= 20;
         }
         game.fontSmall.draw(game.batch, "Turn " + (gameLogic.getPlayerManager().getTurnNumber() + 1) + "/" + gameLogic.TOTAL_TURNS, (float) x, y);

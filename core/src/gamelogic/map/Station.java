@@ -6,12 +6,12 @@ public class Station {
     private String name;
     private Position location;
     private StationActor actor;
-    private boolean passable;
+    private int failureDuration;
 
     public Station(String name, Position location) {
         this.name = name;
         this.location = location;
-        setPassable(true);
+        setFailureDuration(0);
     }
 
     public String getName() {
@@ -38,12 +38,20 @@ public class Station {
         this.actor = actor;
     }
 
-    public boolean isPassable() {
-        return passable;
+    public void decrementDuration() {
+        if (failureDuration > 0) failureDuration--;
     }
 
-    public void setPassable(boolean passable) {
-        this.passable = passable;
+    public boolean isPassable() {
+        return failureDuration == 0;
+    }
+
+    public int getFailureDuration() {
+        return failureDuration;
+    }
+
+    public void setFailureDuration(int failureDuration) {
+        this.failureDuration = failureDuration;
     }
 
 }

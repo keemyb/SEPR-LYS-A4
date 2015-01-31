@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import fvs.taxe.controller.TrainMoveController;
 import util.Tuple;
 
 import java.util.ArrayList;
@@ -16,10 +15,12 @@ public class Map {
     private List<Connection> connections;
     private List<List<Float>> distances;
     private Random random = new Random();
+    private final double JUNCTION_FAILURE_RATE = 0.2;
+    private final int JUNCTION_FAILURE_DURATION = 4;
 
     public Map() {
-        stations = new ArrayList<Station>();
-        connections = new ArrayList<Connection>();
+        stations = new ArrayList<>();
+        connections = new ArrayList<>();
         distances = new ArrayList<>();
 
         initialise();
@@ -107,6 +108,36 @@ public class Map {
         Junction newJunction = new Junction(name, location);
         stations.add(newJunction);
         return newJunction;
+    }
+
+    public void handleJunctionFailures() {
+        ArrayList<Junction> junctions = new ArrayList<>();
+        for (Station s : stations) {
+            if (s instanceof Junction){
+                if (s.isPassable()) junctions.add((Junction) s);
+                else s.decrementDuration();
+            }
+        }
+        breakRandomJunction(junctions);
+    }
+
+    public void breakRandomJunction(ArrayList<Junction> junctions) {
+        if (random.nextDouble() <= JUNCTION_FAILURE_RATE) {
+            // Select one of the junctions to break
+            if (junctions.size() > 0) {
+                Junction junction = junctions.get(random.nextInt(junctions.size()));
+                breakStation(junction, JUNCTION_FAILURE_DURATION);
+                System.out.println(junction.getName() + " has failed! Oh noes!");
+            }
+        }
+    }
+
+    public void breakStation(Station station, int duration) {
+        station.setFailureDuration(duration);
+    }
+
+    public void fixStation(Station station) {
+        station.setFailureDuration(0);
     }
 
     public List<Station> getStations() {

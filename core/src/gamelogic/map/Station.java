@@ -6,10 +6,12 @@ public class Station {
     private String name;
     private Position location;
     private StationActor actor;
+    private boolean passable;
 
     public Station(String name, Position location) {
         this.name = name;
         this.location = location;
+        setPassable(true);
     }
 
     public String getName() {
@@ -34,6 +36,14 @@ public class Station {
 
     public void setActor(StationActor actor) {
         this.actor = actor;
+    }
+
+    public boolean isPassable() {
+        return passable;
+    }
+
+    public void setPassable(boolean passable) {
+        this.passable = passable;
     }
 
 }

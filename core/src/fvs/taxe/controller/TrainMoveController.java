@@ -2,9 +2,12 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.EventAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import fvs.taxe.actions.WaitUntilPassableAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.Player;
 import gamelogic.map.Junction;
@@ -53,6 +56,10 @@ public class TrainMoveController {
         };
     }
 
+    private WaitUntilPassableAction waitUntilPassableAction(final Station station) {
+        return new WaitUntilPassableAction(station);
+    }
+
     // an action for the train to run after it has moved the whole route
     private RunnableAction afterAction() {
         return new RunnableAction() {
@@ -79,6 +86,7 @@ public class TrainMoveController {
             float duration = getDistance(current, next) / train.getSpeed();
             action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
             action.addAction(perStationAction(station));
+            action.addAction(waitUntilPassableAction(station));
             current = next;
         }
 

@@ -22,7 +22,7 @@ public class DialogResourceTrain extends Dialog {
 
         if (!trainPlaced) {
             button("Place at a station", "PLACE");
-        } else if (!train.isMoving()) {
+        } else {
             button("Choose a route", "ROUTE");
         }
     }

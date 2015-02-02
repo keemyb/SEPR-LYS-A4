@@ -43,36 +43,6 @@ public class DialogMultitrain extends Dialog {
         }
     }
 
-    public DialogMultitrain(Train train, Skin skin, Context context) {
-        super("Select train", skin);
-
-        this.context = context;
-
-        text("Choose which train you would like");
-
-        for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
-                if (resource instanceof Train && (((Train)resource).getActor() != null)) {
-                    if (train.getActor().getBounds().overlaps(((Train)resource).getActor().getBounds())) {
-                        String destination = "";
-                        if (((Train) resource).getFinalDestination() != null) {
-                            destination = " to " + ((Train) resource).getFinalDestination().getName();
-                            System.out.println("Train clicked midway: " + (((Train)resource).getName()) + destination);
-                        }
-                        button(((Train) resource).getName() + destination + " (Player " + ((Train) resource).getPlayer().getPlayerNumber() + ")", ((Train) resource));
-                        getButtonTable().row();
-                        isTrain = true;
-                    }
-                }
-            }
-        }
-
-        button("Cancel", "CANCEL");
-        if (!isTrain) {
-            hide();
-        }
-    }
-
     @Override
     public Dialog show(Stage stage) {
         show(stage, null);

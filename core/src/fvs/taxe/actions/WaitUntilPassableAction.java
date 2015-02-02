@@ -15,8 +15,7 @@ public class WaitUntilPassableAction extends Action {
     }
 
     public boolean act(float delta) {
-        if (station.isPassable()) return true;
-        else return false;
+        return station.isPassable();
     }
 
 }

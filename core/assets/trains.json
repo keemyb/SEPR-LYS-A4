@@ -5,16 +5,16 @@
       "speed": 100
     },
     {
+      "name": "Petrol Train",
+      "speed": 90
+    },
+    {
       "name": "Diesel Train",
       "speed": 80
     },
     {
       "name": "Electric Train",
       "speed": 70
-    },
-    {
-      "name": "Petrol Train",
-      "speed": 90
     },
     {
       "name": "Steam Train",

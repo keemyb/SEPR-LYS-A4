@@ -48,7 +48,8 @@ public class TrainActor extends Image {
     }
 
     public void updateFacingDirection() {
-        setDrawable((previousX < getX()) ? rightDrawable : leftDrawable);
+        if (previousX < getX()) setDrawable(rightDrawable);
+        else if (previousX > getX()) setDrawable(leftDrawable);
         previousX = getX();
     }
 

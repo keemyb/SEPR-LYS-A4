@@ -21,14 +21,16 @@ public class GoalManager {
 
     private Goal generateRandom(int turn) {
         Map map = Game.getInstance().getMap();
+
         Station origin;
         do {
             origin = map.getRandomStation();
         } while (origin instanceof Junction);
+
         Station destination;
         do {
             destination = map.getRandomStation();
-            // always true, really?
+            // always true, really? Can confirm, is bollocks. Damn it intelliJ!
         } while (destination == origin || destination instanceof Junction);
 
         Goal goal = new Goal(origin, destination, turn);

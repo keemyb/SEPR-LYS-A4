@@ -86,13 +86,13 @@ public class StationController {
         context.getStage().addActor(stationActor);
     }
 
-    private void renderCollisionStation(final Station collisionStation) {
-        final JunctionActor junctionActor = new JunctionActor(collisionStation.getLocation());
+    private void renderJunction(final Station junction) {
+        final JunctionActor junctionActor = new JunctionActor(junction.getLocation());
 
         junctionActor.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stationClicked(collisionStation);
+                stationClicked(junction);
             }
 
             @Override
@@ -107,6 +107,8 @@ public class StationController {
             }
         });
 
+        junction.setActor(junctionActor);
+
         context.getStage().addActor(junctionActor);
     }
 
@@ -115,7 +117,7 @@ public class StationController {
 
         for (Station station : stations) {
             if (station instanceof Junction) {
-                renderCollisionStation(station);
+                renderJunction(station);
             } else {
                 renderStation(station);
             }

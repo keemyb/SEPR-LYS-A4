@@ -3,6 +3,7 @@ package gamelogic.resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import gamelogic.Game;
 import gamelogic.Player;
 import util.Tuple;
 
@@ -50,8 +51,38 @@ public class TrainManager {
     }
 
     private Train getRandomTrain() {
+        /*
+        The trains that can be received are split into 3 phases
+        Phase 0: 70% Steam; 20% Electric; 10% Diesel
+        Phase 1: 25% Steam; 35% Electric; 25% Diesel; 15% Petrol
+        Phase 2: 0% Steam; 10% Electric; 20% Diesel; 40% Petrol; 30% BULLLLLLET!!!!OMG KAPPA
+         */
 
-        int index = random.nextInt(trains.size());
+        float turn = Game.getInstance().getPlayerManager().getTurnNumber();
+        int phase = (int) Math.floor((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
+        System.out.println(phase);
+        System.out.println((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
+        double randDouble = random.nextDouble();
+        int index;
+
+        // very much hard coded random train selection
+        if (phase == 0) {
+            if (randDouble < 0.7) index = 4;
+            else if (randDouble < 0.9) index = 3;
+            else index = 2;
+        } else if (phase == 1) {
+            if (randDouble < 0.25) index = 4;
+            else if (randDouble < 0.6) index = 3;
+            else if (randDouble < 0.85) index = 2;
+            else index = 1;
+        } else {
+            if (randDouble < 0.1) index = 3;
+            else if (randDouble < 0.3) index = 2;
+            else if (randDouble < 0.7) index = 1;
+            else index = 0;
+        }
+
+        // returns a train with the given index
         Tuple<String, Integer> train = trains.get(index);
         String leftImage = train.getFirst().toLowerCase().replaceAll(" ", "-") + ".png";
         String rightImage = train.getFirst().toLowerCase().replaceAll(" ", "-") + "-right.png";

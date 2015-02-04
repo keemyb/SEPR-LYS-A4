@@ -1,11 +1,13 @@
 package gamelogic.map;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 
 public class Station {
     private String name;
     private Position location;
-    private StationActor actor;
+    private Image actor;
     private int failureDuration;
 
     public Station(String name, Position location) {
@@ -30,16 +32,20 @@ public class Station {
         this.location = location;
     }
 
-    public StationActor getActor() {
+    public Image getActor() {
         return actor;
     }
 
-    public void setActor(StationActor actor) {
+    public void setActor(Image actor) {
         this.actor = actor;
     }
 
     public void decrementDuration() {
-        if (failureDuration > 0) failureDuration--;
+        if (failureDuration > 0) {
+            failureDuration--;
+            if (failureDuration == 0)
+                if (this instanceof Junction) ((JunctionActor) this.getActor()).setBroken();
+        }
     }
 
     public boolean isPassable() {

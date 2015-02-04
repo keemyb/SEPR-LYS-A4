@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import fvs.taxe.actor.JunctionActor;
 import util.Tuple;
 
 import java.util.ArrayList;
@@ -134,10 +135,12 @@ public class Map {
 
     public void breakStation(Station station, int duration) {
         station.setFailureDuration(duration);
+        if (station instanceof Junction) ((JunctionActor) station.getActor()).setBroken();
     }
 
     public void fixStation(Station station) {
         station.setFailureDuration(0);
+        if (station instanceof Junction) ((JunctionActor) station.getActor()).setDefault();
     }
 
     public List<Station> getStations() {

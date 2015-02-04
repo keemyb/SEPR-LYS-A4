@@ -10,7 +10,7 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
-import fvs.taxe.dialog.DialogStationMultitrain;
+import fvs.taxe.dialog.DialogMultitrain;
 import gamelogic.Game;
 import gamelogic.GameState;
 import gamelogic.Player;
@@ -61,7 +61,7 @@ public class StationController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (Game.getInstance().getState() == GameState.NORMAL) {
-                    DialogStationMultitrain dia = new DialogStationMultitrain(station, context.getSkin(), context);
+                    DialogMultitrain dia = new DialogMultitrain(station, context.getSkin(), context);
                     if (dia.getIsTrain()) {
                         dia.show(context.getStage());
                     }

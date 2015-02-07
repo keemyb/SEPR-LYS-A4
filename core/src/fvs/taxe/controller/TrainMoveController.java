@@ -87,6 +87,7 @@ public class TrainMoveController {
             action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
             action.addAction(perStationAction(station));
             action.addAction(waitUntilPassableAction(station));
+
             current = next;
         }
 

@@ -15,7 +15,7 @@ import gamelogic.map.Map;
 
 
 public class GameScreen extends ScreenAdapter {
-    public static final int ANIMATION_TIME = 2;
+    public static final float ANIMATION_TIME = 1.05f;
     final private TaxeGame game;
     private Stage stage;
     private Texture mapTexture;

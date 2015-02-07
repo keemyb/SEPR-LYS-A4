@@ -2,6 +2,7 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,6 +25,8 @@ public class RouteController {
     private boolean isRouting = false;
     private Train train;
     private boolean canEndRouting = true;
+    //added to calculate total number of turns to complete route
+    private float totalRouteDistance;
 
     public RouteController(Context context) {
         this.context = context;
@@ -42,13 +45,20 @@ public class RouteController {
         this.train = train;
         isRouting = true;
         positions = new ArrayList<Position>();
+        //initialise route distance
+        totalRouteDistance = 0;
         positions.add(train.getPosition());
         context.getGameLogic().setState(GameState.ROUTING);
         addRoutingButtons();
 
+
         TrainController trainController = new TrainController(context);
         trainController.setTrainsVisible(train, false);
         train.getActor().setVisible(true);
+    }
+
+    private float getDistance(Position a, Position b) {
+        return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
     }
 
     private void addStationToRoute(Station station) {
@@ -66,8 +76,27 @@ public class RouteController {
         }
         else {
             positions.add(station.getLocation());
+
+            //recalculate the total distance of the route when station/junction is added
+            totalRouteDistance += getDistance(positions.get(positions.size() - 1), positions.get(positions.size() - 2));
+
+            System.out.println("totalRouteDistance =" + totalRouteDistance);
+            System.out.println("total turns = " + totalTurns());
+
+            context.getTopBarController().displayFlashMessage("This route will take approximately " + totalTurns() + " turns to complete.", Color.BLACK, 1000);
+
+
+
             canEndRouting = !(station instanceof Junction);
         }
+    }
+
+    private int totalTurns() {
+        //calculates how many turns it will take to complete the chosen route
+        float distance = totalRouteDistance;
+        float trainSpeed = train.getSpeed();
+        float turns = distance / trainSpeed;
+        return (int) Math.ceil(turns);
     }
 
     private void addRoutingButtons() {

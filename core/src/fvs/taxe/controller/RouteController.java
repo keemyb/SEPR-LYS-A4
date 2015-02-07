@@ -146,6 +146,7 @@ public class RouteController {
         TrainController trainController = new TrainController(context);
         trainController.setTrainsVisible(train, true);
         train.getActor().setVisible(false);
+        context.getTopBarController().clearFlashMessage();
     }
 
     public void drawRoute(Color color) {

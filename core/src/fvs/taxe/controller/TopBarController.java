@@ -94,5 +94,9 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
+    public void clearFlashMessage() {
+        displayFlashMessage("", Color.BLACK);
+    }
+
 
 }

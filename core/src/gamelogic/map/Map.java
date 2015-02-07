@@ -5,8 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import fvs.taxe.actor.JunctionActor;
+import org.lwjgl.Sys;
 import util.Tuple;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -92,6 +94,19 @@ public class Map {
             }
         }
 
+        return false;
+    }
+
+    public boolean doesConnectionExist(Position a, Position b) {
+        for (Connection connection: connections) {
+            Position p1 = connection.getStation1().getLocation();
+            Position p2 = connection.getStation2().getLocation();
+            double dist1 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(), p2.getY(), a.getX(), a.getY());
+            double dist2 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(), p2.getY(), b.getX(), b.getY());
+            if (dist1 <= 0.0001 && dist2 <= 0.0001)
+                return true;
+            System.out.println(dist1 + " ! " + dist2);
+        }
         return false;
     }
 
@@ -193,8 +208,7 @@ public class Map {
                 return station;
             }
         }
-
-        throw new RuntimeException("Station does not exist for that position");
+        return null;
     }
 
     public List<Station> createRoute(List<Position> positions) {

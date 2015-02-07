@@ -66,7 +66,7 @@ public class RouteController {
         Position lastPosition = positions.get(positions.size() - 1);
         Station lastStation = context.getGameLogic().getMap().getStationFromPosition(lastPosition);
 
-        boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(station.getName(), lastStation.getName());
+        boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(lastPosition, station.getLocation());
 
         if (!hasConnection) {
             context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
@@ -133,7 +133,7 @@ public class RouteController {
     }
 
     private void confirmed() {
-        train.setRoute(context.getGameLogic().getMap().createRoute(positions));
+        train.setRoute(positions);
 
         TrainMoveController move = new TrainMoveController(context, train);
     }
@@ -145,7 +145,7 @@ public class RouteController {
 
         TrainController trainController = new TrainController(context);
         trainController.setTrainsVisible(train, true);
-        train.getActor().setVisible(false);
+        train.getActor().setVisible(context.getGameLogic().getMap().getStationFromPosition(train.getPosition()) == null);
         context.getTopBarController().clearFlashMessage();
     }
 

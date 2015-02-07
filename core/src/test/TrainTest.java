@@ -21,9 +21,9 @@ public class TrainTest {
 
     @Test
     public void finalDestinationTest() throws Error {
-        Station station1 = new Station("station1", new Position(5, 5));
-        Station station2 = new Station("station2", new Position(6, 6));
-        ArrayList<Station> route = new ArrayList<Station>();
+        Position station1 = new Position(5, 5);
+        Position station2 = new Position(6, 6);
+        ArrayList<Position> route = new ArrayList<>();
         route.add(station1);
         route.add(station2);
 

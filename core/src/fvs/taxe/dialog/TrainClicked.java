@@ -21,6 +21,7 @@ public class TrainClicked extends ClickListener {
     @Override
     public void clicked(InputEvent event, float x, float y) {
         if (Game.getInstance().getState() != GameState.NORMAL) return;
+        System.out.println("train clicked");
 
         // current player can't be passed in as it changes so find out current player at this instant
         Player currentPlayer = Game.getInstance().getPlayerManager().getCurrentPlayer();
@@ -33,7 +34,7 @@ public class TrainClicked extends ClickListener {
         if (train.getFinalDestination() == null) {
             context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
         } else {
-            context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalDestination().getName(), Color.BLACK, 2);
+            context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
         }
         DialogButtonClicked listener = new DialogButtonClicked(context, currentPlayer, train);
         DialogResourceTrain dia = new DialogResourceTrain(train, context.getSkin(), train.getPosition() != null);

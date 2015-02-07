@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actions.WaitUntilPassableAction;
 import fvs.taxe.actor.TrainActor;
+import gamelogic.Game;
 import gamelogic.Player;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
@@ -68,8 +69,8 @@ public class TrainMoveController {
                 for (String message : completedGoals) {
                     context.getTopBarController().displayFlashMessage(message, Color.WHITE, 2);
                 }
-                System.out.println(train.getFinalDestination().getLocation().getX() + "," + train.getFinalDestination().getLocation().getY());
-                train.setPosition(train.getFinalDestination().getLocation());
+                System.out.println(train.getFinalStation().getLocation().getX() + "," + train.getFinalStation().getLocation().getY());
+                train.setPosition(train.getFinalStation().getLocation());
                 train.getActor().setVisible(false);
                 train.setFinalDestination(null);
             }
@@ -81,13 +82,14 @@ public class TrainMoveController {
         Position current = train.getPosition();
         action.addAction(beforeAction());
 
-        for (final Station station : train.getRoute()) {
-            Position next = station.getLocation();
+        for (final Position next : train.getRoute()) {
             float duration = getDistance(current, next) / train.getSpeed();
             action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
-            action.addAction(perStationAction(station));
-            action.addAction(waitUntilPassableAction(station));
-
+            Station station = Game.getInstance().getMap().getStationFromPosition(next);
+            if (station != null) {
+                action.addAction(perStationAction(station));
+                action.addAction(waitUntilPassableAction(station));
+            }
             current = next;
         }
 

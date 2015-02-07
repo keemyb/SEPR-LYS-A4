@@ -1,6 +1,7 @@
 package gamelogic.resource;
 
 import fvs.taxe.actor.TrainActor;
+import gamelogic.Game;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import util.Tuple;
@@ -15,10 +16,10 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     // Final destination should be set to null after firing the arrival event
-    private Station finalDestination;
+    private Position finalDestination;
 
     // Should NOT contain current position!
-    private List<Station> route;
+    private List<Position> route;
 
     //Station name and turn number
     private List<Tuple<String, Integer>> history;
@@ -29,8 +30,8 @@ public class Train extends Resource {
         this.leftImage = leftImage;
         this.rightImage = rightImage;
         this.speed = speed;
-        history = new ArrayList<Tuple<String, Integer>>();
-        route = new ArrayList<Station>();
+        history = new ArrayList<>();
+        route = new ArrayList<>();
     }
 
     public String getName() {
@@ -70,23 +71,30 @@ public class Train extends Resource {
         return finalDestination != null;
     }
 
-    public List<Station> getRoute() {
+    public List<Position> getRoute() {
         return route;
     }
 
-    public void setRoute(List<Station> route) {
+    public void setRoute(List<Position> route) {
         // Final destination should be set to null after firing the arrival event
-        if (route != null && route.size() > 0) finalDestination = route.get(route.size() - 1);
+        if (route != null && route.size() > 0)
+            finalDestination = route.get(route.size() - 1);
 
         this.route = route;
     }
 
-    public Station getFinalDestination() {
+    public Position getFinalDestination() {
         return finalDestination;
     }
 
-    public void setFinalDestination(Station station) {
-        finalDestination = station;
+    public void setFinalDestination(Position position) {
+        finalDestination = position;
+    }
+
+    public Station getFinalStation() {
+        Station s = Game.getInstance().getMap().getStationFromPosition(finalDestination);
+        if (s != null) return s;
+        throw new RuntimeException("train's route must end with a station");
     }
 
     public int getSpeed() {
@@ -100,7 +108,7 @@ public class Train extends Resource {
 
     //Station name and turn number
     public void addHistory(String stationName, int turn) {
-        history.add(new Tuple<String, Integer>(stationName, turn));
+        history.add(new Tuple<>(stationName, turn));
     }
 
     @Override

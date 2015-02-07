@@ -32,7 +32,7 @@ public class TrainController {
                 if (resource instanceof Train) {
                     boolean trainAtStation = false;
                     for (Station station : context.getGameLogic().getMap().getStations()) {
-                        if (station.getLocation() == ((Train) resource).getPosition()) {
+                        if (station.getLocation().equals(((Train) resource).getPosition())) {
                             trainAtStation = true;
                             break;
                         }

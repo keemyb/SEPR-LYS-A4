@@ -36,7 +36,7 @@ public class Goal {
                 passedOrigin = true;
             }
         }
-        if (train.getFinalDestination() == destination && passedOrigin) {
+        if (train.getFinalStation() == destination && passedOrigin) {
             if (trainName == null || trainName.equals(train.getName())) {
                 return true;
             } else {

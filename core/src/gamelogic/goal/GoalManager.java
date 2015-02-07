@@ -57,7 +57,8 @@ public class GoalManager {
                 completedString.add("Player " + player.getPlayerNumber() + " completed a goal to " + goal.toString() + "!");
             }
         }
-        System.out.println("Train arrived to final destination: " + train.getFinalDestination().getName());
+        System.out.println("Train arrived to final destination: " +
+                Game.getInstance().getMap().getStationFromPosition(train.getFinalDestination()).getName());
         return completedString;
     }
 }

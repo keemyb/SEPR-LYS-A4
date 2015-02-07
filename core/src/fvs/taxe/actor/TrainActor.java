@@ -40,6 +40,7 @@ public class TrainActor extends Image {
             super.act(delta);
             updateBounds();
             updateFacingDirection();
+            train.setPosition(new Position(getX() + width / 2, getY() + height / 2));
         }
     }
 

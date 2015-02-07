@@ -65,6 +65,9 @@ public class StationController {
                     if (dia.getIsTrain()) {
                         dia.show(context.getStage());
                     }
+                    else {
+                        System.out.println("no trains here");
+                    }
                 }
                 stationClicked(station);
             }

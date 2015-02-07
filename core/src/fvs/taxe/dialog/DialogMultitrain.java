@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
 import gamelogic.Player;
+import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
@@ -23,15 +24,21 @@ public class DialogMultitrain extends Dialog {
 
         for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
             for (Resource resource : player.getResources()) {
-                if (resource instanceof Train) {
-                    if (((Train) resource).getPosition() == station.getLocation()) {
+                if (resource instanceof Train && (((Train)resource).getPosition() != null)) {
+                    Position trainPosition = (((Train)resource).getPosition());
+                    System.out.println("train: " + trainPosition.getX() + ", " + trainPosition.getY());
+                    System.out.println("station: " + station.getLocation().getX() + ", " + station.getLocation().getY());
+                    if (((Train) resource).getPosition().equals(station.getLocation())) {
                         String destination = "";
                         if (((Train) resource).getFinalDestination() != null) {
-                            destination = " to " + ((Train) resource).getFinalDestination().getName();
+                            destination = " to " + ((Train) resource).getFinalStation().getName();
                         }
                         button(((Train) resource).getName() + destination + " (Player " + ((Train) resource).getPlayer().getPlayerNumber() + ")", ((Train) resource));
                         getButtonTable().row();
                         isTrain = true;
+                    }
+                    else {
+                        System.out.println("not equal");
                     }
                 }
             }

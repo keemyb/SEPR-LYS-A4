@@ -12,6 +12,6 @@ public class StationHelperTest extends LibGdxTest {
         Map map = new Map();
 
         assertTrue(map.doesConnectionExist("Madrid", "Paris"));
-        assertFalse(map.doesConnectionExist("London", "Paris"));
+        assertFalse(map.doesConnectionExist("London", "Berlin"));
     }
 }

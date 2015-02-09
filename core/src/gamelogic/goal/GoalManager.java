@@ -37,8 +37,30 @@ public class GoalManager {
 
         // Goal with a specific train
         Random random = new Random();
-        if (random.nextInt(2) == 1) {
-            goal.addConstraint("train", trainManager.getTrainNames().get(random.nextInt(trainManager.getTrainNames().size())));
+        double randDouble = random.nextDouble();
+        if (random.nextInt(3) == 1) {
+            int phase = (int) Math.floor((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
+            if (phase == 0) {
+                if (randDouble < 0.9) {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(4));
+                } else {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(3));
+                }
+            } else if (phase == 1) {
+                if (randDouble < 0.15) {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(4));
+                } else if (randDouble < 0.7) {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(3));
+                } else {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(2));
+                }
+            } else {
+                if (randDouble < 0.6) {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(1));
+                } else {
+                    goal.addConstraint("train", trainManager.getTrainNames().get(0));
+                }
+            }
         }
 
         return goal;

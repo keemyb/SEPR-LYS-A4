@@ -25,11 +25,14 @@ public class PlayerManager {
     }
 
     public void turnOver() {
-        currentTurn = currentTurn == 1 ? 0 : 1;
-        turnChanged();
+        if (currentTurn == 0) {
+            currentTurn = 1;
+        } else {
+            currentTurn = 0;
+            turnChanged();
+        }
         playerChanged();
     }
-
 
     public void subscribeTurnChanged(TurnListener listener) {
         turnListeners.add(listener);

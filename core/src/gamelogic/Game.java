@@ -32,10 +32,11 @@ public class Game {
         playerManager.subscribeTurnChanged(new TurnListener() {
             @Override
             public void changed() {
-                Player currentPlayer = playerManager.getCurrentPlayer();
-                goalManager.addRandomGoalToPlayer(currentPlayer);
-                trainManager.addRandomTrainToPlayer(currentPlayer);
-                trainManager.addRandomTrainToPlayer(currentPlayer);
+                for (Player currentPlayer : playerManager.getAllPlayers()) {
+                    goalManager.addRandomGoalToPlayer(currentPlayer);
+                    trainManager.addRandomTrainToPlayer(currentPlayer);
+                    trainManager.addRandomTrainToPlayer(currentPlayer);
+                }
             }
         });
     }
@@ -51,13 +52,12 @@ public class Game {
         return instance;
     }
 
-    // Only the first player should be given goals and resources during init
-    // The second player gets them when turn changes!
     private void initialisePlayers() {
-        Player player = playerManager.getAllPlayers().get(0);
-        goalManager.addRandomGoalToPlayer(player);
-        trainManager.addRandomTrainToPlayer(player);
-        trainManager.addRandomTrainToPlayer(player);
+        for (Player player : playerManager.getAllPlayers()) {
+            goalManager.addRandomGoalToPlayer(player);
+            trainManager.addRandomTrainToPlayer(player);
+            trainManager.addRandomTrainToPlayer(player);
+        }
     }
 
     public PlayerManager getPlayerManager() {

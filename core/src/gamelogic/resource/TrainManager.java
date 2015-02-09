@@ -60,8 +60,6 @@ public class TrainManager {
 
         float turn = Game.getInstance().getPlayerManager().getTurnNumber();
         int phase = (int) Math.floor((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
-        System.out.println(phase);
-        System.out.println((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
         double randDouble = random.nextDouble();
         int index;
 

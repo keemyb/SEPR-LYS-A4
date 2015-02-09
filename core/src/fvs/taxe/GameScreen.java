@@ -109,6 +109,9 @@ public class GameScreen extends ScreenAdapter {
             stationController.displayNumberOfTrainsAtStations();
         }
 
+        resourceController.drawHeaderText();
+        goalController.showCurrentPlayerGoals();
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
@@ -120,9 +123,6 @@ public class GameScreen extends ScreenAdapter {
         }
         game.fontSmall.draw(game.batch, "Turn " + (gameLogic.getPlayerManager().getTurnNumber() + 1) + "/" + gameLogic.TOTAL_TURNS, x, y);
         game.batch.end();
-
-        resourceController.drawHeaderText();
-        goalController.showCurrentPlayerGoals();
     }
 
     @Override

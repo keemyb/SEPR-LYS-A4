@@ -55,7 +55,7 @@ public class StationController {
     }
 
     private void renderStation(final Station station) {
-        final StationActor stationActor = new StationActor(station.getLocation());
+        final StationActor stationActor = new StationActor(station);
 
         stationActor.addListener(new ClickListener() {
             @Override

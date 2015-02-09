@@ -1,14 +1,17 @@
 package gamelogic.map;
 
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
+
+import javax.swing.*;
 
 public class Station {
     private String name;
     private String abbreviation;
     private Position location;
-    private Image actor;
+    private Group actor;
     private int failureDuration;
 
     public Station(String name, String abbreviation, Position location) {
@@ -42,11 +45,11 @@ public class Station {
         this.location = location;
     }
 
-    public Image getActor() {
+    public Group getActor() {
         return actor;
     }
 
-    public void setActor(Image actor) {
+    public void setActor(Group actor) {
         this.actor = actor;
     }
 

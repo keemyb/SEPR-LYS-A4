@@ -59,6 +59,7 @@ public class Map {
     private void parseStations(JsonValue jsonVal) {
         for (JsonValue station = jsonVal.getChild("stations"); station != null; station = station.next) {
             String name = "";
+            String abbreviation = "";
             int x = 0;
             int y = 0;
             boolean isJunction = false;
@@ -66,6 +67,8 @@ public class Map {
             for (JsonValue val = station.child; val != null; val = val.next) {
                 if (val.name.equalsIgnoreCase("name")) {
                     name = val.asString();
+                } else if (val.name.equalsIgnoreCase("abbreviation")) {
+                    abbreviation = val.asString();
                 } else if (val.name.equalsIgnoreCase("x")) {
                     x = val.asInt();
                 } else if (val.name.equalsIgnoreCase("y")) {
@@ -76,9 +79,9 @@ public class Map {
             }
 
             if (isJunction) {
-                addJunction(name, new Position(x, y));
+                addJunction(name, abbreviation, new Position(x, y));
             } else {
-                addStation(name, new Position(x, y));
+                addStation(name, abbreviation, new Position(x, y));
             }
         }
     }
@@ -114,14 +117,14 @@ public class Map {
         return stations.get(random.nextInt(stations.size()));
     }
 
-    public Station addStation(String name, Position location) {
-        Station newStation = new Station(name, location);
+    public Station addStation(String name, String abbreviation, Position location) {
+        Station newStation = new Station(name,abbreviation, location);
         stations.add(newStation);
         return newStation;
     }
 
-    public Junction addJunction(String name, Position location) {
-        Junction newJunction = new Junction(name, location);
+    public Junction addJunction(String name, String abbreviation, Position location) {
+        Junction newJunction = new Junction(name, abbreviation, location);
         stations.add(newJunction);
         return newJunction;
     }

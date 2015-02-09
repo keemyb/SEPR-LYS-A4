@@ -11,8 +11,9 @@ public class Station {
     private Image actor;
     private int failureDuration;
 
-    public Station(String name, Position location) {
+    public Station(String name, String abbreviation, Position location) {
         this.name = name;
+        this.abbreviation = abbreviation;
         this.location = location;
         setFailureDuration(0);
     }
@@ -24,6 +25,7 @@ public class Station {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getAbbreviation() {
         return abbreviation;
     }

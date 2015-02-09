@@ -52,7 +52,7 @@ public class Goal {
         if (trainName != null) {
             trainString = trainName;
         }
-        return "Send a " + trainString + " from " + origin.getName() + " to " + destination.getName() + " (" + score + ")";
+        return "Send a " + trainString + " from " + origin.getName() + "(" + origin.getAbbreviation() + ")"+ " to " + destination.getName() + "(" + destination.getAbbreviation() +")" + " : " + score ;
     }
 
     public void setComplete() {

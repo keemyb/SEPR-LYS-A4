@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StationController {
-    public final static int CONNECTION_LINE_WIDTH = 5;
+    public final static int CONNECTION_LINE_WIDTH = 3;
     /*
     have to use CopyOnWriteArrayList because when we iterate through our listeners and execute
     their handler's method, one case unsubscribes from the event removing itself from this list

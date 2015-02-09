@@ -6,6 +6,7 @@ import fvs.taxe.actor.StationActor;
 
 public class Station {
     private String name;
+    private String abbreviation;
     private Position location;
     private Image actor;
     private int failureDuration;
@@ -22,6 +23,13 @@ public class Station {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     public Position getLocation() {

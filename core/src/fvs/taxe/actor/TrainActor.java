@@ -11,8 +11,8 @@ import gamelogic.map.Position;
 import gamelogic.resource.Train;
 
 public class TrainActor extends Image {
-    public static int width = 36;
-    public static int height = 36;
+    public static int width = 30;
+    public static int height = 25;
     public Train train;
     private Rectangle bounds;
     private float previousX;

@@ -122,7 +122,7 @@ public class GameScreen extends ScreenAdapter {
             y -= 20;
         }
         int turn = gameLogic.getPlayerManager().getTurnNumber() + 1;
-        if (turn > 30) turn = 30;
+        if (turn > gameLogic.TOTAL_TURNS) turn = gameLogic.TOTAL_TURNS;
         game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.TOTAL_TURNS, x, y);
         game.batch.end();
     }

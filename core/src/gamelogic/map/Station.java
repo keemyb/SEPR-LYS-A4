@@ -57,7 +57,7 @@ public class Station {
         if (failureDuration > 0) {
             failureDuration--;
             if (failureDuration == 0)
-                if (this instanceof Junction) ((JunctionActor) this.getActor()).setBroken();
+                if (this instanceof Junction) ((JunctionActor) this.getActor()).setDefault();
         }
     }
 

@@ -20,20 +20,15 @@ public class DialogEndGame extends Dialog {
         int highscore = 0;
         int playernum = 0;
         for (Player player : pm.getAllPlayers()) {
-            int goalsComplete = 0;
-            for (Goal goal : player.getGoals()) {
-                if (goal.getComplete()) {
-                    goalsComplete++;
-                }
-            }
+            int playerScore = player.getScore();
 
-            text("Player " + player.getPlayerNumber() + " completed " + goalsComplete + " goals");
+            text("Player " + player.getPlayerNumber() + " scored " + playerScore + " points");
             getContentTable().row();
 
-            if (goalsComplete > highscore) {
-                highscore = goalsComplete;
+            if (playerScore > highscore) {
+                highscore = playerScore;
                 playernum = player.getPlayerNumber();
-            }
+            } else if (playerScore == highscore) playernum = 0;
         }
         if (playernum != 0) {
             text("PLAYER " + playernum + " WINS!");
@@ -41,7 +36,6 @@ public class DialogEndGame extends Dialog {
             text("NO WINNER");
         }
 
-        //button("Main Menu","MENU");
         button("Exit", "EXIT");
     }
 

@@ -121,7 +121,9 @@ public class GameScreen extends ScreenAdapter {
             game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + p.getScore(), x, y);
             y -= 20;
         }
-        game.fontSmall.draw(game.batch, "Turn " + (gameLogic.getPlayerManager().getTurnNumber() + 1) + "/" + gameLogic.TOTAL_TURNS, x, y);
+        int turn = gameLogic.getPlayerManager().getTurnNumber() + 1;
+        if (turn > 30) turn = 30;
+        game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.TOTAL_TURNS, x, y);
         game.batch.end();
     }
 

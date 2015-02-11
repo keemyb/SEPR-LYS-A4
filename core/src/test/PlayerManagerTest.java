@@ -30,7 +30,8 @@ public class PlayerManagerTest {
     public void testTurnNumber() throws Exception {
         int previous = pm.getTurnNumber();
         pm.turnOver();
-
+        assertTrue("Turn number changed", previous == pm.getTurnNumber());
+        pm.turnOver();
         assertTrue("Turn number did not change", previous < pm.getTurnNumber());
     }
 

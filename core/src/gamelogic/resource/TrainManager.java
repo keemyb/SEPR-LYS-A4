@@ -100,4 +100,12 @@ public class TrainManager {
         train.setPlayer(player);
         player.addResource(train);
     }
+
+    public int getSpeedOfTRain(String name) {
+        for (Tuple<String, Integer> train: trains) {
+            if (train.getFirst().equals(name))
+                return train.getSecond();
+        }
+        throw new RuntimeException("Can't find train with name " + name);
+    }
 }

@@ -13,12 +13,15 @@ public class Goal {
     private boolean complete = false;
     //constraints
     private String trainName = null;
+    //limits
+    private boolean quantifiable = false;
+    private int turnLimit = 0;
 
     public Goal(Station origin, Station destination, int turn) {
         this.origin = origin;
         this.destination = destination;
         this.turnIssued = turn;
-        updateScore();
+        updateGoal();
     }
 
     public void addConstraint(String name, String value) {
@@ -27,6 +30,13 @@ public class Goal {
         } else {
             throw new RuntimeException(name + " is not a valid goal constraint");
         }
+        updateGoal();
+    }
+
+    public void addTurnLimit(int turns){
+        quantifiable = true;
+        turnLimit = turns;
+        updateGoal();
     }
 
     public boolean isComplete(Train train) {
@@ -49,10 +59,21 @@ public class Goal {
 
     public String toString() {
         String trainString = "train";
-        if (trainName != null) {
+        String turnLimit = Integer.toString(getTurnLimit());
+        String goalString;
+        if (trainName != null && !quantifiable) {
             trainString = trainName;
+            goalString = "Send a " + trainString + " from " + origin.getName() + "(" + origin.getAbbreviation() + ")"+ " to " + destination.getName() + "(" + destination.getAbbreviation() +")" + " : " + score ;
         }
-        return "Send a " + trainString + " from " + origin.getName() + "(" + origin.getAbbreviation() + ")"+ " to " + destination.getName() + "(" + destination.getAbbreviation() +")" + " : " + score ;
+        else if (trainName != null && quantifiable) {
+            trainString = trainName;
+            goalString = "Send a " + trainString + " from " + origin.getName() + "(" + origin.getAbbreviation() + ")"+ " to " + destination.getName() + "(" + destination.getAbbreviation() +")" + " in " + turnLimit + " turns : " + score ;
+        }
+        else{
+            goalString = "Send a " + trainString + " from " + origin.getName() + "(" + origin.getAbbreviation() + ")"+ " to " + destination.getName() + "(" + destination.getAbbreviation() +")" + " : " + score ;
+        }
+
+        return goalString;
     }
 
     public void setComplete() {
@@ -63,13 +84,41 @@ public class Goal {
         return complete;
     }
 
-    public void updateScore() {
+    public void updateGoal() {
         int distance = (int)Game.getInstance().getMap().getDistance(origin, destination);
-        score = Math.max(50, distance - distance % 50);
+        if (quantifiable) {
+            if (turnIssued != Game.getInstance().getPlayerManager().getTurnNumber())
+                turnLimit--;
+            float t = distance * 5f * (1f - 1f / turnLimit);
+            score = Math.max(50, (int)t - (int)t % 50);
+        }
+        else {
+            score = Math.max(50, distance - distance % 50);
+        }
+    }
+
+    public boolean isExpired() {
+        return (quantifiable && turnLimit == 0);
     }
 
     public int getScore() {
         return score;
+    }
+
+    public Station getOrigin() {
+        return origin;
+    }
+
+    public Station getDestination() {
+        return destination;
+    }
+
+    public String getTrainName() {
+        return trainName;
+    }
+
+    public int getTurnLimit(){
+        return turnLimit;
     }
 
 }

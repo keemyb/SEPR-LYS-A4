@@ -38,6 +38,7 @@ public class GoalManager {
         // Goal with a specific train
         Random random = new Random();
         double randDouble = random.nextDouble();
+
         if (random.nextInt(3) == 1) {
             int phase = (int) Math.floor((turn / Game.getInstance().totalTurns) * 3.0);
             if (phase == 0) {
@@ -61,9 +62,19 @@ public class GoalManager {
                     goal.addConstraint("train", trainManager.getTrainNames().get(0));
                 }
             }
+            //Make goal quantifiable
+            if (random.nextInt(3) >= 0){
+                //add a turn limit to the goal
+                goal.addTurnLimit(computeTurnLimit(goal.getOrigin(), goal.getDestination(), goal.getTrainName()));
+            }
         }
 
         return goal;
+    }
+
+    private int computeTurnLimit(Station origin, Station destination, String trainName){
+        int distance = (int)Game.getInstance().getMap().getDistance(origin, destination);
+        return distance / trainManager.getSpeedOfTRain(trainName) + 5;
     }
 
     public void addRandomGoalToPlayer(Player player) {

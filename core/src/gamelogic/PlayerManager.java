@@ -1,5 +1,7 @@
 package gamelogic;
 
+import gamelogic.goal.Goal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,18 @@ public class PlayerManager {
     }
 
     private void turnChanged() {
-        if (turnNumber < Game.getInstance().totalTurns) turnNumber++;
+        if (turnNumber < Game.getInstance().totalTurns)
+            turnNumber++;
+        List<Goal> goalsToRemove = new ArrayList<>();
+        for (Player player: players) {
+            for (Goal goal : player.getGoals()) {
+                goal.updateGoal();
+                if (goal.isExpired())
+                    goalsToRemove.add(goal);
+            }
+            for (Goal goal: goalsToRemove)
+                player.getGoals().remove(goal);
+        }
         for (TurnListener listener : turnListeners) {
             listener.changed();
         }

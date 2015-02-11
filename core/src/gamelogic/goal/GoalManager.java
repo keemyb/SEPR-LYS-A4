@@ -39,7 +39,7 @@ public class GoalManager {
         Random random = new Random();
         double randDouble = random.nextDouble();
         if (random.nextInt(3) == 1) {
-            int phase = (int) Math.floor((turn / Game.getInstance().TOTAL_TURNS) * 3.0);
+            int phase = (int) Math.floor((turn / Game.getInstance().totalTurns) * 3.0);
             if (phase == 0) {
                 if (randDouble < 0.9) {
                     goal.addConstraint("train", trainManager.getTrainNames().get(4));

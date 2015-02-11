@@ -69,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
         gameLogic.subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
-                if (gameLogic.getPlayerManager().getTurnNumber() == gameLogic.TOTAL_TURNS && state == GameState.NORMAL) {
+                if (gameLogic.getPlayerManager().getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
                     DialogEndGame dia = new DialogEndGame(GameScreen.this.game, gameLogic.getPlayerManager(), skin);
                     dia.show(stage);
                 }
@@ -122,8 +122,8 @@ public class GameScreen extends ScreenAdapter {
             y -= 20;
         }
         int turn = gameLogic.getPlayerManager().getTurnNumber() + 1;
-        if (turn > gameLogic.TOTAL_TURNS) turn = gameLogic.TOTAL_TURNS;
-        game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.TOTAL_TURNS, x, y);
+        if (turn > gameLogic.totalTurns) turn = gameLogic.totalTurns;
+        game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.totalTurns, x, y);
         game.batch.end();
     }
 

@@ -10,8 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import fvs.taxe.dialog.DialogEndGame;
+import fvs.taxe.dialog.DialogStartGame;
 
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -22,11 +26,15 @@ public class MainMenuScreen extends ScreenAdapter {
     private Vector3 touchPoint;
     private Sprite mapSprite;
     private Viewport viewport;
+    private Skin skin;
+    private Stage stage;
 
 
     public MainMenuScreen(TaxeGame game) {
         this.game = game;
-
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
+        Gdx.input.setInputProcessor(stage);
 
         playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 350, 400, 100);
         exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 200, 400, 100);
@@ -46,7 +54,8 @@ public class MainMenuScreen extends ScreenAdapter {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-                game.setScreen(new GameScreen(game));
+                DialogStartGame dia = new DialogStartGame(MainMenuScreen.this.game, skin);
+                dia.show(stage);
                 return;
             }
             if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
@@ -92,6 +101,8 @@ public class MainMenuScreen extends ScreenAdapter {
                 exitBounds.getY() + exitBounds.getHeight() / 2 + game.font.getBounds(exitGameString).height / 2); // center the text
 
         game.batch.end();
+
+        stage.draw();
     }
 
     @Override

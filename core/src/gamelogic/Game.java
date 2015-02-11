@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Game {
     private static Game instance;
-    public final int TOTAL_TURNS = 30;
+    public int totalTurns = 30;
     private final int CONFIG_PLAYERS = 2;
     private PlayerManager playerManager;
     private GoalManager goalManager;
@@ -58,6 +58,10 @@ public class Game {
             trainManager.addRandomTrainToPlayer(player);
             trainManager.addRandomTrainToPlayer(player);
         }
+    }
+
+    public void setTotalTurns(int totalTurns) {
+        this.totalTurns = totalTurns;
     }
 
     public PlayerManager getPlayerManager() {

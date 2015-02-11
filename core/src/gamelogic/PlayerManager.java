@@ -39,7 +39,7 @@ public class PlayerManager {
     }
 
     private void turnChanged() {
-        if (turnNumber < Game.getInstance().TOTAL_TURNS) turnNumber++;
+        if (turnNumber < Game.getInstance().totalTurns) turnNumber++;
         for (TurnListener listener : turnListeners) {
             listener.changed();
         }

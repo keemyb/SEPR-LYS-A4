@@ -87,8 +87,10 @@ public class Goal {
     public void updateGoal() {
         int distance = (int)Game.getInstance().getMap().getDistance(origin, destination);
         if (quantifiable) {
-            if (turnIssued != Game.getInstance().getPlayerManager().getTurnNumber())
+            if (turnIssued != Game.getInstance().getPlayerManager().getTurnNumber()) {
                 turnLimit--;
+            }
+
             float t = distance * 5f * (1f - 1f / turnLimit);
             score = Math.max(50, (int)t - (int)t % 50);
         }
@@ -119,6 +121,10 @@ public class Goal {
 
     public int getTurnLimit(){
         return turnLimit;
+    }
+
+    public int getTurnIssued() {
+        return turnIssued;
     }
 
 }

@@ -256,7 +256,7 @@ public class Map {
                             distances.get(i).set(j, distances.get(i).get(k) + distances.get(k).get(j));
                         }
 
-        // Debug info: printing distances
+//        //Debug info: printing distances
 //        for (int i = 0; i < stations.size(); i++) {
 //            for (int j = 0; j < stations.size(); j++) {
 //                System.out.println(stations.get(i).getName() + " > " +

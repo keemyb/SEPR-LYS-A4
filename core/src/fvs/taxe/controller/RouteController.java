@@ -44,7 +44,7 @@ public class RouteController {
     public void begin(Train train) {
         this.train = train;
         isRouting = true;
-        positions = new ArrayList<Position>();
+        positions = new ArrayList<>();
         //initialise route distance
         totalRouteDistance = 0;
         positions.add(train.getPosition());

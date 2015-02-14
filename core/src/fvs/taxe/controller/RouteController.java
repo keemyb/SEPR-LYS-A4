@@ -25,7 +25,6 @@ public class RouteController {
     private boolean isRouting = false;
     private Train train;
     private boolean canEndRouting = true;
-    //added to calculate total number of turns to complete route
     private float totalRouteDistance;
 
     public RouteController(Context context) {
@@ -72,7 +71,8 @@ public class RouteController {
             context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
         }
         else if (positions.contains(station.getLocation())) {
-            context.getTopBarController().displayFlashMessage("You can not visit the same station twice in one route.", Color.RED);
+            context.getTopBarController().displayFlashMessage(
+                    "You can not visit the same station twice in one route.", Color.RED);
         }
         else {
             positions.add(station.getLocation());
@@ -83,7 +83,8 @@ public class RouteController {
             System.out.println("totalRouteDistance =" + totalRouteDistance);
             System.out.println("total turns = " + totalTurns());
 
-            context.getTopBarController().displayFlashMessage("This route will take approximately " + totalTurns() + " turns to complete.", Color.BLACK, 1000);
+            context.getTopBarController().displayFlashMessage(
+                    "This route will take approximately " + totalTurns() + " turns to complete.", Color.BLACK, 1000);
 
 
 
@@ -120,7 +121,6 @@ public class RouteController {
                     context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
                     return;
                 }
-
                 confirmed();
                 endRouting();
             }
@@ -161,7 +161,6 @@ public class RouteController {
                 game.shapeRenderer.rectLine(previousPosition.getX(), previousPosition.getY(), position.getX(),
                         position.getY(), StationController.CONNECTION_LINE_WIDTH);
             }
-
             previousPosition = position;
         }
 

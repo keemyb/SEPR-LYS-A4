@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
+import gamelogic.goal.Goal;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
-import gamelogic.goal.Goal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ public class GoalController {
             if (goal.getComplete()) {
                 continue;
             }
-
             strings.add(goal.toString());
         }
 
@@ -50,15 +49,12 @@ public class GoalController {
         game.batch.end();
 
         y -= 15;
-
         for (String goalString : playerGoalStrings()) {
             y -= 30;
-
             TextButton button = new TextButton(goalString, context.getSkin());
             button.setPosition(x, y);
             goalButtons.addActor(button);
         }
-
         context.getStage().addActor(goalButtons);
     }
 

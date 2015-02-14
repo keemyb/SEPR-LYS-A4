@@ -18,15 +18,12 @@ public class JellyActor extends Image {
 
     public JellyActor(Jelly jelly) {
         super(new Texture(Gdx.files.internal("jelly 1.png")));
-
         Position position = jelly.getPosition();
-
         jelly.setActor(this);
         this.jelly = jelly;
         setSize(width, height);
         bounds = new Rectangle();
         setPosition(position.getX() - width / 2, position.getY() - height / 2);
-
         setTouchable(Touchable.disabled);
     }
 

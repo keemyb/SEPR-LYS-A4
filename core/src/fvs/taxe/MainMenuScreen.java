@@ -17,7 +17,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fvs.taxe.dialog.DialogEndGame;
 import fvs.taxe.dialog.DialogStartGame;
 
-
+/**
+ * This class represents the screen shown immediately after opening the game.
+ */
 public class MainMenuScreen extends ScreenAdapter {
     private TaxeGame game;
     private OrthographicCamera camera;
@@ -70,7 +72,6 @@ public class MainMenuScreen extends ScreenAdapter {
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Draw transparent map in the background
-
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -94,14 +95,15 @@ public class MainMenuScreen extends ScreenAdapter {
         //Draw text into rectangles
         game.batch.begin();
         String startGameString = "Start game";
-        game.font.draw(game.batch, startGameString, playBounds.getX() + playBounds.getWidth() / 2 - game.font.getBounds(startGameString).width / 2,
-                playBounds.getY() + playBounds.getHeight() / 2 + game.font.getBounds(startGameString).height / 2); // center the text
+        game.font.draw(game.batch, startGameString,
+                playBounds.getX() + playBounds.getWidth() / 2 - game.font.getBounds(startGameString).width / 2,
+                playBounds.getY() + playBounds.getHeight() / 2 + game.font.getBounds(startGameString).height / 2);
         String exitGameString = "Exit";
-        game.font.draw(game.batch, exitGameString, exitBounds.getX() + exitBounds.getWidth() / 2 - game.font.getBounds(exitGameString).width / 2,
-                exitBounds.getY() + exitBounds.getHeight() / 2 + game.font.getBounds(exitGameString).height / 2); // center the text
+        game.font.draw(game.batch, exitGameString,
+                exitBounds.getX() + exitBounds.getWidth() / 2 - game.font.getBounds(exitGameString).width / 2,
+                exitBounds.getY() + exitBounds.getHeight() / 2 + game.font.getBounds(exitGameString).height / 2);
 
         game.batch.end();
-
         stage.draw();
     }
 

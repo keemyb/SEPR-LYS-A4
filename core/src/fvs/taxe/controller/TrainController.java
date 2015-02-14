@@ -20,7 +20,6 @@ public class TrainController {
         trainActor.addListener(new TrainClicked(context, train));
         trainActor.setVisible(false);
         context.getStage().addActor(trainActor);
-
         return trainActor;
     }
 

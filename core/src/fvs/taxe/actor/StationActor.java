@@ -26,7 +26,6 @@ public class StationActor extends Group {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("segoe-script-bold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        // font size 14 pixels
         parameter.size = 14;
         font = generator.generateFont(parameter);
         generator.dispose();
@@ -35,7 +34,6 @@ public class StationActor extends Group {
         stationDot.setBounds(0, 0, width, height);
         stationLabel.setPosition(-30, 18);
 
-        //setSize(width, height);
         setPosition(station.getLocation().getX() - width / 2, station.getLocation().getY() - height / 2);
         addActor(stationDot);
         addActor(stationLabel);

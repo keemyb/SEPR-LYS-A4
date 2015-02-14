@@ -18,7 +18,9 @@ import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 
-
+/**
+ * This class represents screen shown while players are playing against each other.
+ */
 public class GameScreen extends ScreenAdapter {
     public static final float ANIMATION_TIME = 1.05f;
     final private TaxeGame game;
@@ -30,7 +32,6 @@ public class GameScreen extends ScreenAdapter {
     private float timeAnimated = 0;
     private Tooltip tooltip;
     private Context context;
-
 
     private StationController stationController;
     private TopBarController topBarController;
@@ -44,11 +45,9 @@ public class GameScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-
         gameLogic = Game.getInstance();
         context = new Context(stage, skin, game, gameLogic);
         Gdx.input.setInputProcessor(stage);
-
 
         mapTexture = new Texture(Gdx.files.internal("game-map.png"));
         map = gameLogic.getMap();
@@ -84,8 +83,6 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
-
-    // called every frame
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -136,14 +133,12 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    // Called when GameScreen becomes current screen of the game
     public void show() {
         stationController.renderStations();
         jellyController.renderJellies();
         topBarController.addEndTurnButton();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
-
 
     @Override
     public void dispose() {
@@ -154,8 +149,6 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
-
-
     }
 
 }

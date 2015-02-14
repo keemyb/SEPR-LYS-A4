@@ -3,9 +3,6 @@ package fvs.taxe.controller;
 import fvs.taxe.actor.JellyActor;
 import gamelogic.map.Jelly;
 
-/**
- * Created by Owen on 13/02/2015.
- */
 public class JellyController {
 
     private Context context;

@@ -2,10 +2,10 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import fvs.taxe.actions.WaitUntilPassableAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.game.Game;
 import gamelogic.player.Player;
@@ -33,7 +33,10 @@ public class TrainMoveController {
         addMoveActions();
     }
 
-    // an action for the train to run before it starts moving across the screen
+    /**
+     * An action for the train to run before it starts moving across the screen
+     * @return
+     */
     private RunnableAction beforeAction() {
         return new RunnableAction() {
             public void run() {
@@ -43,25 +46,35 @@ public class TrainMoveController {
         };
     }
 
-    // this action will run every time the train reaches a station within a route
+    /**
+     * This action will run every time the train reaches a station within a route
+     * @param station the station that was reached
+     * @return
+     */
     private RunnableAction perStationAction(final Station station) {
         return new RunnableAction() {
             public void run() {
                 train.addToHistory(station.getName(), PlayerManager.getTurnNumber());
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());
-                // train.setPosition(station.getLocation());
-
                 collisions(station);
             }
         };
     }
 
-    private WaitUntilPassableAction waitUntilPassableAction(final Junction junction) {
-        return new WaitUntilPassableAction(junction);
+    private Action waitUntilPassableAction (final Junction junction) {
+        return new Action() {
+            @Override
+            public boolean act(float delta) {
+                return junction.isPassable();
+            }
+        };
     }
 
-    // an action for the train to run after it has moved the whole route
+    /**
+     * An action for the train to run after it has moved the whole route
+     * @return
+     */
     private RunnableAction afterAction() {
         return new RunnableAction() {
             public void run() {
@@ -93,7 +106,6 @@ public class TrainMoveController {
             }
             current = next;
         }
-
         action.addAction(afterAction());
 
         // remove previous actions to be cautious
@@ -112,7 +124,6 @@ public class TrainMoveController {
         }
 
         List<Train> trainsToDestroy = trainsToDestroy();
-
         if (trainsToDestroy.size() > 0) {
             for (Train trainToDestroy : trainsToDestroy) {
                 trainToDestroy.getActor().remove();
@@ -124,7 +135,7 @@ public class TrainMoveController {
     }
 
     private List<Train> trainsToDestroy() {
-        List<Train> trainsToDestroy = new ArrayList<Train>();
+        List<Train> trainsToDestroy = new ArrayList<>();
 
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {

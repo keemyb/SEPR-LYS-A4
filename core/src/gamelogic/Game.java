@@ -14,6 +14,7 @@ public class Game {
     private PlayerManager playerManager;
     private GoalManager goalManager;
     private TrainManager trainManager;
+
     private Map map;
     private GameState state;
     private List<GameStateListener> gameStateListeners = new ArrayList<GameStateListener>();

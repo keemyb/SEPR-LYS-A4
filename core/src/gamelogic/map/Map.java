@@ -5,8 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import fvs.taxe.actor.JunctionActor;
-import org.lwjgl.Sys;
-import util.Tuple;
+import gamelogic.Game;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.Random;
 public class Map {
     private List<Station> stations;
     private List<Connection> connections;
+    private List<Jelly> jellies;
     private List<List<Float>> distances;
     private Random random = new Random();
     private final double JUNCTION_FAILURE_RATE = 0.2;
@@ -24,6 +24,7 @@ public class Map {
     public Map() {
         stations = new ArrayList<>();
         connections = new ArrayList<>();
+        jellies = new ArrayList<>();
         distances = new ArrayList<>();
 
         initialise();
@@ -35,6 +36,11 @@ public class Map {
 
         parseStations(jsonVal);
         parseConnections(jsonVal);
+
+        addJelly();
+        addJelly();
+        addJelly();
+        addJelly();
 
         computeDistances();
     }
@@ -113,6 +119,21 @@ public class Map {
         return false;
     }
 
+    public Jelly addJelly() {
+        Station station = stations.get(new Random().nextInt(stations.size()));
+        Jelly jelly = new Jelly(station);
+        jelly.setPosition(station.getLocation());
+        jellies.add(jelly);
+
+        return jelly;
+    }
+
+    public void handleJellyCollisions(){
+        for (Jelly jelly : jellies) {
+            //HANDLE COLLISIONS
+        }
+    }
+
     public Station getRandomStation() {
         return stations.get(random.nextInt(stations.size()));
     }
@@ -165,8 +186,21 @@ public class Map {
         return stations;
     }
 
+    public List<Jelly> getJellies() {
+        return jellies;
+    }
+
     public List<Connection> getConnections() {
         return connections;
+    }
+
+    public List<Station> getAdjacentStations(Station station) {
+        List<Station> adjacentStations = new ArrayList<>();
+        for (Connection c : connections) {
+            if (c.getStation1() == station) adjacentStations.add(c.getStation2());
+            else if (c.getStation2() == station) adjacentStations.add(c.getStation1());
+        }
+        return adjacentStations;
     }
 
     public Connection addConnection(Station station1, Station station2) {

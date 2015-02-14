@@ -32,6 +32,7 @@ public class GameScreen extends ScreenAdapter {
     private ResourceController resourceController;
     private GoalController goalController;
     private RouteController routeController;
+    private JellyController jellyController;
 
     public GameScreen(TaxeGame game) {
         this.game = game;
@@ -55,6 +56,7 @@ public class GameScreen extends ScreenAdapter {
         resourceController = new ResourceController(context);
         goalController = new GoalController(context);
         routeController = new RouteController(context);
+        jellyController = new JellyController(context);
 
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
@@ -103,6 +105,7 @@ public class GameScreen extends ScreenAdapter {
                 timeAnimated = 0;
                 map.handleJunctionFailures();
             }
+            map.handleJellyCollisions();
         }
 
         if (gameLogic.getState() == GameState.NORMAL || gameLogic.getState() == GameState.PLACING) {
@@ -131,6 +134,7 @@ public class GameScreen extends ScreenAdapter {
     // Called when GameScreen becomes current screen of the game
     public void show() {
         stationController.renderStations();
+        jellyController.renderJellies();
         topBarController.addEndTurnButton();
         resourceController.drawPlayerResources(gameLogic.getPlayerManager().getCurrentPlayer());
     }

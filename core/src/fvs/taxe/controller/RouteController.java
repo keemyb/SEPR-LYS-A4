@@ -64,7 +64,7 @@ public class RouteController {
     private void addStationToRoute(Station station) {
         // the latest position chosen in the positions so far
         Position lastPosition = positions.get(positions.size() - 1);
-        Station lastStation = context.getGameLogic().getMap().getStationFromPosition(lastPosition);
+        Station lastStation = context.getGameLogic().getMap().getStationByPosition(lastPosition);
 
         boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(lastPosition, station.getLocation());
 
@@ -145,7 +145,7 @@ public class RouteController {
 
         TrainController trainController = new TrainController(context);
         trainController.setTrainsVisible(train, true);
-        train.getActor().setVisible(context.getGameLogic().getMap().getStationFromPosition(train.getPosition()) == null);
+        train.getActor().setVisible(context.getGameLogic().getMap().getStationByPosition(train.getPosition()) == null);
         context.getTopBarController().clearFlashMessage();
     }
 

@@ -6,11 +6,9 @@ import gamelogic.Player;
 import gamelogic.PlayerManager;
 import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
-import gamelogic.map.Map;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
-import gamelogic.resource.TrainManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,25 +18,22 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GoalManagerTest extends LibGdxTest {
-    GoalManager gm;
-    PlayerManager pm;
     Game game;
+    PlayerManager pm;
+    GoalManager gm;
 
     @Before
     public void setup() throws Exception {
-        TrainManager rs = new TrainManager();
-        gm = new GoalManager(rs);
-        pm = new PlayerManager();
         game = Game.getInstance();
-
+        pm = game.getPlayerManager();
     }
 
     @Test
     public void goalManagerTest() throws Exception {
-        pm.createPlayers(2);
+        //pm.createPlayers(2);
         Player player1 = pm.getCurrentPlayer();
 
-        Train train = new Train("Green", "", "", 100);
+        Train train = new Train("Green", 100);
 
 //        Station station1 = new Station("station1", new Position(5, 5));
 //        Station station2 = new Station("station2", new Position(2, 2));
@@ -55,11 +50,11 @@ public class GoalManagerTest extends LibGdxTest {
         route.add(station2.getLocation());
         train.setRoute(route);
 
-        train.addHistory("London", 0);
+        train.addToHistory("London", 0);
 
         pm.turnOver();
         pm.turnOver();
-        train.addHistory("Paris", 1);
+        train.addToHistory("Paris", 1);
 
         ArrayList<String> completedStrings = gm.trainArrived(train, player1);
         assertTrue("Goal wasn't completed", goal.isComplete(train));

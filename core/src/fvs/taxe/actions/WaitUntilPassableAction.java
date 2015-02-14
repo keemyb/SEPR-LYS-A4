@@ -1,6 +1,7 @@
 package fvs.taxe.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
+import gamelogic.map.Junction;
 import gamelogic.map.Station;
 
 /**
@@ -8,14 +9,14 @@ import gamelogic.map.Station;
  */
 public class WaitUntilPassableAction extends Action {
 
-    private Station station;
+    private Junction junction;
 
-    public WaitUntilPassableAction(Station station) {
-        this.station = station;
+    public WaitUntilPassableAction(Junction junction) {
+        this.junction = junction;
     }
 
     public boolean act(float delta) {
-        return station.isPassable();
+        return junction.isPassable();
     }
 
 }

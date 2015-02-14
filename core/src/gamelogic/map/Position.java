@@ -1,5 +1,8 @@
 package gamelogic.map;
 
+/**
+ * This class represents a 2D (x, y) coordinates.
+ */
 public class Position {
     private float x;
     private float y;

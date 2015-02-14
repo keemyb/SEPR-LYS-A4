@@ -15,6 +15,7 @@ import gamelogic.Player;
 import gamelogic.map.Junction;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 
 public class DialogButtonClicked implements ResourceDialogClickListener {
     private Context context;
@@ -34,7 +35,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                 currentPlayer.removeResource(train);
                 break;
             case TRAIN_PLACE:
-                Pixmap pixmap = new Pixmap(Gdx.files.internal(train.getCursorImage()));
+                Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
                 Gdx.input.setCursorImage(pixmap, 8, 10); // these numbers will need tweaking
                 pixmap.dispose();
 
@@ -51,7 +52,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                         }
 
                         train.setPosition(station.getLocation());
-                        train.addHistory(station.getName(), Game.getInstance().getPlayerManager().getTurnNumber());
+                        train.addToHistory(station.getName(), Game.getInstance().getPlayerManager().getTurnNumber());
 
                         Gdx.input.setCursorImage(null, 0, 0);
 

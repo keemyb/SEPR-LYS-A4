@@ -2,15 +2,14 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.EventAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actions.WaitUntilPassableAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.Game;
 import gamelogic.Player;
+import gamelogic.goal.GoalManager;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
@@ -47,7 +46,7 @@ public class TrainMoveController {
     private RunnableAction perStationAction(final Station station) {
         return new RunnableAction() {
             public void run() {
-                train.addHistory(station.getName(), context.getGameLogic().getPlayerManager().getTurnNumber());
+                train.addToHistory(station.getName(), context.getGameLogic().getPlayerManager().getTurnNumber());
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + context.getGameLogic().getPlayerManager().getTurnNumber());
                 // train.setPosition(station.getLocation());
@@ -57,22 +56,22 @@ public class TrainMoveController {
         };
     }
 
-    private WaitUntilPassableAction waitUntilPassableAction(final Station station) {
-        return new WaitUntilPassableAction(station);
+    private WaitUntilPassableAction waitUntilPassableAction(final Junction junction) {
+        return new WaitUntilPassableAction(junction);
     }
 
     // an action for the train to run after it has moved the whole route
     private RunnableAction afterAction() {
         return new RunnableAction() {
             public void run() {
-                ArrayList<String> completedGoals = context.getGameLogic().getGoalManager().trainArrived(train, train.getPlayer());
+                ArrayList<String> completedGoals = GoalManager.trainArrived(train, train.getPlayer());
                 for (String message : completedGoals) {
                     context.getTopBarController().displayFlashMessage(message, Color.WHITE, 2);
                 }
                 System.out.println(train.getFinalStation().getLocation().getX() + "," + train.getFinalStation().getLocation().getY());
                 train.setPosition(train.getFinalStation().getLocation());
                 train.getActor().setVisible(false);
-                train.setFinalDestination(null);
+                train.arrivedAtDestination();
             }
         };
     }
@@ -85,10 +84,11 @@ public class TrainMoveController {
         for (final Position next : train.getRoute()) {
             float duration = getDistance(current, next) / train.getSpeed();
             action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
-            Station station = Game.getInstance().getMap().getStationFromPosition(next);
+            Station station = Game.getInstance().getMap().getStationByPosition(next);
             if (station != null) {
                 action.addAction(perStationAction(station));
-                action.addAction(waitUntilPassableAction(station));
+                if (station instanceof Junction)
+                    action.addAction(waitUntilPassableAction((Junction)station));
             }
             current = next;
         }

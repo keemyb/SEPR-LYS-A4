@@ -1,6 +1,5 @@
 package fvs.taxe.controller;
 
-import fvs.taxe.actions.SetNextMoveAction;
 import fvs.taxe.actor.JellyActor;
 import gamelogic.map.Jelly;
 
@@ -21,8 +20,7 @@ public class JellyController {
             actor.setPosition(j.getPosition().getX() - JellyActor.width / 2, j.getPosition().getY() - JellyActor.height / 2);
             j.setActor(actor);
             context.getStage().addActor(actor);
-
-            actor.addAction(new SetNextMoveAction(j));
+            j.startMoving();
         }
     }
 

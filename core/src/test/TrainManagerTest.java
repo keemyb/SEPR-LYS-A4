@@ -12,13 +12,12 @@ public class TrainManagerTest extends LibGdxTest {
     public void testAddTrainToPlayer() throws Exception {
         PlayerManager pm = new PlayerManager();
         Player player = new Player(pm, 1);
-        TrainManager rm = new TrainManager();
 
         // add enough resources to exceed maximum
         for (int i = 0; i < 20; i++) {
-            rm.addRandomTrainToPlayer(player);
+            TrainManager.addRandomTrainToPlayer(player);
         }
 
-        assertTrue(player.getResources().size() == rm.CONFIG_MAX_TRAINS);
+        assertTrue(player.getResources().size() == TrainManager.CONFIG_MAX_TRAINS);
     }
 }

@@ -1,4 +1,4 @@
-package gamelogic;
+package util;
 
 public interface Disposable {
     public void dispose();

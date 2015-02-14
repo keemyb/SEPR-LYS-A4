@@ -4,52 +4,63 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import fvs.taxe.actor.JunctionActor;
-import gamelogic.Game;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * This class represents map in the game, containing stations and jellies.
+ */
 public class Map {
+    private final double JUNCTION_FAILURE_RATE = 0.2;
+    private final int JUNCTION_FAILURE_DURATION = 4;
     private List<Station> stations;
+    private List<Junction> junctions;
     private List<Connection> connections;
     private List<Jelly> jellies;
     private List<List<Float>> distances;
     private Random random = new Random();
-    private final double JUNCTION_FAILURE_RATE = 0.2;
-    private final int JUNCTION_FAILURE_DURATION = 4;
 
     public Map() {
         stations = new ArrayList<>();
+        junctions = new ArrayList<>();
         connections = new ArrayList<>();
         jellies = new ArrayList<>();
         distances = new ArrayList<>();
 
-        initialise();
-    }
-
-    private void initialise() {
         JsonReader jsonReader = new JsonReader();
         JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
-
         parseStations(jsonVal);
         parseConnections(jsonVal);
 
-        addJelly();
-        addJelly();
-        addJelly();
-        addJelly();
+        for (Station s : stations)
+            if (s instanceof Junction)
+                junctions.add((Junction) s);
 
         computeDistances();
+        addJelly();
+        addJelly();
+        addJelly();
+        addJelly();
+    }
+
+    /**
+     * Returns Euclidean distance between two points.
+     *
+     * @param a position of the first point
+     * @param b position of the second point
+     * @return Euclidean distance between a and b
+     */
+    public static float getDistance(Position a, Position b) {
+        return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
     }
 
     private void parseConnections(JsonValue jsonVal) {
         for (JsonValue connection = jsonVal.getChild("connections"); connection != null; connection = connection.next) {
             String station1 = "";
             String station2 = "";
-
             for (JsonValue val = connection.child; val != null; val = val.next) {
                 if (val.name.equalsIgnoreCase("station1")) {
                     station1 = val.asString();
@@ -57,38 +68,24 @@ public class Map {
                     station2 = val.asString();
                 }
             }
-
             addConnection(station1, station2);
         }
     }
 
     private void parseStations(JsonValue jsonVal) {
         for (JsonValue station = jsonVal.getChild("stations"); station != null; station = station.next) {
-            String name = "";
-            String abbreviation = "";
-            int x = 0;
-            int y = 0;
+            String name = "", abbreviation = "";
+            int x = 0, y = 0;
             boolean isJunction = false;
-
             for (JsonValue val = station.child; val != null; val = val.next) {
-                if (val.name.equalsIgnoreCase("name")) {
-                    name = val.asString();
-                } else if (val.name.equalsIgnoreCase("abbreviation")) {
-                    abbreviation = val.asString();
-                } else if (val.name.equalsIgnoreCase("x")) {
-                    x = val.asInt();
-                } else if (val.name.equalsIgnoreCase("y")) {
-                    y = val.asInt();
-                } else {
-                    isJunction = val.asBoolean();
-                }
+                if (val.name.equalsIgnoreCase("name")) name = val.asString();
+                else if (val.name.equalsIgnoreCase("abbreviation")) abbreviation = val.asString();
+                else if (val.name.equalsIgnoreCase("x")) x = val.asInt();
+                else if (val.name.equalsIgnoreCase("y")) y = val.asInt();
+                else isJunction = val.asBoolean();
             }
-
-            if (isJunction) {
-                addJunction(name, abbreviation, new Position(x, y));
-            } else {
-                addStation(name, abbreviation, new Position(x, y));
-            }
+            if (isJunction) addJunction(name, abbreviation, new Position(x, y));
+            else addStation(name, abbreviation, new Position(x, y));
         }
     }
 
@@ -96,39 +93,42 @@ public class Map {
         for (Connection connection : connections) {
             String s1 = connection.getStation1().getName();
             String s2 = connection.getStation2().getName();
-
             if (s1.equals(stationName) && s2.equals(anotherStationName)
                     || s1.equals(anotherStationName) && s2.equals(stationName)) {
                 return true;
             }
         }
-
         return false;
     }
 
+    /**
+     * Determines if there exists a connection going through two given positions
+     *
+     * @param a first position
+     * @param b second position
+     * @return true if there's a connection going through line (a, b); false otherwise
+     */
     public boolean doesConnectionExist(Position a, Position b) {
-        for (Connection connection: connections) {
+        for (Connection connection : connections) {
             Position p1 = connection.getStation1().getLocation();
             Position p2 = connection.getStation2().getLocation();
             double dist1 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(), p2.getY(), a.getX(), a.getY());
             double dist2 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(), p2.getY(), b.getX(), b.getY());
             if (dist1 <= 0.0001 && dist2 <= 0.0001)
                 return true;
-            System.out.println(dist1 + " ! " + dist2);
         }
         return false;
     }
 
     public Jelly addJelly() {
-        Station station = stations.get(new Random().nextInt(stations.size()));
+        Station station = stations.get(random.nextInt(stations.size()));
         Jelly jelly = new Jelly(station);
         jelly.setPosition(station.getLocation());
         jellies.add(jelly);
-
         return jelly;
     }
 
-    public void handleJellyCollisions(){
+    public void handleJellyCollisions() {
         for (Jelly jelly : jellies) {
             //HANDLE COLLISIONS
         }
@@ -139,47 +139,36 @@ public class Map {
     }
 
     public Station addStation(String name, String abbreviation, Position location) {
-        Station newStation = new Station(name,abbreviation, location);
-        stations.add(newStation);
-        return newStation;
+        Station station = new Station(name, abbreviation, location);
+        stations.add(station);
+        return station;
     }
 
     public Junction addJunction(String name, String abbreviation, Position location) {
-        Junction newJunction = new Junction(name, abbreviation, location);
-        stations.add(newJunction);
-        return newJunction;
+        Junction junction = new Junction(name, abbreviation, location);
+        stations.add(junction);
+        junctions.add(junction);
+        return junction;
     }
 
+    /**
+     * Decrements failure duration of already failed junctions and randomly selects the next junction to fail.
+     */
     public void handleJunctionFailures() {
-        ArrayList<Junction> junctions = new ArrayList<>();
-        for (Station s : stations) {
-            if (s instanceof Junction){
-                if (s.isPassable()) junctions.add((Junction) s);
-                else s.decrementDuration();
-            }
+        List<Junction> breakable = new ArrayList<>();
+        for (Junction junction : junctions) {
+            if (junction.isPassable()) breakable.add(junction);
+            else junction.decrementFailureDuration();
         }
-        breakRandomJunction(junctions);
+        breakRandomJunction(breakable);
     }
 
-    public void breakRandomJunction(ArrayList<Junction> junctions) {
-        if (random.nextDouble() <= JUNCTION_FAILURE_RATE) {
-            // Select one of the junctions to break
-            if (junctions.size() > 0) {
-                Junction junction = junctions.get(random.nextInt(junctions.size()));
-                breakStation(junction, JUNCTION_FAILURE_DURATION);
-                System.out.println(junction.getName() + " has failed! Oh noes!");
-            }
+    private void breakRandomJunction(List<Junction> junctions) {
+        if (random.nextDouble() <= JUNCTION_FAILURE_RATE && !junctions.isEmpty()) {
+            Junction junction = junctions.get(random.nextInt(junctions.size()));
+            junction.setFailureDuration(JUNCTION_FAILURE_DURATION);
+            System.out.println(junction.getName() + " has failed! Oh noes!");
         }
-    }
-
-    public void breakStation(Station station, int duration) {
-        station.setFailureDuration(duration);
-        if (station instanceof Junction) ((JunctionActor) station.getActor()).setBroken();
-    }
-
-    public void fixStation(Station station) {
-        station.setFailureDuration(0);
-        if (station instanceof Junction) ((JunctionActor) station.getActor()).setDefault();
     }
 
     public List<Station> getStations() {
@@ -209,22 +198,10 @@ public class Map {
         return newConnection;
     }
 
-    //Add Connection by Names
     public Connection addConnection(String station1, String station2) {
         Station st1 = getStationByName(station1);
         Station st2 = getStationByName(station2);
         return addConnection(st1, st2);
-    }
-
-    //Get connections from station
-    public List<Connection> getConnectionsFromStation(Station station) {
-        List<Connection> results = new ArrayList<Connection>();
-        for (Connection connection : connections) {
-            if (connection.getStation1() == station || connection.getStation2() == station) {
-                results.add(connection);
-            }
-        }
-        return results;
     }
 
     public Station getStationByName(String name) {
@@ -239,7 +216,7 @@ public class Map {
         return null;
     }
 
-    public Station getStationFromPosition(Position position) {
+    public Station getStationByPosition(Position position) {
         for (Station station : stations) {
             if (station.getLocation().equals(position)) {
                 return station;
@@ -248,21 +225,10 @@ public class Map {
         return null;
     }
 
-    public List<Station> createRoute(List<Position> positions) {
-        List<Station> route = new ArrayList<Station>();
-
-        for (Position position : positions) {
-            route.add(getStationFromPosition(position));
-        }
-
-        return route;
-    }
-
     /**
      * Uses Floyd-Warshall algorithm to compute shortest distances between every pair of stations.
      */
     private void computeDistances() {
-
         // Setting all initial distances to infinity or 0, if stations are / aren't the same
         for (int i = 0; i < stations.size(); i++) {
             distances.add(new ArrayList<Float>());
@@ -280,7 +246,6 @@ public class Map {
                 }
             }
         }
-
         // Execute Floyd-Warshall algorithm
         for (int k = 0; k < stations.size(); k++)
             for (int i = 0; i < stations.size(); i++)
@@ -289,18 +254,16 @@ public class Map {
                         if (distances.get(i).get(j) > distances.get(i).get(k) + distances.get(k).get(j)) {
                             distances.get(i).set(j, distances.get(i).get(k) + distances.get(k).get(j));
                         }
-
-//        //Debug info: printing distances
-//        for (int i = 0; i < stations.size(); i++) {
-//            for (int j = 0; j < stations.size(); j++) {
-//                System.out.println(stations.get(i).getName() + " > " +
-//                        stations.get(j).getName() + ": " +
-//                        distances.get(i).get(j));
-//            }
-//        }
     }
 
-    public float getDistance(Station a, Station b) {
+    /**
+     * Returns length of shortest route between two stations.
+     *
+     * @param a first station
+     * @param b second station
+     * @return length of shortest route between a and b.
+     */
+    public float getShortestRouteDistance(Station a, Station b) {
         return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
     }
 

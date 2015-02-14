@@ -1,23 +1,24 @@
 package gamelogic.map;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import fvs.taxe.actions.SetNextMoveAction;
 import fvs.taxe.actor.JellyActor;
-import fvs.taxe.actor.TrainActor;
 import gamelogic.Game;
 
+import java.util.List;
+import java.util.Random;
+
 /**
- * Created by Owen on 11/02/2015.
+ * This class represents jellies in the game. Jellies are small creatures that move randomly along routes and slow down
+ * trains.
  */
 public class Jelly {
 
+    private final int speed = 40;
     private Position position;
     private JellyActor actor;
     private Station nextStation;
-    private final int speed = 40;
 
     public Jelly(Station station) {
         this.nextStation = station;
@@ -35,17 +36,37 @@ public class Jelly {
         return nextStation;
     }
 
-    public void setNextStation(Station station) {
+    private void setNextStation(Station station) {
         nextStation = station;
         SequenceAction seq = new SequenceAction();
-        float duration = getDistance(position, station.getLocation()) / speed;
-        seq.addAction(Actions.moveTo(station.getLocation().getX() - JellyActor.width / 2, station.getLocation().getY() - JellyActor.height / 2, duration));
-        seq.addAction(new SetNextMoveAction(this));
+        float duration = Map.getDistance(position, station.getLocation()) / speed;
+        seq.addAction(Actions.moveTo(station.getLocation().getX() - JellyActor.width / 2,
+                station.getLocation().getY() - JellyActor.height / 2, duration));
+        seq.addAction(nextMoveAction());
         actor.addAction(seq);
     }
 
-    private float getDistance(Position a, Position b) {
-        return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
+
+    public void startMoving() {
+        actor.addAction(nextMoveAction());
+    }
+
+    /**
+     * This is action is called once jelly arrives at the station, and it choose next random station for jelly to move.
+     *
+     * @return
+     */
+    private Action nextMoveAction() {
+        return new Action() {
+            @Override
+            public boolean act(float delta) {
+                List<Station> stations = Game.getInstance().getMap().getAdjacentStations(getNextStation());
+                int random = new Random().nextInt(stations.size());
+                Station nextStation = stations.get(random);
+                setNextStation(nextStation);
+                return true;
+            }
+        };
     }
 
     public Position getPosition() {

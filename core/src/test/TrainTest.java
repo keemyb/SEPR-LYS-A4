@@ -2,7 +2,6 @@ package test;
 
 
 import gamelogic.map.Position;
-import gamelogic.map.Station;
 import gamelogic.resource.Train;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,7 @@ public class TrainTest {
 
     @Before
     public void trainSetup() throws Exception {
-        train = new Train("RedTrain", "RedTrain.png", "RedTrainRight.png", 250);
+        train = new Train("RedTrain", 250);
     }
 
     @Test
@@ -29,7 +28,7 @@ public class TrainTest {
 
         train.setRoute(route);
         assertTrue("Setting a train route was not succesful", train.getRoute().size() == 2);
-        assertTrue("Final destination wasn't set", train.getFinalDestination() == station2);
+        assertTrue("Final destination wasn't set", train.getFinalPosition() == station2);
     }
 
 

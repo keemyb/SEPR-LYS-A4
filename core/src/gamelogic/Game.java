@@ -12,8 +12,6 @@ public class Game {
     public int totalTurns = 30;
     private final int CONFIG_PLAYERS = 2;
     private PlayerManager playerManager;
-    private GoalManager goalManager;
-    private TrainManager trainManager;
 
     private Map map;
     private GameState state;
@@ -23,8 +21,7 @@ public class Game {
         playerManager = new PlayerManager();
         playerManager.createPlayers(CONFIG_PLAYERS);
 
-        trainManager = new TrainManager();
-        goalManager = new GoalManager(trainManager);
+        //trainManager = new TrainManager();
 
         map = new Map();
 
@@ -34,9 +31,9 @@ public class Game {
             @Override
             public void changed() {
                 for (Player currentPlayer : playerManager.getAllPlayers()) {
-                    goalManager.addRandomGoalToPlayer(currentPlayer);
-                    trainManager.addRandomTrainToPlayer(currentPlayer);
-                    trainManager.addRandomTrainToPlayer(currentPlayer);
+                    GoalManager.addRandomGoalToPlayer(currentPlayer);
+                    TrainManager.addRandomTrainToPlayer(currentPlayer);
+                    TrainManager.addRandomTrainToPlayer(currentPlayer);
                 }
             }
         });
@@ -55,9 +52,9 @@ public class Game {
 
     private void initialisePlayers() {
         for (Player player : playerManager.getAllPlayers()) {
-            goalManager.addRandomGoalToPlayer(player);
-            trainManager.addRandomTrainToPlayer(player);
-            trainManager.addRandomTrainToPlayer(player);
+            GoalManager.addRandomGoalToPlayer(player);
+            TrainManager.addRandomTrainToPlayer(player);
+            TrainManager.addRandomTrainToPlayer(player);
         }
     }
 
@@ -67,14 +64,6 @@ public class Game {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
-    }
-
-    public GoalManager getGoalManager() {
-        return goalManager;
-    }
-
-    public TrainManager getTrainManager() {
-        return trainManager;
     }
 
     public Map getMap() {
@@ -88,6 +77,10 @@ public class Game {
     public void setState(GameState state) {
         this.state = state;
         stateChanged();
+    }
+
+    public int getPhase() {
+        return (int) Math.floor((playerManager.getTurnNumber() / Game.getInstance().totalTurns) * 3.0);
     }
 
     public void subscribeStateChanged(GameStateListener listener) {

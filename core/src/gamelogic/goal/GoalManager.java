@@ -11,87 +11,91 @@ import gamelogic.resource.TrainManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GoalManager {
+/**
+ * Abstract class providing functions for manipulating goals.
+ */
+public abstract class GoalManager {
+
     public final static int CONFIG_MAX_PLAYER_GOALS = 3;
-    private TrainManager trainManager;
+    private final static Random random = new Random();
 
-    public GoalManager(TrainManager trainManager) {
-        this.trainManager = trainManager;
-    }
-
-    private Goal generateRandom(int turn) {
+    /**
+     * Returns a random goal. The type of goal is dependent on phase of the game.
+     * @param turn current turn
+     * @return random goal
+     */
+    private static Goal generateRandom(int turn) {
         Map map = Game.getInstance().getMap();
 
-        Station origin;
+        Station origin, destination;
         do {
             origin = map.getRandomStation();
         } while (origin instanceof Junction);
-
-        Station destination;
         do {
             destination = map.getRandomStation();
-            // always true, really? Can confirm, is bollocks. Damn it intelliJ!
         } while (destination == origin || destination instanceof Junction);
-
         Goal goal = new Goal(origin, destination, turn);
 
-        // Goal with a specific train
-        Random random = new Random();
+        // Goal with a specific train; pretty much hardcoded configuration
         double randDouble = random.nextDouble();
-
         if (random.nextInt(3) == 1) {
-            int phase = (int) Math.floor((turn / Game.getInstance().totalTurns) * 3.0);
+            int phase = Game.getInstance().getPhase();
             if (phase == 0) {
                 if (randDouble < 0.9) {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(4));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(4));
                 } else {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(3));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(3));
                 }
             } else if (phase == 1) {
                 if (randDouble < 0.15) {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(4));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(4));
                 } else if (randDouble < 0.7) {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(3));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(3));
                 } else {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(2));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(2));
                 }
             } else {
                 if (randDouble < 0.6) {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(1));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(1));
                 } else {
-                    goal.addConstraint("train", trainManager.getTrainNames().get(0));
+                    goal.addTrainConstraint(TrainManager.getTrainNames().get(0));
                 }
-            }
-            //Make goal quantifiable
-            if (random.nextInt(3) >= 0){
-                //add a turn limit to the goal
-                goal.addTurnLimit(computeTurnLimit(goal.getOrigin(), goal.getDestination(), goal.getTrainName()));
             }
         }
 
+        //Make goal quantifiable
+        if (random.nextInt(3) == 1) {
+            goal.addTurnLimitConstraint(computeTurnLimit(goal.getOrigin(), goal.getDestination()));
+        }
         return goal;
     }
 
-    private int computeTurnLimit(Station origin, Station destination, String trainName){
-        int distance = (int)Game.getInstance().getMap().getDistance(origin, destination);
-        return distance / trainManager.getSpeedOfTRain(trainName) + 5;
+    private static int computeTurnLimit(Station origin, Station destination){
+        int distance = (int)Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+        return distance / TrainManager.getRandomTrain().getSpeed() + 5;
     }
 
-    public void addRandomGoalToPlayer(Player player) {
+    public static void addRandomGoalToPlayer(Player player) {
         player.addGoal(generateRandom(player.getPlayerManager().getTurnNumber()));
     }
 
-    public ArrayList<String> trainArrived(Train train, Player player) {
-        ArrayList<String> completedString = new ArrayList<String>();
+    /**
+     * Executed when a train has arrived to its destination.
+     * @param train train
+     * @param player player
+     * @return list of strings saying which goals were completed.
+     */
+    public static ArrayList<String> trainArrived(Train train, Player player) {
+        ArrayList<String> completedStrings = new ArrayList<>();
         for (Goal goal : player.getGoals()) {
             if (goal.isComplete(train)) {
                 player.completeGoal(goal);
                 player.removeResource(train);
-                completedString.add("Player " + player.getPlayerNumber() + " completed a goal to " + goal.toString() + "!");
+                completedStrings.add("Player " + player.getPlayerNumber() + " completed a goal to " + goal.toString() + "!");
             }
         }
         System.out.println("Train arrived to final destination: " +
-                Game.getInstance().getMap().getStationFromPosition(train.getFinalDestination()).getName());
-        return completedString;
+                Game.getInstance().getMap().getStationByPosition(train.getFinalPosition()).getName());
+        return completedStrings;
     }
 }

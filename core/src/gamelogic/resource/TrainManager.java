@@ -8,62 +8,50 @@ import gamelogic.Player;
 import util.Tuple;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class TrainManager {
-    public final int CONFIG_MAX_TRAINS = 7;
-    private Random random = new Random();
-    private ArrayList<Tuple<String, Integer>> trains;
+/**
+ * Abstract class providing functions for manipulating trains.
+ */
+public abstract class TrainManager {
+    public final static int CONFIG_MAX_TRAINS = 7;
+    private final static Random random = new Random();
+    private final static ArrayList<Tuple<String, Integer>> trainEntries;
 
-    public TrainManager() {
-        initialise();
-    }
-
-    private void initialise() {
+    //Reading trains from json-file.
+    static {
         JsonReader jsonReader = new JsonReader();
         JsonValue jsonVal = jsonReader.parse(Gdx.files.local("trains.json"));
 
-        trains = new ArrayList<Tuple<String, Integer>>();
-        for (JsonValue train = jsonVal.getChild("trains"); train != null; train = train.next()) {
+        trainEntries = new ArrayList<>();
+        for (JsonValue entry = jsonVal.getChild("trains"); entry != null; entry = entry.next()) {
             String name = "";
-            int speed = 50;
-            for (JsonValue val = train.child; val != null; val = val.next()) {
+            int speed = 0;
+            for (JsonValue val = entry.child; val != null; val = val.next()) {
                 if (val.name.equalsIgnoreCase("name")) {
                     name = val.asString();
                 } else {
                     speed = val.asInt();
                 }
             }
-            trains.add(new Tuple<String, Integer>(name, speed));
+            trainEntries.add(new Tuple<>(name, speed));
         }
     }
 
-    public ArrayList<String> getTrainNames() {
-        ArrayList<String> names = new ArrayList<String>();
-        for (Tuple<String, Integer> train : trains) {
+    public static List<String> getTrainNames() {
+        List<String> names = new ArrayList<>();
+        for (Tuple<String, Integer> train : trainEntries) {
             names.add(train.getFirst());
         }
         return names;
     }
 
-    public ArrayList<Tuple<String, Integer>> getTrains() {
-        return trains;
-    }
-
-    private Train getRandomTrain() {
-        /*
-        The trains that can be received are split into 3 phases
-        Phase 0: 70% Steam; 20% Electric; 10% Diesel
-        Phase 1: 25% Steam; 35% Electric; 25% Diesel; 15% Petrol
-        Phase 2: 0% Steam; 10% Electric; 20% Diesel; 40% Petrol; 30% BULLLLLLET!!!!OMG KAPPA
-         */
-
-        float turn = Game.getInstance().getPlayerManager().getTurnNumber();
-        int phase = (int) Math.floor((turn / Game.getInstance().totalTurns) * 3.0);
+    public static Train getRandomTrain() {
         double randDouble = random.nextDouble();
+        int phase = Game.getInstance().getPhase();
         int index;
-
-        // very much hard coded random train selection
+        // Very much hard coded random train selection
         if (phase == 0) {
             if (randDouble < 0.7) index = 4;
             else if (randDouble < 0.9) index = 3;
@@ -81,18 +69,23 @@ public class TrainManager {
         }
 
         // returns a train with the given index
-        Tuple<String, Integer> train = trains.get(index);
-        String leftImage = train.getFirst().toLowerCase().replaceAll(" ", "-") + ".png";
-        String rightImage = train.getFirst().toLowerCase().replaceAll(" ", "-") + "-right.png";
-        return new Train(train.getFirst(), leftImage, rightImage, train.getSecond());
+        Tuple<String, Integer> entry = trainEntries.get(index);
+        return new Train(entry.getFirst(), entry.getSecond());
 
     }
 
-    public void addRandomTrainToPlayer(Player player) {
+    /**
+     * Add a random train to a player. The trains that can be received are split into 3 phases <ol> <li>Phase zero: 70%
+     * Steam; 20% Electric; 10% Diesel</li> <li>Phase one: 25% Steam; 35% Electric; 25% Diesel; 15% Petrol</li>
+     * <li>Phase two: 0% Steam; 10% Electric; 20% Diesel; 40% Petrol; 30% Bullet</li> </ol>
+     *
+     * @param player the player that will receive the train
+     */
+    public static void addRandomTrainToPlayer(Player player) {
         addTrainToPlayer(player, getRandomTrain());
     }
 
-    private void addTrainToPlayer(Player player, Train train) {
+    public static void addTrainToPlayer(Player player, Train train) {
         if (player.getResources().size() >= CONFIG_MAX_TRAINS) {
             return;
         }
@@ -101,11 +94,16 @@ public class TrainManager {
         player.addResource(train);
     }
 
-    public int getSpeedOfTRain(String name) {
-        for (Tuple<String, Integer> train: trains) {
-            if (train.getFirst().equals(name))
-                return train.getSecond();
-        }
-        throw new RuntimeException("Can't find train with name " + name);
+    public static String getLeftImageFileName(Train train) {
+        return "trains/" + train.getName().toLowerCase().replaceAll(" ", "-") + ".png";
     }
+
+    public static String getRightImageFileName(Train train) {
+        return "trains/" + train.getName().toLowerCase().replaceAll(" ", "-") + "-right.png";
+    }
+
+    public static String getCursorImageFileName(Train train) {
+        return "trains/cursor/" + train.getName().toLowerCase().replaceAll(" ", "-") + ".png";
+    }
+
 }

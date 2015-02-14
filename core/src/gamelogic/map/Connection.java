@@ -1,5 +1,8 @@
 package gamelogic.map;
 
+/**
+ * This class represents connection between two stations.
+ */
 public class Connection {
     private Station station1;
     private Station station2;

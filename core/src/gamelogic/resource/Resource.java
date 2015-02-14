@@ -1,8 +1,12 @@
 package gamelogic.resource;
 
-import gamelogic.Disposable;
 import gamelogic.Player;
+import util.Disposable;
 
+/**
+ * This class provides a skeletal implementation of player resources in the game. Additional types of resources should
+ * be added by extending this class.
+ */
 public abstract class Resource implements Disposable {
     protected String name;
     private Player player;
@@ -26,5 +30,9 @@ public abstract class Resource implements Disposable {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public String getName() {
+        return name;
     }
 }

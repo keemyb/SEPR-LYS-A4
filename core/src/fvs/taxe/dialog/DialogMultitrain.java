@@ -30,7 +30,7 @@ public class DialogMultitrain extends Dialog {
                     System.out.println("station: " + station.getLocation().getX() + ", " + station.getLocation().getY());
                     if (((Train) resource).getPosition().equals(station.getLocation())) {
                         String destination = "";
-                        if (((Train) resource).getFinalDestination() != null) {
+                        if (((Train) resource).getFinalPosition() != null) {
                             destination = " to " + ((Train) resource).getFinalStation().getName();
                         }
                         button(((Train) resource).getName() + destination + " (Player " + ((Train) resource).getPlayer().getPlayerNumber() + ")", ((Train) resource));

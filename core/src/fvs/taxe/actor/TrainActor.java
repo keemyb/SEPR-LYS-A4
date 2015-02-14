@@ -9,6 +9,7 @@ import gamelogic.Game;
 import gamelogic.GameState;
 import gamelogic.map.Position;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 
 public class TrainActor extends Image {
     public static int width = 30;
@@ -20,9 +21,9 @@ public class TrainActor extends Image {
     private Drawable rightDrawable;
 
     public TrainActor(Train train) {
-        super(new Texture(Gdx.files.internal(train.getLeftImage())));
+        super(new Texture(Gdx.files.internal(TrainManager.getLeftImageFileName(train))));
         leftDrawable = getDrawable();
-        rightDrawable = new Image(new Texture(Gdx.files.internal(train.getRightImage()))).getDrawable();
+        rightDrawable = new Image(new Texture(Gdx.files.internal(TrainManager.getRightImageFileName(train)))).getDrawable();
 
         Position position = train.getPosition();
 

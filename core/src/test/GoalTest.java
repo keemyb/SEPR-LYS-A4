@@ -21,16 +21,13 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GoalTest extends LibGdxTest {
-    GoalManager gm;
     PlayerManager pm;
     Game game;
 
     @Before
     public void setup() throws Exception {
         game = Game.getInstance();
-        gm = game.getGoalManager();
         pm = game.getPlayerManager();
-
     }
 
     @Test
@@ -43,7 +40,7 @@ public class GoalTest extends LibGdxTest {
         Goal goal = new Goal(station1, station2, pm.getTurnNumber());
         pm.getCurrentPlayer().addGoal(goal);
 
-        goal.addTurnLimit(20);
+        goal.addTurnLimitConstraint(20);
         assertEquals(20, goal.getTurnLimit());
         goal.updateGoal();
         assertEquals(20, goal.getTurnLimit());

@@ -9,45 +9,29 @@ import util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents trains in the game.
+ */
 public class Train extends Resource {
-    private String leftImage;
-    private String rightImage;
-    private Position position;
+
     private TrainActor actor;
     private int speed;
-    // Final destination should be set to null after firing the arrival event
-    private Position finalDestination;
-
-    // Should NOT contain current position!
-    private List<Position> route;
-
-    //Station name and turn number
-    private List<Tuple<String, Integer>> history;
+    private Position position;
+    private Position finalPosition;                 // must be set to null after arrival event
+    private Station finalStation;                   // must correspond to finalPosition
+    private List<Position> route;                   // must not contain current position
+    private List<Tuple<String, Integer>> history;   // station name and turn number
 
 
-    public Train(String name, String leftImage, String rightImage, int speed) {
+    public Train(String name, int speed) {
         this.name = name;
-        this.leftImage = leftImage;
-        this.rightImage = rightImage;
         this.speed = speed;
         history = new ArrayList<>();
         route = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getLeftImage() {
-        return "trains/" + leftImage;
-    }
-
-    public String getRightImage() {
-        return "trains/" + rightImage;
-    }
-
-    public String getCursorImage() {
-        return "trains/cursor/" + leftImage;
+    public int getSpeed() {
+        return speed;
     }
 
     public Position getPosition() {
@@ -67,47 +51,47 @@ public class Train extends Resource {
         this.actor = actor;
     }
 
-    public boolean isMoving() {
-        return finalDestination != null;
-    }
-
     public List<Position> getRoute() {
         return route;
     }
 
     public void setRoute(List<Position> route) {
-        // Final destination should be set to null after firing the arrival event
-        if (route != null && route.size() > 0)
-            finalDestination = route.get(route.size() - 1);
-
+        if (route != null && route.size() > 0) {
+            finalPosition = route.get(route.size() - 1);
+            finalStation = Game.getInstance().getMap().getStationByPosition(finalPosition);
+        }
         this.route = route;
     }
 
-    public Position getFinalDestination() {
-        return finalDestination;
+    public void arrivedAtDestination() {
+        finalPosition = null;
+        finalStation = null;
     }
 
-    public void setFinalDestination(Position position) {
-        finalDestination = position;
+    public Position getFinalPosition() {
+        return finalPosition;
     }
 
     public Station getFinalStation() {
-        Station s = Game.getInstance().getMap().getStationFromPosition(finalDestination);
-        if (s != null) return s;
-        throw new RuntimeException("train's route must end with a station");
+        return finalStation;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
-    //Station name and turn number
+    /**
+     * Returns the list of stations and the number of turns when they were visited.
+     *
+     * @return
+     */
     public List<Tuple<String, Integer>> getHistory() {
         return history;
     }
 
-    //Station name and turn number
-    public void addHistory(String stationName, int turn) {
+    /**
+     * Adds (stationName, turn) as the last entry to train history
+     *
+     * @param stationName name of station
+     * @param turn        number of turn when station was visited
+     */
+    public void addToHistory(String stationName, int turn) {
         history.add(new Tuple<>(stationName, turn));
     }
 

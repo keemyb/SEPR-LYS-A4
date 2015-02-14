@@ -11,13 +11,14 @@ import fvs.taxe.Tooltip;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogMultitrain;
-import gamelogic.Game;
-import gamelogic.GameState;
-import gamelogic.Player;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
+import gamelogic.player.Player;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -158,7 +159,7 @@ public class StationController {
     private int trainsAtStation(Station station) {
         int count = 0;
 
-        for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
+        for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {
                 if (resource instanceof Train) {
                     if (((Train) resource).getActor() != null) {

@@ -1,7 +1,7 @@
 package gamelogic.resource;
 
 import fvs.taxe.actor.TrainActor;
-import gamelogic.Game;
+import gamelogic.game.Game;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import util.Tuple;

@@ -3,8 +3,8 @@ package gamelogic.resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import gamelogic.Game;
-import gamelogic.Player;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
 import util.Tuple;
 
 import java.util.ArrayList;

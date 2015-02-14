@@ -1,7 +1,7 @@
 package test;
 
-import gamelogic.Player;
-import gamelogic.PlayerManager;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.TrainManager;
 import org.junit.Test;
 
@@ -10,8 +10,7 @@ import static org.junit.Assert.assertTrue;
 public class TrainManagerTest extends LibGdxTest {
     @Test
     public void testAddTrainToPlayer() throws Exception {
-        PlayerManager pm = new PlayerManager();
-        Player player = new Player(pm, 1);
+        Player player = new Player(1);
 
         // add enough resources to exceed maximum
         for (int i = 0; i < 20; i++) {

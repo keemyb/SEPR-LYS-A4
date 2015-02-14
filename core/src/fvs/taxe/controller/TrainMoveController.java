@@ -7,12 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actions.WaitUntilPassableAction;
 import fvs.taxe.actor.TrainActor;
-import gamelogic.Game;
-import gamelogic.Player;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -46,9 +47,9 @@ public class TrainMoveController {
     private RunnableAction perStationAction(final Station station) {
         return new RunnableAction() {
             public void run() {
-                train.addToHistory(station.getName(), context.getGameLogic().getPlayerManager().getTurnNumber());
+                train.addToHistory(station.getName(), PlayerManager.getTurnNumber());
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
-                        + context.getGameLogic().getPlayerManager().getTurnNumber());
+                        + PlayerManager.getTurnNumber());
                 // train.setPosition(station.getLocation());
 
                 collisions(station);
@@ -125,7 +126,7 @@ public class TrainMoveController {
     private List<Train> trainsToDestroy() {
         List<Train> trainsToDestroy = new ArrayList<Train>();
 
-        for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
+        for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {
                 if (resource instanceof Train) {
                     Train otherTrain = (Train) resource;

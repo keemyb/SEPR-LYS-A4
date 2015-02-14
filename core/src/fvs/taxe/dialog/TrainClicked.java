@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.controller.Context;
-import gamelogic.Game;
-import gamelogic.GameState;
-import gamelogic.Player;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 
 public class TrainClicked extends ClickListener {
@@ -24,7 +25,7 @@ public class TrainClicked extends ClickListener {
         System.out.println("train clicked");
 
         // current player can't be passed in as it changes so find out current player at this instant
-        Player currentPlayer = Game.getInstance().getPlayerManager().getCurrentPlayer();
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
 
         if (!train.isOwnedBy(currentPlayer)) {
             context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);

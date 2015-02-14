@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actor.JellyActor;
-import gamelogic.Game;
+import gamelogic.game.Game;
 
 import java.util.List;
 import java.util.Random;

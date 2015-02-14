@@ -1,8 +1,8 @@
 package test;
 
-import gamelogic.Game;
-import gamelogic.Player;
-import gamelogic.PlayerManager;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,13 +14,11 @@ public class GameTest extends LibGdxTest {
     @Before
     public void setUpGame() throws Exception {
         Game game = Game.getInstance();
-        game.getPlayerManager();
-        pm = game.getPlayerManager();
     }
 
     @Test
     public void testInitialisePlayers() {
-        Player currentPlayer = pm.getCurrentPlayer();
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
 
         // fresh players should start with at least 1 goal and resource
         assertTrue(currentPlayer.getResources().size() > 0);
@@ -29,12 +27,12 @@ public class GameTest extends LibGdxTest {
 
     @Test
     public void testPlayerChanged() throws Exception {
-        Player p1 = pm.getCurrentPlayer();
+        Player p1 = PlayerManager.getCurrentPlayer();
         int resourceCount = p1.getResources().size();
         int goalCount = p1.getGoals().size();
 
-        pm.turnOver();
-        pm.turnOver();
+        PlayerManager.turnOver();
+        PlayerManager.turnOver();
 
         // resource count should increase when p1 has another turn
         assertTrue(p1.getResources().size() > resourceCount);

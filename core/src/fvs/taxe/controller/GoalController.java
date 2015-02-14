@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
-import gamelogic.Player;
-import gamelogic.PlayerManager;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.goal.Goal;
 
 import java.util.ArrayList;
@@ -21,8 +21,7 @@ public class GoalController {
 
     private List<String> playerGoalStrings() {
         ArrayList<String> strings = new ArrayList<String>();
-        PlayerManager pm = context.getGameLogic().getPlayerManager();
-        Player currentPlayer = pm.getCurrentPlayer();
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
 
         for (Goal goal : currentPlayer.getGoals()) {
             if (goal.getComplete()) {
@@ -64,6 +63,6 @@ public class GoalController {
     }
 
     private String playerGoalHeader() {
-        return "Player " + context.getGameLogic().getPlayerManager().getCurrentPlayer().getPlayerNumber() + " Goals:";
+        return "Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + " Goals:";
     }
 }

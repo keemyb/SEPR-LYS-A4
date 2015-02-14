@@ -4,9 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
-import gamelogic.Player;
+import gamelogic.player.Player;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -22,7 +23,7 @@ public class DialogMultitrain extends Dialog {
 
         text("Choose which train you would like");
 
-        for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
+        for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {
                 if (resource instanceof Train && (((Train)resource).getPosition() != null)) {
                     Position trainPosition = (((Train)resource).getPosition());

@@ -5,8 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.TrainClicked;
-import gamelogic.Player;
-import gamelogic.PlayerChangedListener;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerChangedListener;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -17,10 +18,10 @@ public class ResourceController {
     public ResourceController(final Context context) {
         this.context = context;
 
-        context.getGameLogic().getPlayerManager().subscribePlayerChanged(new PlayerChangedListener() {
+        PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                drawPlayerResources(context.getGameLogic().getPlayerManager().getCurrentPlayer());
+                drawPlayerResources(PlayerManager.getCurrentPlayer());
             }
         });
     }

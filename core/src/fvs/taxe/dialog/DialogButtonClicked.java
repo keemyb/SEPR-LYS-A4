@@ -9,11 +9,12 @@ import fvs.taxe.actor.TrainActor;
 import fvs.taxe.controller.Context;
 import fvs.taxe.controller.StationController;
 import fvs.taxe.controller.TrainController;
-import gamelogic.Game;
-import gamelogic.GameState;
-import gamelogic.Player;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
+import gamelogic.player.Player;
 import gamelogic.map.Junction;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
@@ -52,7 +53,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                         }
 
                         train.setPosition(station.getLocation());
-                        train.addToHistory(station.getName(), Game.getInstance().getPlayerManager().getTurnNumber());
+                        train.addToHistory(station.getName(), PlayerManager.getTurnNumber());
 
                         Gdx.input.setCursorImage(null, 0, 0);
 

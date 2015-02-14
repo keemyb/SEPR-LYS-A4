@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import gamelogic.Game;
-import gamelogic.GameState;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
 import gamelogic.map.Jelly;
 import gamelogic.map.Position;
-import gamelogic.resource.Train;
 
 public class JellyActor extends Image {
     public static int width = 40;

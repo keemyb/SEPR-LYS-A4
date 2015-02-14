@@ -7,8 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.TaxeGame;
-import gamelogic.GameState;
-import gamelogic.GameStateListener;
+import gamelogic.game.GameState;
+import gamelogic.game.GameStateListener;
+import gamelogic.player.PlayerManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -76,7 +77,7 @@ public class TopBarController {
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                context.getGameLogic().getPlayerManager().turnOver();
+                PlayerManager.turnOver();
             }
         });
 

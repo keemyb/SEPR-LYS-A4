@@ -6,20 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.MainMenuScreen;
 import fvs.taxe.TaxeGame;
-import gamelogic.Player;
-import gamelogic.PlayerManager;
-import gamelogic.goal.Goal;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 
 public class DialogEndGame extends Dialog {
     private TaxeGame game;
 
-    public DialogEndGame(TaxeGame game, PlayerManager pm, Skin skin) {
+    public DialogEndGame(TaxeGame game, Skin skin) {
         super("GAME OVER", skin);
         this.game = game;
 
         int highscore = 0;
         int playernum = 0;
-        for (Player player : pm.getAllPlayers()) {
+        for (Player player : PlayerManager.getAllPlayers()) {
             int playerScore = player.getScore();
 
             text("Player " + player.getPlayerNumber() + " scored " + playerScore + " points");

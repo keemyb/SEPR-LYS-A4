@@ -1,13 +1,15 @@
 package gamelogic.goal;
 
-import gamelogic.Game;
+import gamelogic.game.Game;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 import util.Tuple;
 
 /**
- * This class represents goals in the game. Goals can have two constraints: train constraint (a goal must be completed by a specific train)
- * and a turn limit constraint (goal must be completed within specific number of turns - it is quantifiable).
+ * This class represents goals in the game. Goals can have two constraints: train constraint (a goal must be completed
+ * by a specific train) and a turn limit constraint (goal must be completed within specific number of turns - it is
+ * quantifiable).
  */
 public class Goal {
     private int score;
@@ -31,7 +33,7 @@ public class Goal {
         updateGoal();
     }
 
-    public void addTurnLimitConstraint(int turns){
+    public void addTurnLimitConstraint(int turns) {
         quantifiable = true;
         turnLimit = turns;
         updateGoal();
@@ -65,15 +67,14 @@ public class Goal {
     }
 
     public void updateGoal() {
-        int distance = (int)Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
         if (quantifiable) {
-            if (turnIssued != Game.getInstance().getPlayerManager().getTurnNumber()) {
+            if (turnIssued != PlayerManager.getTurnNumber()) {
                 turnLimit--;
             }
             float t = distance * 5 * (1 - 1f / turnLimit);
-            score = Math.max(50, (int)t - (int)t % 50);
-        }
-        else {
+            score = Math.max(50, (int) t - (int) t % 50);
+        } else {
             score = Math.max(50, distance - distance % 50);
         }
     }
@@ -95,7 +96,7 @@ public class Goal {
         return destination;
     }
 
-    public int getTurnLimit(){
+    public int getTurnLimit() {
         return turnLimit;
     }
 

@@ -2,8 +2,9 @@ package fvs.taxe.controller;
 
 import fvs.taxe.actor.TrainActor;
 import fvs.taxe.dialog.TrainClicked;
-import gamelogic.Player;
+import gamelogic.player.Player;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -27,7 +28,7 @@ public class TrainController {
     // Sets all trains on the map visible or invisible except one that we are routing for
     public void setTrainsVisible(Train train, boolean visible) {
 
-        for (Player player : context.getGameLogic().getPlayerManager().getAllPlayers()) {
+        for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {
                 if (resource instanceof Train) {
                     boolean trainAtStation = false;

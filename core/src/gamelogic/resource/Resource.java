@@ -1,6 +1,6 @@
 package gamelogic.resource;
 
-import gamelogic.Player;
+import gamelogic.player.Player;
 import util.Disposable;
 
 /**

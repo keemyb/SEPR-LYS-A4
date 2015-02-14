@@ -1,4 +1,4 @@
-package gamelogic;
+package gamelogic.game;
 
 public enum GameState {
     NORMAL,

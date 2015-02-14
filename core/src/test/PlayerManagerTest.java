@@ -1,7 +1,8 @@
 package test;
 
-import gamelogic.Player;
-import gamelogic.PlayerManager;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,30 +10,29 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class PlayerManagerTest {
-    private PlayerManager pm;
+    private Game game;
 
     @Before
     public void setUp() throws Exception {
-        pm = new PlayerManager();
-        pm.createPlayers(2);
+        Game game = Game.getInstance();
     }
 
     @Test
     public void testGetCurrentPlayer() throws Exception {
-        Player p1 = pm.getCurrentPlayer();
-        pm.turnOver();
+        Player p1 = PlayerManager.getCurrentPlayer();
+        PlayerManager.turnOver();
 
         // player should change after PlayerManager.turnOver() is called
-        assertFalse(p1.equals(pm.getCurrentPlayer()));
+        assertFalse(p1.equals(PlayerManager.getCurrentPlayer()));
     }
 
     @Test
     public void testTurnNumber() throws Exception {
-        int previous = pm.getTurnNumber();
-        pm.turnOver();
-        assertTrue("Turn number changed", previous == pm.getTurnNumber());
-        pm.turnOver();
-        assertTrue("Turn number did not change", previous < pm.getTurnNumber());
+        int previous = PlayerManager.getTurnNumber();
+        PlayerManager.turnOver();
+        assertTrue("Turn number changed", previous == PlayerManager.getTurnNumber());
+        PlayerManager.turnOver();
+        assertTrue("Turn number did not change", previous < PlayerManager.getTurnNumber());
     }
 
 

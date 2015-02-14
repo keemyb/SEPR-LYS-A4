@@ -1,9 +1,9 @@
 package test;
 
 
-import gamelogic.Game;
-import gamelogic.Player;
-import gamelogic.PlayerManager;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Position;
@@ -19,19 +19,16 @@ import static org.junit.Assert.assertTrue;
 
 public class GoalManagerTest extends LibGdxTest {
     Game game;
-    PlayerManager pm;
-    GoalManager gm;
 
     @Before
     public void setup() throws Exception {
         game = Game.getInstance();
-        pm = game.getPlayerManager();
     }
 
     @Test
     public void goalManagerTest() throws Exception {
         //pm.createPlayers(2);
-        Player player1 = pm.getCurrentPlayer();
+        Player player1 = PlayerManager.getCurrentPlayer();
 
         Train train = new Train("Green", 100);
 
@@ -52,11 +49,11 @@ public class GoalManagerTest extends LibGdxTest {
 
         train.addToHistory("London", 0);
 
-        pm.turnOver();
-        pm.turnOver();
+        PlayerManager.turnOver();
+        PlayerManager.turnOver();
         train.addToHistory("Paris", 1);
 
-        ArrayList<String> completedStrings = gm.trainArrived(train, player1);
+        ArrayList<String> completedStrings = GoalManager.trainArrived(train, player1);
         assertTrue("Goal wasn't completed", goal.isComplete(train));
         assertTrue("Completed goal string not right", completedStrings.size() > 0);
 

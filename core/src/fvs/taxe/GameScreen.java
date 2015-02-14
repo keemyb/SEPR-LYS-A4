@@ -10,8 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
 import fvs.taxe.dialog.DialogEndGame;
-import gamelogic.*;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
+import gamelogic.game.GameStateListener;
+import gamelogic.game.TurnListener;
 import gamelogic.map.Map;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 
 
 public class GameScreen extends ScreenAdapter {
@@ -61,7 +66,7 @@ public class GameScreen extends ScreenAdapter {
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
 
-        gameLogic.getPlayerManager().subscribeTurnChanged(new TurnListener() {
+        PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override
             public void changed() {
                 gameLogic.setState(GameState.ANIMATING);
@@ -71,8 +76,8 @@ public class GameScreen extends ScreenAdapter {
         gameLogic.subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
-                if (gameLogic.getPlayerManager().getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
-                    DialogEndGame dia = new DialogEndGame(GameScreen.this.game, gameLogic.getPlayerManager(), skin);
+                if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
+                    DialogEndGame dia = new DialogEndGame(GameScreen.this.game, skin);
                     dia.show(stage);
                 }
             }
@@ -120,11 +125,11 @@ public class GameScreen extends ScreenAdapter {
 
         game.batch.begin();
         float x = 10, y = 80;
-        for (Player p: gameLogic.getPlayerManager().getAllPlayers()) {
+        for (Player p: PlayerManager.getAllPlayers()) {
             game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + p.getScore(), x, y);
             y -= 20;
         }
-        int turn = gameLogic.getPlayerManager().getTurnNumber() + 1;
+        int turn = PlayerManager.getTurnNumber() + 1;
         if (turn > gameLogic.totalTurns) turn = gameLogic.totalTurns;
         game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.totalTurns, x, y);
         game.batch.end();
@@ -136,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
         stationController.renderStations();
         jellyController.renderJellies();
         topBarController.addEndTurnButton();
-        resourceController.drawPlayerResources(gameLogic.getPlayerManager().getCurrentPlayer());
+        resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 
 

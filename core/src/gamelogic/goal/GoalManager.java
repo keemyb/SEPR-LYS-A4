@@ -1,10 +1,11 @@
 package gamelogic.goal;
 
-import gamelogic.Game;
-import gamelogic.Player;
+import gamelogic.game.Game;
 import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
@@ -21,6 +22,7 @@ public abstract class GoalManager {
 
     /**
      * Returns a random goal. The type of goal is dependent on phase of the game.
+     *
      * @param turn current turn
      * @return random goal
      */
@@ -70,18 +72,19 @@ public abstract class GoalManager {
         return goal;
     }
 
-    private static int computeTurnLimit(Station origin, Station destination){
-        int distance = (int)Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+    private static int computeTurnLimit(Station origin, Station destination) {
+        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
         return distance / TrainManager.getRandomTrain().getSpeed() + 5;
     }
 
     public static void addRandomGoalToPlayer(Player player) {
-        player.addGoal(generateRandom(player.getPlayerManager().getTurnNumber()));
+        player.addGoal(generateRandom(PlayerManager.getTurnNumber()));
     }
 
     /**
      * Executed when a train has arrived to its destination.
-     * @param train train
+     *
+     * @param train  train
      * @param player player
      * @return list of strings saying which goals were completed.
      */

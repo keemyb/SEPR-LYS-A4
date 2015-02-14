@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
-import gamelogic.Game;
+import gamelogic.game.Game;
 
 public class DialogStartGame extends Dialog {
     private TaxeGame game;

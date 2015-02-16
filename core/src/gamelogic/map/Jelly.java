@@ -16,6 +16,8 @@ import java.util.Random;
  */
 public class Jelly {
 
+    private final int baseSpeed = 40;
+    private final int maxSpeed = 70;
     private Position position;
     private JellyActor actor;
     private Station nextStation;
@@ -37,7 +39,8 @@ public class Jelly {
     }
 
     private void setNextStation(Station station) {
-        int speed = 40 + (int) (30 * ((float)PlayerManager.getTurnNumber() / (float)Game.getInstance().totalTurns));
+        int speedIncrease = maxSpeed - baseSpeed;
+        int speed = baseSpeed + (int) (speedIncrease * ((float)PlayerManager.getTurnNumber() / (float)Game.getInstance().totalTurns));
 
         nextStation = station;
         SequenceAction seq = new SequenceAction();

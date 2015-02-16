@@ -1,9 +1,18 @@
 package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import fvs.taxe.actor.JellyActor;
+import fvs.taxe.actor.TrainActor;
+import fvs.taxe.controller.TopBarController;
+import gamelogic.game.Game;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
+import gamelogic.resource.Resource;
+import gamelogic.resource.Train;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -130,7 +139,25 @@ public class Map {
 
     public void handleJellyCollisions() {
         for (Jelly jelly : jellies) {
-            //HANDLE COLLISIONS
+            JellyActor jellyActor = jelly.getActor();
+            Rectangle bounds = jellyActor.getBounds();
+            for (Player player : PlayerManager.getAllPlayers()) {
+                ArrayList<Resource> toDelete = new ArrayList<>();
+                for (Resource r : player.getResources()) {
+                    if (r instanceof Train) {
+                        Position position = ((Train) r).getPosition();
+                        if (position != null) {
+                            if (bounds.contains(position.getX(), position.getY())) {
+                                toDelete.add(r);
+
+                            }
+                        }
+                    }
+                }
+                for (Resource r : toDelete) {
+                    player.removeResource(r);
+                }
+            }
         }
     }
 

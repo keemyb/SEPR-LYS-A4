@@ -116,6 +116,7 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
         camera.update();
     }
 

@@ -6,13 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import fvs.taxe.actor.JellyActor;
-import fvs.taxe.actor.TrainActor;
-import fvs.taxe.controller.TopBarController;
-import gamelogic.game.Game;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainJelliedListener;
+import gamelogic.resource.TrainManager;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import java.util.Random;
 public class Map {
     private final double JUNCTION_FAILURE_RATE = 0.2;
     private final int JUNCTION_FAILURE_DURATION = 4;
+    private final int NUMBER_OF_JELLIES = 4;
     private List<Station> stations;
     private List<Junction> junctions;
     private List<Connection> connections;
@@ -49,10 +49,8 @@ public class Map {
                 junctions.add((Junction) s);
 
         computeDistances();
-        addJelly();
-        addJelly();
-        addJelly();
-        addJelly();
+
+        for (int i = 0; i < NUMBER_OF_JELLIES; i++) addJelly();
     }
 
     /**
@@ -156,6 +154,7 @@ public class Map {
                 }
                 for (Resource r : toDelete) {
                     player.removeResource(r);
+                    TrainManager.trainJellied();
                 }
             }
         }

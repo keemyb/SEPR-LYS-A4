@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actor.JellyActor;
 import gamelogic.game.Game;
+import gamelogic.player.PlayerManager;
 
 import java.util.List;
 import java.util.Random;
@@ -15,7 +16,6 @@ import java.util.Random;
  */
 public class Jelly {
 
-    private final int speed = 40;
     private Position position;
     private JellyActor actor;
     private Station nextStation;
@@ -37,6 +37,8 @@ public class Jelly {
     }
 
     private void setNextStation(Station station) {
+        int speed = 40 + (int) (30 * ((float)PlayerManager.getTurnNumber() / (float)Game.getInstance().totalTurns));
+
         nextStation = station;
         SequenceAction seq = new SequenceAction();
         float duration = Map.getDistance(position, station.getLocation()) / speed;

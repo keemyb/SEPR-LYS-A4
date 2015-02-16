@@ -17,6 +17,8 @@ import gamelogic.game.TurnListener;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.resource.TrainJelliedListener;
+import gamelogic.resource.TrainManager;
 
 /**
  * This class represents screen shown while players are playing against each other.
@@ -64,6 +66,13 @@ public class GameScreen extends ScreenAdapter {
 
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
+
+        TrainManager.subscribeTrainJellied(new TrainJelliedListener() {
+            @Override
+            public void changed() {
+                topBarController.displayFlashMessage("A train has been consumed by a jelly! Thanks Obama...", Color.RED);
+            }
+        });
 
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override

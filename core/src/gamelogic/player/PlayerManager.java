@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class PlayerManager {
 
     private static ArrayList<Player> players = new ArrayList<>();
+    private static int startingPlayer = 0; // The player who goes first this turn
     private static int currentPlayerNumber = 0;
     private static int turnNumber = 0;
     private static List<TurnListener> turnListeners = new ArrayList<>();
@@ -30,12 +31,13 @@ public abstract class PlayerManager {
     }
 
     public static void turnOver() {
-        currentPlayerNumber++;
-        if (currentPlayerNumber == players.size()) {
-            currentPlayerNumber = 0;
+        if (currentPlayerNumber == startingPlayer) {
+            currentPlayerNumber = startingPlayer == 0 ? 1 : 0;
+            playerChanged();
+        } else {
+            startingPlayer = currentPlayerNumber;
             turnChanged();
         }
-        playerChanged();
     }
 
     public static void subscribeTurnChanged(TurnListener listener) {

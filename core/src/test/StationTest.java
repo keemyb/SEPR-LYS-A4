@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 public class StationTest {
     @Test
-    public void StationsTest() throws Exception {
+    public void stationsTest() throws Exception {
         int x = 5000;
         int y = 7000;
         String name = "TestStation";
@@ -19,5 +19,6 @@ public class StationTest {
 
         assertTrue("Position is wrong", testStation.getLocation().getX() == x && testStation.getLocation().getY() == y);
         assertTrue("Name is wrong", testStation.getName().equals(name));
+        assertTrue("Abbreviation is wrong", testStation.getAbbreviation().equals(abbreviation));
     }
 }

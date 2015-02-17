@@ -37,7 +37,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                 break;
             case TRAIN_PLACE:
                 Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
-                Gdx.input.setCursorImage(pixmap, 8, 10); // these numbers will need tweaking
+                Gdx.input.setCursorImage(pixmap, 8, 10);
                 pixmap.dispose();
 
                 Game.getInstance().setState(GameState.PLACING);

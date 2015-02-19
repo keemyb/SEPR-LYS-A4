@@ -26,6 +26,7 @@ public class GoalTest extends LibGdxTest {
         Station station1 = game.getMap().getStationByName("London");
         Station station2 = game.getMap().getStationByName("Paris");
 
+        PlayerManager.clearAllGoals();
         Goal goal = new Goal(station1, station2, PlayerManager.getTurnNumber());
         PlayerManager.getCurrentPlayer().addGoal(goal);
 

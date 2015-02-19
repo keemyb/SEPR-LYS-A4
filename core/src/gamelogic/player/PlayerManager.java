@@ -75,6 +75,11 @@ public abstract class PlayerManager {
         }
     }
 
+    public static void clearAllGoals() {
+        for (Player player: players)
+            player.getGoals().clear();
+    }
+
     public static int getTurnNumber() {
         return turnNumber;
     }

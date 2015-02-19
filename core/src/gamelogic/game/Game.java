@@ -71,7 +71,7 @@ public class Game {
     }
 
     public int getPhase() {
-        return (int) Math.floor((PlayerManager.getTurnNumber() / Game.getInstance().totalTurns) * 3.0);
+        return (int) Math.floor(((float) PlayerManager.getTurnNumber() / (float) Game.getInstance().totalTurns) * 3.0);
     }
 
     public void subscribeStateChanged(GameStateListener listener) {

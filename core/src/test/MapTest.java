@@ -21,7 +21,6 @@ public class MapTest extends LibGdxTest {
     public void addStationAndConnectionTest() throws Exception {
         String name1 = "station1";
         String name2 = "station2";
-        String abbreviation1 = "abbreviation1";
 
 
         int previousSize = map.getStations().size();

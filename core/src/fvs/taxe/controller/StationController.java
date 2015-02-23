@@ -102,7 +102,7 @@ public class StationController {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 tooltip.setPosition(junctionActor.getX() + 10, junctionActor.getY() + 10);
-                tooltip.show("Junction");
+                tooltip.show(junction.getName());
             }
 
             @Override

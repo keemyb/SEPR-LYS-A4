@@ -21,103 +21,124 @@ import fvs.taxe.dialog.DialogStartGame;
  * This class represents the screen shown immediately after opening the game.
  */
 public class MainMenuScreen extends ScreenAdapter {
-    private TaxeGame game;
-    private OrthographicCamera camera;
-    private Rectangle playBounds;
-    private Rectangle exitBounds;
-    private Vector3 touchPoint;
-    private Sprite mapSprite;
-    private Viewport viewport;
-    private Skin skin;
-    private Stage stage;
+	private TaxeGame game;
+	private OrthographicCamera camera;
+	private Rectangle playBounds;
+	private Rectangle exitBounds;
+	private Vector3 touchPoint;
+	private Sprite mapSprite;
+	private Viewport viewport;
+	private Skin skin;
+	private Stage stage;
+	private boolean hideButtons;
 
+	public MainMenuScreen(TaxeGame game) {
+		this.game = game;
+		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+		stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH,
+				TaxeGame.WORLD_HEIGHT));
+		Gdx.input.setInputProcessor(stage);
 
-    public MainMenuScreen(TaxeGame game) {
-        this.game = game;
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
-        Gdx.input.setInputProcessor(stage);
+		playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 350, 400,
+				100);
+		exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 200, 400,
+				100);
+		touchPoint = new Vector3();
+		mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
+		mapSprite.setPosition(0, 0);
 
-        playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 350, 400, 100);
-        exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 200, 400, 100);
-        touchPoint = new Vector3();
-        mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
-        mapSprite.setPosition(0, 0);
+		camera = new OrthographicCamera();
+		viewport = new StretchViewport(TaxeGame.WORLD_WIDTH,
+				TaxeGame.WORLD_HEIGHT, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth / 2,
+				camera.viewportHeight / 2, 0);
+		hideButtons = false;
 
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT, camera);
-        viewport.apply();
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+	}
 
+	public void update() {
+		if (Gdx.input.justTouched()) {
+			camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(),
+					0));
+			if (playBounds.contains(touchPoint.x, touchPoint.y)) {
+				DialogStartGame dia = new DialogStartGame(
+						MainMenuScreen.this.game, skin);
+				hideButtons = true;
+				dia.show(stage);
+				return;
+			}
+			if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
+				Gdx.app.exit();
+			}
+		}
+	}
 
-    }
+	public void draw() {
+		GL20 gl = Gdx.gl;
+		gl.glClearColor(1, 1, 1, 1);
+		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    public void update() {
-        if (Gdx.input.justTouched()) {
-            camera.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-            if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-                DialogStartGame dia = new DialogStartGame(MainMenuScreen.this.game, skin);
-                dia.show(stage);
-                return;
-            }
-            if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
-                Gdx.app.exit();
-            }
-        }
-    }
+		// Draw transparent map in the background
+		camera.update();
+		game.batch.setProjectionMatrix(camera.combined);
 
-    public void draw() {
-        GL20 gl = Gdx.gl;
-        gl.glClearColor(1, 1, 1, 1);
-        gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		game.batch.begin();
+		Color c = game.batch.getColor();
+		game.batch.setColor(c.r, c.g, c.b, (float) 0.3);
+		game.batch.draw(mapSprite, 0, 0, TaxeGame.WORLD_WIDTH,
+				TaxeGame.WORLD_HEIGHT);
+		game.batch.setColor(c);
+		game.batch.end();
 
-        //Draw transparent map in the background
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+		if (!hideButtons) {
+			// Draw rectangles, did not use TextButtons because it was easier
+			// not to
+			game.shapeRenderer.setProjectionMatrix(camera.combined);
+			game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        game.batch.begin();
-        Color c = game.batch.getColor();
-        game.batch.setColor(c.r, c.g, c.b, (float) 0.3);
-        game.batch.draw(mapSprite, 0, 0, TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT);
-        game.batch.setColor(c);
-        game.batch.end();
+			game.shapeRenderer.setColor(Color.GREEN);
+			game.shapeRenderer.rect(playBounds.getX(), playBounds.getY(),
+					playBounds.getWidth(), playBounds.getHeight());
+			game.shapeRenderer.setColor(Color.RED);
+			game.shapeRenderer.rect(exitBounds.getX(), exitBounds.getY(),
+					exitBounds.getWidth(), exitBounds.getHeight());
+			game.shapeRenderer.end();
 
-        //Draw rectangles, did not use TextButtons because it was easier not to
-        game.shapeRenderer.setProjectionMatrix(camera.combined);
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			// Draw text into rectangles
+			game.batch.begin();
+			String startGameString = "Start game";
+			game.font.draw(
+					game.batch,
+					startGameString,
+					playBounds.getX() + playBounds.getWidth() / 2
+							- game.font.getBounds(startGameString).width / 2,
+					playBounds.getY() + playBounds.getHeight() / 2
+							+ game.font.getBounds(startGameString).height / 2);
+			String exitGameString = "Exit";
+			game.font.draw(
+					game.batch,
+					exitGameString,
+					exitBounds.getX() + exitBounds.getWidth() / 2
+							- game.font.getBounds(exitGameString).width / 2,
+					exitBounds.getY() + exitBounds.getHeight() / 2
+							+ game.font.getBounds(exitGameString).height / 2);
+			game.batch.end();
+		}
+		stage.draw();
+	}
 
-        game.shapeRenderer.setColor(Color.GREEN);
-        game.shapeRenderer.rect(playBounds.getX(), playBounds.getY(), playBounds.getWidth(), playBounds.getHeight());
-        game.shapeRenderer.setColor(Color.RED);
-        game.shapeRenderer.rect(exitBounds.getX(), exitBounds.getY(), exitBounds.getWidth(), exitBounds.getHeight());
-        game.shapeRenderer.end();
+	@Override
+	public void render(float delta) {
+		update();
+		draw();
+	}
 
-        //Draw text into rectangles
-        game.batch.begin();
-        String startGameString = "Start game";
-        game.font.draw(game.batch, startGameString,
-                playBounds.getX() + playBounds.getWidth() / 2 - game.font.getBounds(startGameString).width / 2,
-                playBounds.getY() + playBounds.getHeight() / 2 + game.font.getBounds(startGameString).height / 2);
-        String exitGameString = "Exit";
-        game.font.draw(game.batch, exitGameString,
-                exitBounds.getX() + exitBounds.getWidth() / 2 - game.font.getBounds(exitGameString).width / 2,
-                exitBounds.getY() + exitBounds.getHeight() / 2 + game.font.getBounds(exitGameString).height / 2);
-
-        game.batch.end();
-        stage.draw();
-    }
-
-    @Override
-    public void render(float delta) {
-        update();
-        draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
-        stage.getViewport().update(width, height, true);
-        camera.update();
-    }
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height, true);
+		stage.getViewport().update(width, height, true);
+		camera.update();
+	}
 
 }

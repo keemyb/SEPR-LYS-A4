@@ -22,12 +22,12 @@ public class MapTest extends LibGdxTest {
         String name1 = "station1";
         String name2 = "station2";
         String abbreviation1 = "abbreviation1";
-        String abbreviation2 = "abbreviation2";
+
 
         int previousSize = map.getStations().size();
 
-        map.addStation(name1, abbreviation1, new Position(9999, 9999));
-        map.addStation(name2, abbreviation2, new Position(200, 200));
+        map.addStation(name1, new Position(9999, 9999));
+        map.addStation(name2, new Position(200, 200));
 
         assertTrue("Failed to add stations", map.getStations().size() - previousSize == 2);
 

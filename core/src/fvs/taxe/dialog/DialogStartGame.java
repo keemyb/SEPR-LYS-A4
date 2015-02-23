@@ -16,7 +16,6 @@ public class DialogStartGame extends Dialog {
 
         button("15 Turns", 15);
         button("30 Turns", 30);
-        getContentTable().row();
         button("45 Turns", 45);
         button("60 Turns", 60);
     }
@@ -24,7 +23,7 @@ public class DialogStartGame extends Dialog {
     @Override
     public Dialog show(Stage stage) {
         show(stage, null);
-        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
+        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) * 0.67));
         return this;
     }
 

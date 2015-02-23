@@ -52,8 +52,8 @@ public class Goal {
         String trainString = (trainName == null) ? "train" : trainName;
         String turnLimit = Integer.toString(getTurnLimit());
         return "Send a " + trainString +
-                " from " + origin.getName() + "(" + origin.getAbbreviation() + ")" +
-                " to " + destination.getName() + "(" + destination.getAbbreviation() + ")" +
+                " from " + origin.getName() +
+                " to " + destination.getName() +
                 ((quantifiable) ? " in " + turnLimit + " turns" : "") +
                 ": " + score;
     }

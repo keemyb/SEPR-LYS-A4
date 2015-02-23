@@ -10,8 +10,8 @@ public class Junction extends Station {
 
     private int failureDuration = 0;
 
-    public Junction(String name, String abbreviation, Position location) {
-        super(name, abbreviation, location);
+    public Junction(String name, Position location) {
+        super(name, location);
     }
 
     public void decrementFailureDuration() {

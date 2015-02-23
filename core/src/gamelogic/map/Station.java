@@ -7,13 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Group;
  */
 public class Station {
     private String name;
-    private String abbreviation;
     private Position location;
     private Group actor;
 
-    public Station(String name, String abbreviation, Position location) {
+    public Station(String name, Position location) {
         this.name = name;
-        this.abbreviation = abbreviation;
         this.location = location;
     }
 
@@ -23,10 +21,6 @@ public class Station {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAbbreviation() {
-        return abbreviation;
     }
 
     public Position getLocation() {

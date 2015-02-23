@@ -2,140 +2,120 @@
   "stations": [
     {
       "name": "York",
-      "abbreviation": "YRK",
       "junction": false,
       "x": 355,
       "y": 413
     },
     {
       "name": "London",
-      "abbreviation": "LDN",
       "junction": false,
       "x": 377,
       "y": 360
     },
     {
       "name": "Paris",
-      "abbreviation": "PRS",
       "junction": false,
       "x": 425,
       "y": 271
     },
     {
       "name": "Madrid",
-      "abbreviation": "MRD",
       "junction": false,
       "x": 327,
       "y": 115
     },
     {
       "name": "Lisbon",
-      "abbreviation": "LBN",
       "junction": false,
       "x": 242,
       "y": 98
     },
     {
       "name": "Luxembourg",
-      "abbreviation": "LUX",
       "junction": false,
       "x": 483,
       "y": 286
     },
     {
       "name": "Berlin",
-      "abbreviation": "BRN",
       "junction": false,
       "x": 574,
       "y": 353
     },
     {
       "name": "Copenhagen",
-      "abbreviation": "COP",
       "junction": false,
       "x": 543,
       "y": 443
     },
     {
       "name": "Oslo",
-      "abbreviation": "OSL",
       "junction": false,
       "x": 528,
       "y": 527
     },
     {
       "name": "Stockholm",
-      "abbreviation": "STK",
       "junction": false,
       "x": 613,
       "y": 519
     },
     {
       "name": "Helsinki",
-      "abbreviation": "HEL",
       "junction": false,
       "x": 709,
       "y": 543
     },
     {
       "name": "Rome",
-      "abbreviation": "ROM",
       "junction": false,
       "x": 617,
       "y": 130
     },
     {
       "name": "Prague",
-      "abbreviation": "PRG",
       "junction": false,
       "x": 597,
       "y": 295
     },
     {
       "name": "Warsaw",
-      "abbreviation": "WRS",
       "junction": false,
       "x": 683,
       "y": 354
     },
     {
       "name": "Minsk",
-      "abbreviation": "MSK",
       "junction": false,
       "x": 769,
       "y": 396
     },
     {
       "name": "Athens",
-      "abbreviation": "ATH",
       "junction": false,
       "x": 749,
       "y": 85
     },
     {
       "name": "Bucharest",
-      "abbreviation": "BCR",
       "junction": false,
       "x": 764,
       "y": 185
     },
     {
       "name": "Kiev",
-      "abbreviation": "KEV",
       "junction": false,
       "x": 819,
       "y": 334
     },
     {
       "name": "Moscow",
-      "abbreviation": "MCW",
       "junction": false,
       "x": 874,
       "y": 435
     },
     {
       "name": "Ankara",
-      "abbreviation": "ANK",
       "junction": false,
       "x": 890,
       "y": 97

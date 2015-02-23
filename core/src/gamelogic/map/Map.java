@@ -81,18 +81,17 @@ public class Map {
 
     private void parseStations(JsonValue jsonVal) {
         for (JsonValue station = jsonVal.getChild("stations"); station != null; station = station.next) {
-            String name = "", abbreviation = "";
+            String name = "";
             int x = 0, y = 0;
             boolean isJunction = false;
             for (JsonValue val = station.child; val != null; val = val.next) {
                 if (val.name.equalsIgnoreCase("name")) name = val.asString();
-                else if (val.name.equalsIgnoreCase("abbreviation")) abbreviation = val.asString();
                 else if (val.name.equalsIgnoreCase("x")) x = val.asInt();
                 else if (val.name.equalsIgnoreCase("y")) y = val.asInt();
                 else isJunction = val.asBoolean();
             }
-            if (isJunction) addJunction(name, abbreviation, new Position(x, y));
-            else addStation(name, abbreviation, new Position(x, y));
+            if (isJunction) addJunction(name, new Position(x, y));
+            else addStation(name, new Position(x, y));
         }
     }
 
@@ -164,14 +163,14 @@ public class Map {
         return stations.get(random.nextInt(stations.size()));
     }
 
-    public Station addStation(String name, String abbreviation, Position location) {
-        Station station = new Station(name, abbreviation, location);
+    public Station addStation(String name, Position location) {
+        Station station = new Station(name, location);
         stations.add(station);
         return station;
     }
 
-    public Junction addJunction(String name, String abbreviation, Position location) {
-        Junction junction = new Junction(name, abbreviation, location);
+    public Junction addJunction(String name, Position location) {
+        Junction junction = new Junction(name, location);
         stations.add(junction);
         junctions.add(junction);
         return junction;

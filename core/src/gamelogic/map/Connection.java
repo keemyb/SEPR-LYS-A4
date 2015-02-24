@@ -30,10 +30,10 @@ public class Connection {
         private String name;
         private int costPerUnitLength;
         private float hardness;
-        Material(String name, int costPerUnitLength, float hardness) {
+        Material(String name, int costPerUnitLength, float strength) {
             this.name = name;
             this.costPerUnitLength = costPerUnitLength;
-            this.hardness = hardness;
+            this.hardness = strength;
         }
 
         public int calculateTotalCost(float length) {

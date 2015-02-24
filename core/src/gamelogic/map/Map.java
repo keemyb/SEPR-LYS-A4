@@ -1,6 +1,7 @@
 package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -66,7 +67,8 @@ public class Map {
 					station2 = val.asString();
 				}
 			}
-			addConnection(station1, station2);
+            // Pre-defined connections are Gold.
+			addConnection(station1, station2, Connection.Material.GOLD);
 		}
 	}
 
@@ -128,6 +130,32 @@ public class Map {
 		}
 		return false;
 	}
+
+    public boolean prospectiveConnectionIsValid(Connection prospectiveConnection) {
+        Station station1 = prospectiveConnection.getStation1();
+        Station station2 = prospectiveConnection.getStation2();
+        if (doesConnectionExist(station1.getName(), station2.getName())) return false;
+        if (doesProspectiveConnectionIntersectExisting(prospectiveConnection)) return false;
+        return true;
+    }
+
+    public boolean doesProspectiveConnectionIntersectExisting(Connection prospectiveConnection) {
+        Line2D prospectiveLine = connectionToLine(prospectiveConnection);
+        for (Connection connection : connections) {
+            if (connection.hasCommonStation(prospectiveConnection)) continue;
+
+            Line2D existingLine = connectionToLine(connection);
+            if (existingLine.intersectsLine(prospectiveLine)) return true;
+        }
+        return false;
+    }
+
+    public Line2D connectionToLine(Connection connection) {
+        return new Line2D.Double(connection.getStation1().getLocation().getX(),
+                connection.getStation1().getLocation().getY(),
+                connection.getStation2().getLocation().getX(),
+                connection.getStation2().getLocation().getY());
+    }
 
 	public Station getRandomStation() {
 		return stations.get(random.nextInt(stations.size()));
@@ -195,28 +223,25 @@ public class Map {
 		return adjacentStations;
 	}
 
-	public Connection addConnection(Station station1, Station station2) {
-		Connection newConnection = new Connection(station1, station2);
+	public Connection addConnection(Station station1, Station station2, Connection.Material material) {
+		Connection newConnection = new Connection(station1, station2, material);
 		connections.add(newConnection);
 		return newConnection;
 	}
 
-	public Connection addConnection(String station1, String station2) {
-		Station st1 = getStationByName(station1);
-		Station st2 = getStationByName(station2);
-		return addConnection(st1, st2);
+	public Connection addConnection(String stationName1, String stationName2, Connection.Material material) {
+		Station station1 = getStationByName(stationName1);
+		Station station2 = getStationByName(stationName2);
+		return addConnection(station1, station2, material);
 	}
 
 	public Station getStationByName(String name) {
-		int i = 0;
-		while (i < stations.size()) {
-			if (stations.get(i).getName().equals(name)) {
-				return stations.get(i);
-			} else {
-				i++;
-			}
-		}
-		return null;
+        for (Station station : stations) {
+            if (station.getName().equals(name)) {
+                return station;
+            }
+        }
+        return null;
 	}
 
 	public Station getStationByPosition(Position position) {

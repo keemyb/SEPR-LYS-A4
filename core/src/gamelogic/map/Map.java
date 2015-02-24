@@ -1,16 +1,9 @@
 package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
-import gamelogic.resource.Resource;
-import gamelogic.resource.Train;
-import gamelogic.resource.TrainJelliedListener;
-import gamelogic.resource.TrainManager;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -135,6 +128,30 @@ public class Map {
 		}
 		return false;
 	}
+
+    public boolean prospectiveConnectionIsValid(Connection prospectiveConnection) {
+        Station station1 = prospectiveConnection.getStation1();
+        Station station2 = prospectiveConnection.getStation2();
+        if (doesConnectionExist(station1.getName(), station2.getName())) return false;
+        if (doesProspectiveConnectionIntersectExisting(prospectiveConnection)) return false;
+        return true;
+    }
+
+    public boolean doesProspectiveConnectionIntersectExisting(Connection prospectiveConnection) {
+        Line2D prospectiveLine = connectionToLine(prospectiveConnection);
+        for (Connection connection : connections) {
+            Line2D existingLine = connectionToLine(connection);
+            if (prospectiveLine.intersectsLine(existingLine)) return false;
+        }
+        return true;
+    }
+
+    public Line2D connectionToLine(Connection connection) {
+        return new Line2D.Double(connection.getStation1().getLocation().getX(),
+                connection.getStation1().getLocation().getY(),
+                connection.getStation2().getLocation().getX(),
+                connection.getStation2().getLocation().getY());
+    }
 
 	public Station getRandomStation() {
 		return stations.get(random.nextInt(stations.size()));

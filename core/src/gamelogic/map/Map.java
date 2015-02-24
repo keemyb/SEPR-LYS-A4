@@ -209,15 +209,12 @@ public class Map {
 	}
 
 	public Station getStationByName(String name) {
-		int i = 0;
-		while (i < stations.size()) {
-			if (stations.get(i).getName().equals(name)) {
-				return stations.get(i);
-			} else {
-				i++;
-			}
-		}
-		return null;
+        for (Station station : stations) {
+            if (station.getName().equals(name)) {
+                return station;
+            }
+        }
+        return null;
 	}
 
 	public Station getStationByPosition(Position position) {

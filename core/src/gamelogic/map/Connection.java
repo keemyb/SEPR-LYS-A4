@@ -28,20 +28,24 @@ public class Connection {
         BRONZE("Bronze", 10, 0.5f);
 
         private String name;
-        private int price;
+        private int costPerUnitLength;
         private float hardness;
-        Material(String name, int price, float hardness) {
+        Material(String name, int costPerUnitLength, float hardness) {
             this.name = name;
-            this.price = price;
+            this.costPerUnitLength = costPerUnitLength;
             this.hardness = hardness;
+        }
+
+        public int calculateTotalCost(float length) {
+            return (int) Math.ceil(length) * costPerUnitLength;
         }
 
         public String getName() {
             return name;
         }
 
-        public int getPrice() {
-            return price;
+        public int getCostPerUnitLength() {
+            return costPerUnitLength;
         }
 
         public float getHardness() {

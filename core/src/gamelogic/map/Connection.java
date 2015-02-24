@@ -6,10 +6,12 @@ package gamelogic.map;
 public class Connection {
     private Station station1;
     private Station station2;
+    private Material material;
 
-    public Connection(Station station1, Station station2) {
+    public Connection(Station station1, Station station2, Material material) {
         this.station1 = station1;
         this.station2 = station2;
+        this.material = material;
     }
 
     public Station getStation1() {
@@ -20,7 +22,7 @@ public class Connection {
         return this.station2;
     }
 
-    public enum ConnectionType {
+    public enum Material {
         GOLD("Gold", 50, 1),
         SILVER("Silver", 30, 0.8f),
         BRONZE("Bronze", 10, 0.5f);
@@ -28,7 +30,7 @@ public class Connection {
         private String name;
         private int price;
         private float hardness;
-        ConnectionType(String name, int price, float hardness) {
+        Material(String name, int price, float hardness) {
             this.name = name;
             this.price = price;
             this.hardness = hardness;

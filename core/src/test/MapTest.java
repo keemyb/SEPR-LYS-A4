@@ -1,5 +1,6 @@
 package test;
 
+import gamelogic.map.Connection;
 import gamelogic.map.Map;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
@@ -30,7 +31,7 @@ public class MapTest extends LibGdxTest {
 
         assertTrue("Failed to add stations", map.getStations().size() - previousSize == 2);
 
-        map.addConnection(name1, name2);
+        map.addConnection(name1, name2, Connection.Material.GOLD);
         assertTrue("Connection addition failed", map.doesConnectionExist(name2, name1));
 
         // Should throw an error by itself

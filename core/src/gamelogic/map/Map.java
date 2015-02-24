@@ -72,7 +72,8 @@ public class Map {
 					station2 = val.asString();
 				}
 			}
-			addConnection(station1, station2);
+            // Pre-defined connections are Gold.
+			addConnection(station1, station2, Connection.Material.GOLD);
 		}
 	}
 
@@ -195,16 +196,16 @@ public class Map {
 		return adjacentStations;
 	}
 
-	public Connection addConnection(Station station1, Station station2) {
-		Connection newConnection = new Connection(station1, station2);
+	public Connection addConnection(Station station1, Station station2, Connection.Material material) {
+		Connection newConnection = new Connection(station1, station2, material);
 		connections.add(newConnection);
 		return newConnection;
 	}
 
-	public Connection addConnection(String station1, String station2) {
-		Station st1 = getStationByName(station1);
-		Station st2 = getStationByName(station2);
-		return addConnection(st1, st2);
+	public Connection addConnection(String stationName1, String stationName2, Connection.Material material) {
+		Station station1 = getStationByName(stationName1);
+		Station station2 = getStationByName(stationName2);
+		return addConnection(station1, station2, material);
 	}
 
 	public Station getStationByName(String name) {

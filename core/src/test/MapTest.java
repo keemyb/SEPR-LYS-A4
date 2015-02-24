@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class MapTest extends LibGdxTest {
@@ -52,5 +53,19 @@ public class MapTest extends LibGdxTest {
         assertEquals(275.3817f, map.getShortestRouteDistance(london, prague), 0.0001f);
         assertEquals(174.2630f, map.getShortestRouteDistance(prague, paris), 0.0001f);
 
+    }
+
+    @Test
+    public void connectionIntersectionTest() throws Exception {
+        Station paris = map.getStationByName("Paris");
+        Station berlin = map.getStationByName("Berlin");
+        Connection overlappingConnection = new Connection(paris, berlin, Connection.Material.GOLD);
+
+        Station madrid = map.getStationByName("Madrid");
+        Station rome = map.getStationByName("Rome");
+        Connection nonOverlappingConnection = new Connection(madrid, rome, Connection.Material.GOLD);
+
+        assertTrue(map.doesProspectiveConnectionIntersectExisting(overlappingConnection));
+        assertFalse(map.doesProspectiveConnectionIntersectExisting(nonOverlappingConnection));
     }
 }

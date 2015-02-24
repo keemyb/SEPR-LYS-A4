@@ -14,6 +14,14 @@ public class Connection {
         this.material = material;
     }
 
+    public boolean hasCommonStation(Connection connection) {
+        if (connection.getStation1().equals(station1)) return true;
+        if (connection.getStation1().equals(station2)) return true;
+        if (connection.getStation2().equals(station1)) return true;
+        if (connection.getStation2().equals(station2)) return true;
+        return false;
+    }
+
     public Station getStation1() {
         return this.station1;
     }

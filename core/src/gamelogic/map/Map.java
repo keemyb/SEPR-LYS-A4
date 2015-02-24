@@ -1,10 +1,12 @@
 package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,10 +142,12 @@ public class Map {
     public boolean doesProspectiveConnectionIntersectExisting(Connection prospectiveConnection) {
         Line2D prospectiveLine = connectionToLine(prospectiveConnection);
         for (Connection connection : connections) {
+            if (connection.hasCommonStation(prospectiveConnection)) continue;
+
             Line2D existingLine = connectionToLine(connection);
-            if (prospectiveLine.intersectsLine(existingLine)) return false;
+            if (existingLine.intersectsLine(prospectiveLine)) return true;
         }
-        return true;
+        return false;
     }
 
     public Line2D connectionToLine(Connection connection) {

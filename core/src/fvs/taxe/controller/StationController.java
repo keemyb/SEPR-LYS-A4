@@ -75,7 +75,7 @@ public class StationController {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                tooltip.setPosition(stationActor.getX() + 20, stationActor.getY() + 20);
+                tooltip.setPosition(station.getLocation().getX() -(tooltip.getWidth()/2), station.getLocation().getY() + 12);
                 tooltip.show(station.getName());
             }
 
@@ -101,7 +101,7 @@ public class StationController {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                tooltip.setPosition(junctionActor.getX() + 10, junctionActor.getY() + 10);
+                tooltip.setPosition(junction.getLocation().getX() -(tooltip.getWidth()/2), junction.getLocation().getY() + 10);
                 tooltip.show(junction.getName());
             }
 

@@ -13,6 +13,7 @@ import util.Tuple;
  */
 public class Goal {
     private int score;
+    private int money;
     private Station origin;
     private Station destination;
     private int turnIssued;
@@ -55,7 +56,7 @@ public class Goal {
                 " from " + origin.getName() +
                 " to " + destination.getName() +
                 ((quantifiable) ? " in " + turnLimit + " turns" : "") +
-                ": " + score;
+                " to earn $" + money + " and " + score + " points";
     }
 
     public void setComplete() {
@@ -77,6 +78,7 @@ public class Goal {
         } else {
             score = Math.max(50, distance - distance % 50);
         }
+        money = score;
     }
 
     // Only quantifiable goals can expire.
@@ -85,6 +87,10 @@ public class Goal {
     }
 
     public int getScore() {
+        return score;
+    }
+
+    public int getMoney() {
         return score;
     }
 

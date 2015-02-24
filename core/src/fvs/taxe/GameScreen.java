@@ -16,6 +16,7 @@ import gamelogic.game.GameStateListener;
 import gamelogic.game.TurnListener;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
+import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 
 /**
@@ -81,6 +82,15 @@ public class GameScreen extends ScreenAdapter {
                     DialogEndGame dia = new DialogEndGame(GameScreen.this.game, skin);
                     dia.show(stage);
                 }
+                if (gameLogic.getState() != GameState.ANIMATING) {
+                    topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": $" + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
+                }
+            }
+        });
+        PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
+            @Override
+            public void changed() {
+                topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": $" + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
             }
         });
     }

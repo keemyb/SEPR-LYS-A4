@@ -1,21 +1,20 @@
 package fvs.taxe.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import gamelogic.goal.Goal;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoalController {
     private Context context;
@@ -73,12 +72,12 @@ public class GoalController {
 				@Override
 				public void enter(InputEvent event, float x, float y,
 						int pointer, Actor fromActor) {
-					originTip.setPosition(origin.getLocation().getX()+10, origin
-							.getLocation().getY()+10);
+					originTip.setPosition(origin.getLocation().getX()-(originTip.getWidth()/2), origin
+							.getLocation().getY()+12);
 					originTip.show(origin.getName());
 					
-					destTip.setPosition(dest.getLocation().getX()+10, dest.getLocation()
-							.getY()+10);
+					destTip.setPosition(dest.getLocation().getX()-(destTip.getWidth()/2), dest.getLocation()
+							.getY()+12);
 					destTip.show(dest.getName());
 					
 					

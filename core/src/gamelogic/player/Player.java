@@ -16,6 +16,7 @@ public class Player {
     private List<Goal> goals;
     private int playerNumber;
     private int score = 0;
+    private int money = 0;
 
     public Player(int playerNumber) {
         goals = new ArrayList<>();
@@ -51,6 +52,7 @@ public class Player {
     public void completeGoal(Goal goal) {
         goal.setComplete();
         score += goal.getScore();
+        money += goal.getMoney();
         changed();
     }
 
@@ -72,4 +74,9 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    public int getMoney() {
+        return money;
+    }
+
 }

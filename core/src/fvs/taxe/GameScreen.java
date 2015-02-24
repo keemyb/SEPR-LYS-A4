@@ -17,8 +17,6 @@ import gamelogic.game.TurnListener;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
-import gamelogic.resource.TrainJelliedListener;
-import gamelogic.resource.TrainManager;
 
 /**
  * This class represents screen shown while players are playing against each other.
@@ -65,18 +63,15 @@ public class GameScreen extends ScreenAdapter {
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
 
-        TrainManager.subscribeTrainJellied(new TrainJelliedListener() {
-            @Override
-            public void changed() {
-                topBarController.displayFlashMessage("A train has been consumed by a jelly! Thanks Obama...", Color.RED);
-            }
-        });
-
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override
             public void changed() {
+                map.handleJunctionFailures();
                 gameLogic.setState(GameState.ANIMATING);
-                topBarController.displayFlashMessage("Time is passing...", Color.BLACK);
+                topBarController.displayFlashMessage("Time is passing...", Color.BLACK, 0.9f);
+                if (map.getLastBroken() != null) {
+                    topBarController.displayFlashMessage("There is a junction failure at " + map.getLastBroken().getName(), Color.RED, 0.9f);
+                }
             }
         });
         gameLogic.subscribeStateChanged(new GameStateListener() {
@@ -112,7 +107,6 @@ public class GameScreen extends ScreenAdapter {
             if (timeAnimated >= ANIMATION_TIME) {
                 gameLogic.setState(GameState.NORMAL);
                 timeAnimated = 0;
-                map.handleJunctionFailures();
             }
         }
 

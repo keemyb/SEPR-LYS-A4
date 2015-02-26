@@ -44,11 +44,13 @@ public class Player {
 
     public void addOwnedConnection(Connection connection) {
         connectionsOwned.add(connection);
+        connection.setOwner(this);
         changed();
     }
 
     public void removeOwnedConnection(Connection connection) {
         connectionsOwned.remove(connection);
+        connection.setOwner(null);
         changed();
     }
 

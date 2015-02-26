@@ -1,5 +1,7 @@
 package gamelogic.map;
 
+import gamelogic.player.Player;
+
 /**
  * This class represents connection between two stations.
  */
@@ -8,6 +10,7 @@ public class Connection {
     private Station station2;
     private float length;
     private Material material;
+    private Player owner = null;
 
     public Connection(Station station1, Station station2, Material material) {
         this.station1 = station1;
@@ -27,6 +30,14 @@ public class Connection {
         if (connection.getStation2().equals(station1)) return true;
         if (connection.getStation2().equals(station2)) return true;
         return false;
+    }
+
+    public void setOwner(Player player) {
+        owner = player;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     public Station getStation1() {

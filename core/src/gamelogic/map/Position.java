@@ -28,6 +28,12 @@ public class Position {
         this.y = y;
     }
 
+    public static float getDistance(Position position1, Position position2) {
+        float dx = position1.x - position2.x;
+        float dy = position1.y - position2.y;
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
     public boolean equals(Object o) {
         if (o instanceof Position) {
             Position pos = (Position) o;

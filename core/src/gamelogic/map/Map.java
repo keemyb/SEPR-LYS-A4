@@ -43,19 +43,6 @@ public class Map {
 		computeDistances();
 	}
 
-	/**
-	 * Returns Euclidean distance between two points.
-	 *
-	 * @param a
-	 *            position of the first point
-	 * @param b
-	 *            position of the second point
-	 * @return Euclidean distance between a and b
-	 */
-	public static float getDistance(Position a, Position b) {
-		return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
-	}
-
 	private void parseConnections(JsonValue jsonVal) {
 		for (JsonValue connection = jsonVal.getChild("connections"); connection != null; connection = connection.next) {
 			String station1 = "";

@@ -14,13 +14,7 @@ public class Connection {
         this.station2 = station2;
         this.material = material;
 
-        float station1X = station1.getLocation().getX();
-        float station1Y = station1.getLocation().getY();
-        float station2X = station2.getLocation().getX();
-        float station2Y = station2.getLocation().getY();
-        float dx = station1X - station2X;
-        float dy = station1Y - station2Y;
-        length = (float) Math.sqrt(dx * dx + dy * dy);
+        length = Station.getDistance(station1, station2);
     }
 
     public int getRentPayable() {

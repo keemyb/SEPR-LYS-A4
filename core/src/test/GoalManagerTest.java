@@ -42,9 +42,9 @@ public class GoalManagerTest extends LibGdxTest {
         player1.addGoal(goal);
         player1.addResource(train);
 
-        ArrayList<Position> route = new ArrayList<>();
-        route.add(station1.getLocation());
-        route.add(station2.getLocation());
+        ArrayList<Station> route = new ArrayList<>();
+        route.add(station1);
+        route.add(station2);
         train.setRoute(route);
 
         train.addToHistory("London", 0);

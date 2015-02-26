@@ -21,7 +21,7 @@ import java.util.List;
 public class RouteController {
     private Context context;
     private Group routingButtons = new Group();
-    private List<Position> positions;
+    private List<Station> stations = new ArrayList<>();
     private boolean isRouting = false;
     private Train train;
     private boolean canEndRouting = true;
@@ -43,10 +43,9 @@ public class RouteController {
     public void begin(Train train) {
         this.train = train;
         isRouting = true;
-        positions = new ArrayList<>();
+        stations.clear();
         //initialise route distance
         totalRouteDistance = 0;
-        positions.add(train.getPosition());
         context.getGameLogic().setState(GameState.ROUTING);
         addRoutingButtons();
 
@@ -58,23 +57,29 @@ public class RouteController {
 
     private void addStationToRoute(Station station) {
         // the latest position chosen in the positions so far
-        Position lastPosition = positions.get(positions.size() - 1);
-        Station lastStation = context.getGameLogic().getMap().getStationByPosition(lastPosition);
+        Position lastPosition;
+        if (stations.isEmpty()) {
+            lastPosition = train.getPosition();
+        } else {
+            lastPosition = stations.get(stations.size() - 1).getLocation();
+        }
 
         boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(lastPosition, station.getLocation());
 
         if (!hasConnection) {
             context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
         }
-        else if (positions.contains(station.getLocation())) {
+        else if (stations.contains(station)) {
             context.getTopBarController().displayFlashMessage(
                     "You can not visit the same station twice in one route.", Color.RED);
         }
         else {
-            positions.add(station.getLocation());
+            stations.add(station);
 
             //recalculate the total distance of the route when station/junction is added
-            totalRouteDistance += Position.getDistance(positions.get(positions.size() - 1), positions.get(positions.size() - 2));
+            if (stations.size() > 1) {
+                totalRouteDistance += Station.getDistance(stations.get(stations.size() - 1), stations.get(stations.size() - 2));
+            }
 
             System.out.println("totalRouteDistance =" + totalRouteDistance);
             System.out.println("total turns = " + totalTurns());
@@ -129,7 +134,7 @@ public class RouteController {
     }
 
     private void confirmed() {
-        train.setRoute(positions);
+        train.setRoute(stations);
 
         TrainMoveController move = new TrainMoveController(context, train);
     }
@@ -148,16 +153,21 @@ public class RouteController {
     public void drawRoute(Color color) {
         TaxeGame game = context.getTaxeGame();
 
-        Position previousPosition = null;
+        Station previousStation = null;
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.setColor(color);
 
-        for (Position position : positions) {
-            if (previousPosition != null) {
-                game.shapeRenderer.rectLine(previousPosition.getX(), previousPosition.getY(), position.getX(),
-                        position.getY(), StationController.CONNECTION_LINE_WIDTH);
+        for (Station station : stations) {
+            if (previousStation != null) {
+                game.shapeRenderer.rectLine(previousStation.getLocation().getX(), previousStation.getLocation().getY(),
+                        station.getLocation().getX(), station.getLocation().getY(),
+                        StationController.CONNECTION_LINE_WIDTH);
+            } else {
+                game.shapeRenderer.rectLine(train.getPosition().getX(), train.getPosition().getY(),
+                        station.getLocation().getX(), station.getLocation().getY(),
+                        StationController.CONNECTION_LINE_WIDTH);
             }
-            previousPosition = position;
+            previousStation = station;
         }
 
         game.shapeRenderer.end();

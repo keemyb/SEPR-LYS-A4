@@ -17,9 +17,8 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     private Position position;
-    private Position finalPosition;                 // must be set to null after arrival event
     private Station finalStation;                   // must correspond to finalPosition
-    private List<Position> route;                   // must not contain current position
+    private List<Station> route;                   // must not contain current position
     private List<Tuple<String, Integer>> history;   // station name and turn number
 
 
@@ -51,25 +50,19 @@ public class Train extends Resource {
         this.actor = actor;
     }
 
-    public List<Position> getRoute() {
+    public List<Station> getRoute() {
         return route;
     }
 
-    public void setRoute(List<Position> route) {
+    public void setRoute(List<Station> route) {
         if (route != null && route.size() > 0) {
-            finalPosition = route.get(route.size() - 1);
-            finalStation = Game.getInstance().getMap().getStationByPosition(finalPosition);
+            finalStation = route.get(route.size() - 1);
         }
         this.route = route;
     }
 
     public void arrivedAtDestination() {
-        finalPosition = null;
         finalStation = null;
-    }
-
-    public Position getFinalPosition() {
-        return finalPosition;
     }
 
     public Station getFinalStation() {

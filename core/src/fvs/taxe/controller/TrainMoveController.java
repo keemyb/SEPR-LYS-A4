@@ -95,16 +95,17 @@ public class TrainMoveController {
         Position current = train.getPosition();
         action.addAction(beforeAction());
 
-        for (final Position next : train.getRoute()) {
-            float duration = getDistance(current, next) / train.getSpeed();
-            action.addAction(moveTo(next.getX() - TrainActor.width / 2, next.getY() - TrainActor.height / 2, duration));
-            Station station = Game.getInstance().getMap().getStationByPosition(next);
+        for (final Station next : train.getRoute()) {
+            Position nextPosition = next.getLocation();
+            float duration = getDistance(current, nextPosition) / train.getSpeed();
+            action.addAction(moveTo(nextPosition.getX() - TrainActor.width / 2, nextPosition.getY() - TrainActor.height / 2, duration));
+            Station station = Game.getInstance().getMap().getStationByPosition(nextPosition);
             if (station != null) {
                 action.addAction(perStationAction(station));
                 if (station instanceof Junction)
                     action.addAction(waitUntilPassableAction((Junction)station));
             }
-            current = next;
+            current = nextPosition;
         }
         action.addAction(afterAction());
 

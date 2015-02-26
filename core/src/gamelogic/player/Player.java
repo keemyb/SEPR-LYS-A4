@@ -6,7 +6,9 @@ import gamelogic.map.Connection;
 import gamelogic.resource.Resource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents player in the game. Players complete goals by using resources (trains and power-ups). By
@@ -16,6 +18,7 @@ public class Player {
     public static final int INITIAL_AMOUNT_OF_MONEY = 500;
 
     private List<Resource> resources = new ArrayList<>();
+    private Set<Connection> connectionsOwned = new HashSet<>();
     private List<Goal> goals = new ArrayList<>();
     private int playerNumber;
     private int money = INITIAL_AMOUNT_OF_MONEY;
@@ -36,6 +39,16 @@ public class Player {
     public void removeResource(Resource resource) {
         resources.remove(resource);
         resource.dispose();
+        changed();
+    }
+
+    public void addOwnedConnection(Connection connection) {
+        connectionsOwned.add(connection);
+        changed();
+    }
+
+    public void removeOwnedConnection(Connection connection) {
+        connectionsOwned.remove(connection);
         changed();
     }
 
@@ -84,6 +97,14 @@ public class Player {
 
     public int getMoney() {
         return money;
+    }
+
+    public Set<Connection> getConnectionsOwned() {
+        return connectionsOwned;
+    }
+
+    public boolean ownsConnection(Connection connection) {
+        return connectionsOwned.contains(connection);
     }
 
 }

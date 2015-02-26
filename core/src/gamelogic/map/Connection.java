@@ -49,7 +49,7 @@ public class Connection {
     }
 
     public enum Material {
-        GOLD("Gold", 50, 0, 1),
+        GOLD("Gold", 50, 0.3f, 1),
         SILVER("Silver", 30, 0.2f, 0.8f),
         BRONZE("Bronze", 10, 0.1f, 0.5f);
 

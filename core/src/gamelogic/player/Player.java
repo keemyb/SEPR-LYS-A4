@@ -1,5 +1,6 @@
 package gamelogic.player;
 
+import gamelogic.game.Game;
 import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Connection;
@@ -70,9 +71,13 @@ public class Player {
         changed();
     }
 
-    public void payConnectionRent(Player payee, Connection connection) {
+    public void payConnectionRent(Connection connection) {
+        Player connectionOwner = connection.getOwner();
+        if (connectionOwner == null || connectionOwner == this) return;
         int amount = connection.getRentPayable();
-        payee.money += amount;
+        System.out.println("Player " + playerNumber + " paid Player " + connectionOwner.playerNumber + " " + Game.CURRENCY_SYMBOL + amount +
+        " for the use of the Connection from " + connection.getStation1().getName() + " to " + connection.getStation2().getName() + ".");
+        connectionOwner.money += amount;
         money -= amount;
         changed();
     }

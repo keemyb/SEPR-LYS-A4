@@ -8,11 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import fvs.taxe.actor.TrainActor;
 import gamelogic.game.Game;
+import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.goal.GoalManager;
-import gamelogic.map.Junction;
-import gamelogic.map.Position;
-import gamelogic.map.Station;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
@@ -24,11 +22,18 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 
 public class TrainMoveController {
     private Context context;
+    private Map map;
     private Train train;
 
     public TrainMoveController(Context context, Train train) {
         this.context = context;
+        map = context.getGameLogic().getMap();
         this.train = train;
+
+//      Uncomment to test player 1 paying fare for player 2
+//        for (Connection connection : map.getConnections()) {
+//            connection.setOwner(PlayerManager.getAllPlayers().get(1));
+//        }
 
         addMoveActions();
     }
@@ -55,6 +60,10 @@ public class TrainMoveController {
         return new RunnableAction() {
             public void run() {
                 train.addToHistory(station, PlayerManager.getTurnNumber());
+                if (train.getHistory().size() >= 2) {
+                    Connection visited = map.getConnectionBetween(train.getHistory().get(train.getHistory().size() - 2).getFirst(), station);
+                    ConnectionController.payRent(train, visited);
+                }
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());
                 collisions(station);

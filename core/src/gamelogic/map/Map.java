@@ -79,6 +79,16 @@ public class Map {
 		}
 	}
 
+    public Connection getConnectionBetween(Station station1, Station station2) {
+        for (Connection connection : connections) {
+            if (connection.getStation1().equals(station1) && connection.getStation2().equals(station2)
+                    || connection.getStation1().equals(station2) && connection.getStation2().equals(station1)) {
+                return connection;
+            }
+        }
+        return null;
+    }
+
 	public boolean doesConnectionExist(String stationName,
 			String anotherStationName) {
 		for (Connection connection : connections) {

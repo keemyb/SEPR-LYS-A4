@@ -11,4 +11,13 @@ public class ConnectionController {
         Player payer = train.getPlayer();
         payer.payConnectionRent(connection);
     }
+
+    public static void damageConnection(Train train, Connection connection) {
+        connection.inflictDamage(train);
+    }
+
+    public static void visitedConnection(Train train, Connection visited) {
+        payRent(train, visited);
+        damageConnection(train, visited);
+    }
 }

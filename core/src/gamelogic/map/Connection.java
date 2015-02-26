@@ -1,6 +1,7 @@
 package gamelogic.map;
 
 import gamelogic.player.Player;
+import gamelogic.resource.Train;
 
 /**
  * This class represents connection between two stations.
@@ -9,6 +10,7 @@ public class Connection {
     private Station station1;
     private Station station2;
     private float length;
+    private float health = 1;
     private Material material;
     private Player owner = null;
 
@@ -18,6 +20,12 @@ public class Connection {
         this.material = material;
 
         length = Station.getDistance(station1, station2);
+    }
+
+    public void inflictDamage(Train train) {
+        float damageToInflict = material.calculateDamageInflicted(train);
+        health -= damageToInflict;
+        if (health <= 0) health = 0;
     }
 
     public int getRentPayable() {
@@ -56,12 +64,12 @@ public class Connection {
         private String name;
         private int costPerUnitLength;
         private float rentPayablePerUnitLength;
-        private float hardness;
+        private float strength;
         Material(String name, int costPerUnitLength, float rentPayablePerUnitLength, float strength) {
             this.name = name;
             this.costPerUnitLength = costPerUnitLength;
             this.rentPayablePerUnitLength = rentPayablePerUnitLength;
-            this.hardness = strength;
+            this.strength = strength;
         }
 
         public int calculateTotalCost(float length) {
@@ -72,6 +80,11 @@ public class Connection {
             return (int) (Math.ceil(length) * rentPayablePerUnitLength);
         }
 
+        // TODO Scale the damage based on the fastest train.
+        public float calculateDamageInflicted(Train train) {
+            return (1f - strength) * (float) train.getSpeed() / 100;
+        }
+
         public String getName() {
             return name;
         }
@@ -80,8 +93,8 @@ public class Connection {
             return costPerUnitLength;
         }
 
-        public float getHardness() {
-            return hardness;
+        public float getStrength() {
+            return strength;
         }
     }
 }

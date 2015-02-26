@@ -12,15 +12,15 @@ import java.util.List;
  * completing goals players get score.
  */
 public class Player {
-    private List<Resource> resources;
-    private List<Goal> goals;
+    public static final int INITIAL_AMOUNT_OF_MONEY = 500;
+
+    private List<Resource> resources = new ArrayList<>();
+    private List<Goal> goals = new ArrayList<>();
     private int playerNumber;
     private int score = 0;
-    private int money = 0;
+    private int money = INITIAL_AMOUNT_OF_MONEY;
 
     public Player(int playerNumber) {
-        goals = new ArrayList<>();
-        resources = new ArrayList<>();
         this.playerNumber = playerNumber;
     }
 

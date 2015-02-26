@@ -25,22 +25,22 @@ public class DialogMultitrain extends Dialog {
 
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getResources()) {
-                if (resource instanceof Train && (((Train)resource).getPosition() != null)) {
-                    Position trainPosition = (((Train)resource).getPosition());
-                    System.out.println("train: " + trainPosition.getX() + ", " + trainPosition.getY());
-                    System.out.println("station: " + station.getLocation().getX() + ", " + station.getLocation().getY());
-                    if (((Train) resource).getPosition().equals(station.getLocation())) {
-                        String destination = "";
-                        if (((Train) resource).getFinalPosition() != null) {
-                            destination = " to " + ((Train) resource).getFinalStation().getName();
-                        }
-                        button(((Train) resource).getName() + destination + " (Player " + ((Train) resource).getPlayer().getPlayerNumber() + ")", ((Train) resource));
-                        getButtonTable().row();
-                        isTrain = true;
+                if (!(resource instanceof Train) || ((Train) resource).getPosition() == null) continue;
+                Train train = (Train) resource;
+                Position trainPosition = train.getPosition();
+                System.out.println("train: " + trainPosition.getX() + ", " + trainPosition.getY());
+                System.out.println("station: " + station.getLocation().getX() + ", " + station.getLocation().getY());
+                if (trainPosition.equals(station.getLocation())) {
+                    String destination = "";
+                    if (train.getFinalStation() != null) {
+                        destination = " to " + (train.getFinalStation().getName());
                     }
-                    else {
-                        System.out.println("not equal");
-                    }
+                    button(train.getName() + destination + " (Player " + train.getPlayer().getPlayerNumber() + ")", train);
+                    getButtonTable().row();
+                    isTrain = true;
+                }
+                else {
+                    System.out.println("not equal");
                 }
             }
         }

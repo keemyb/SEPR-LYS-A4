@@ -4,7 +4,6 @@ import gamelogic.game.Game;
 import gamelogic.map.Station;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
-import util.Tuple;
 
 /**
  * This class represents goals in the game. Goals can have two constraints: train constraint (a goal must be completed
@@ -12,8 +11,7 @@ import util.Tuple;
  * quantifiable).
  */
 public class Goal {
-    private int score;
-    private int money;
+    private int reward;
     private Station origin;
     private Station destination;
     private int turnIssued;
@@ -41,12 +39,18 @@ public class Goal {
     }
 
     public boolean isComplete(Train train) {
-        boolean passedOrigin = false;
-        for (Tuple<String, Integer> history : train.getHistory())
-            if (history.getFirst().equals(origin.getName()) && history.getSecond() >= turnIssued)
-                passedOrigin = true;
-        return train.getFinalStation() == destination && passedOrigin &&
-                (trainName == null || trainName.equals(train.getName()));
+        if (!train.historyContains(origin, turnIssued)) return false;
+        if (!train.historyContains(destination, turnIssued)) return false;
+
+        int turnOriginWasVisited = train.getLastTurnStationWasVisited(origin);
+        int turnDestinationWasVisited = train.getLastTurnStationWasVisited(destination);
+        if (turnOriginWasVisited > turnDestinationWasVisited) return false;
+
+        if (trainName != null) {
+            if (!train.toString().equals(trainName)) return false;
+        }
+
+        return true;
     }
 
     public String toString() {
@@ -56,7 +60,7 @@ public class Goal {
                 " from " + origin.getName() +
                 " to " + destination.getName() +
                 ((quantifiable) ? " in " + turnLimit + " turns" : "") +
-                " to earn $" + money + " and " + score + " points";
+                " to earn " + Game.CURRENCY_SYMBOL + reward;
     }
 
     public void setComplete() {
@@ -74,11 +78,10 @@ public class Goal {
                 turnLimit--;
             }
             float t = distance * 5 * (1 - 1f / turnLimit);
-            score = Math.max(50, (int) t - (int) t % 50);
+            reward = Math.max(50, (int) t - (int) t % 50);
         } else {
-            score = Math.max(50, distance - distance % 50);
+            reward = Math.max(50, distance - distance % 50);
         }
-        money = score;
     }
 
     // Only quantifiable goals can expire.
@@ -86,12 +89,8 @@ public class Goal {
         return (quantifiable && turnLimit == 0);
     }
 
-    public int getScore() {
-        return score;
-    }
-
     public int getMoney() {
-        return score;
+        return reward;
     }
 
     public Station getOrigin() {

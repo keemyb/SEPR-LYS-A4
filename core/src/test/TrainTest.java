@@ -2,6 +2,7 @@ package test;
 
 
 import gamelogic.map.Position;
+import gamelogic.map.Station;
 import gamelogic.resource.Train;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +21,15 @@ public class TrainTest {
 
     @Test
     public void finalDestinationTest() throws Error {
-        Position station1 = new Position(5, 5);
-        Position station2 = new Position(6, 6);
-        ArrayList<Position> route = new ArrayList<>();
+        Station station1 = new Station("Station 1", new Position(5, 5));
+        Station station2 = new Station("Station 2", new Position(6, 6));
+        ArrayList<Station> route = new ArrayList<>();
         route.add(station1);
         route.add(station2);
 
         train.setRoute(route);
         assertTrue("Setting a train route was not succesful", train.getRoute().size() == 2);
-        assertTrue("Final destination wasn't set", train.getFinalPosition() == station2);
+        assertTrue("Final destination wasn't set", train.getFinalStation() == station2);
     }
 
 

@@ -14,6 +14,7 @@ import java.util.List;
  * Depending on the phase, different trains and goals are generated.
  */
 public class Game {
+    public static final char CURRENCY_SYMBOL = '$';
     private static Game instance;
     private final int CONFIG_PLAYERS = 2;
     public int totalTurns = 30;

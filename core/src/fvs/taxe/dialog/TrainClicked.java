@@ -32,7 +32,7 @@ public class TrainClicked extends ClickListener {
             return;
         }
 
-        if (train.getFinalPosition() == null) {
+        if (train.getFinalStation() == null) {
             context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
         } else {
             context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);

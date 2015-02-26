@@ -15,6 +15,10 @@ public class Station {
         this.location = location;
     }
 
+    public static float getDistance(Station station1, Station station2) {
+        return Position.getDistance(station1.location, station2.location);
+    }
+
     public String getName() {
         return name;
     }

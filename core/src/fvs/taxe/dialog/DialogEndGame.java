@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.MainMenuScreen;
 import fvs.taxe.TaxeGame;
+import gamelogic.game.Game;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 
@@ -19,15 +20,15 @@ public class DialogEndGame extends Dialog {
         int highscore = 0;
         int playernum = 0;
         for (Player player : PlayerManager.getAllPlayers()) {
-            int playerScore = player.getScore();
+            int playerMoney = player.getMoney();
 
-            text("Player " + player.getPlayerNumber() + " scored " + playerScore + " points");
+            text("Player " + player.getPlayerNumber() + " has " + Game.CURRENCY_SYMBOL + playerMoney);
             getContentTable().row();
 
-            if (playerScore > highscore) {
-                highscore = playerScore;
+            if (playerMoney > highscore) {
+                highscore = playerMoney;
                 playernum = player.getPlayerNumber();
-            } else if (playerScore == highscore) playernum = 0;
+            } else if (playerMoney == highscore) playernum = 0;
         }
         if (playernum != 0) {
             text("PLAYER " + playernum + " WINS!");

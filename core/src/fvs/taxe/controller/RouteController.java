@@ -56,10 +56,6 @@ public class RouteController {
         train.getActor().setVisible(true);
     }
 
-    private float getDistance(Position a, Position b) {
-        return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
-    }
-
     private void addStationToRoute(Station station) {
         // the latest position chosen in the positions so far
         Position lastPosition = positions.get(positions.size() - 1);
@@ -78,7 +74,7 @@ public class RouteController {
             positions.add(station.getLocation());
 
             //recalculate the total distance of the route when station/junction is added
-            totalRouteDistance += getDistance(positions.get(positions.size() - 1), positions.get(positions.size() - 2));
+            totalRouteDistance += Position.getDistance(positions.get(positions.size() - 1), positions.get(positions.size() - 2));
 
             System.out.println("totalRouteDistance =" + totalRouteDistance);
             System.out.println("total turns = " + totalTurns());

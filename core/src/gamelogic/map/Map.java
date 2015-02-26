@@ -2,7 +2,6 @@ package gamelogic.map;
 
 import com.badlogic.gdx.Gdx;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -17,7 +16,6 @@ import java.util.Random;
 public class Map {
 	private final double JUNCTION_FAILURE_RATE = 0.2;
 	private final int JUNCTION_FAILURE_DURATION = 4;
-	private final int NUMBER_OF_JELLIES = 4;
 	private Junction lastBroken;
 	private List<Station> stations;
 	private List<Junction> junctions;
@@ -250,16 +248,12 @@ public class Map {
 		for (int i = 0; i < stations.size(); i++) {
 			distances.add(new ArrayList<Float>());
 			for (int j = 0; j < stations.size(); j++) {
-				Station si = stations.get(i);
-				Station sj = stations.get(j);
+				Station stationi = stations.get(i);
+				Station stationj = stations.get(j);
 				if (i == j) {
 					distances.get(i).add(0f);
-				} else if (doesConnectionExist(si.getName(), sj.getName())) {
-					Position loci = si.getLocation();
-					Position locj = sj.getLocation();
-					distances.get(i).add(
-							Vector2.dst(loci.getX(), loci.getY(), locj.getX(),
-									locj.getY()));
+				} else if (doesConnectionExist(stationi.getName(), stationj.getName())) {
+					distances.get(i).add(Station.getDistance(stationi, stationj));
 				} else {
 					distances.get(i).add(Float.MAX_VALUE);
 				}

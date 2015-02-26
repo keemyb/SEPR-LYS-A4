@@ -68,9 +68,9 @@ public class Player {
         changed();
     }
 
-    public void payConnectionRent(Player player, Connection connection) {
+    public void payConnectionRent(Player payee, Connection connection) {
         int amount = connection.getRentPayable();
-        player.money += amount;
+        payee.money += amount;
         money -= amount;
         changed();
     }

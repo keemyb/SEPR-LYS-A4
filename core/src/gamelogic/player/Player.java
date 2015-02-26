@@ -2,6 +2,7 @@ package gamelogic.player;
 
 import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
+import gamelogic.map.Connection;
 import gamelogic.resource.Resource;
 
 import java.util.ArrayList;
@@ -54,7 +55,8 @@ public class Player {
         changed();
     }
 
-    public void payPlayer(Player player, int amount) {
+    public void payConnectionRent(Player player, Connection connection) {
+        int amount = connection.getRentPayable();
         player.money += amount;
         money -= amount;
         changed();

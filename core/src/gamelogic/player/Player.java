@@ -59,10 +59,12 @@ public class Player {
     public void payPlayer(Player player, int amount) {
         player.money += amount;
         money -= amount;
+        changed();
     }
 
     public void spendMoney(int amount) {
         money -= amount;
+        changed();
     }
 
     /**

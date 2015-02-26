@@ -12,8 +12,7 @@ import util.Tuple;
  * quantifiable).
  */
 public class Goal {
-    private int score;
-    private int money;
+    private int reward;
     private Station origin;
     private Station destination;
     private int turnIssued;
@@ -56,7 +55,7 @@ public class Goal {
                 " from " + origin.getName() +
                 " to " + destination.getName() +
                 ((quantifiable) ? " in " + turnLimit + " turns" : "") +
-                " to earn $" + money + " and " + score + " points";
+                " to earn " + Game.CURRENCY_SYMBOL + reward;
     }
 
     public void setComplete() {
@@ -74,11 +73,10 @@ public class Goal {
                 turnLimit--;
             }
             float t = distance * 5 * (1 - 1f / turnLimit);
-            score = Math.max(50, (int) t - (int) t % 50);
+            reward = Math.max(50, (int) t - (int) t % 50);
         } else {
-            score = Math.max(50, distance - distance % 50);
+            reward = Math.max(50, distance - distance % 50);
         }
-        money = score;
     }
 
     // Only quantifiable goals can expire.
@@ -86,12 +84,8 @@ public class Goal {
         return (quantifiable && turnLimit == 0);
     }
 
-    public int getScore() {
-        return score;
-    }
-
     public int getMoney() {
-        return score;
+        return reward;
     }
 
     public Station getOrigin() {

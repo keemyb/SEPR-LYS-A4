@@ -83,14 +83,14 @@ public class GameScreen extends ScreenAdapter {
                     dia.show(stage);
                 }
                 if (gameLogic.getState() != GameState.ANIMATING) {
-                    topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": $" + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
+                    topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
                 }
             }
         });
         PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": $" + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
+                topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
             }
         });
     }
@@ -133,7 +133,7 @@ public class GameScreen extends ScreenAdapter {
         game.batch.begin();
         float x = 10, y = 80;
         for (Player p: PlayerManager.getAllPlayers()) {
-            game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + p.getScore(), x, y);
+            game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + p.getMoney(), x, y);
             y -= 20;
         }
         int turn = PlayerManager.getTurnNumber() + 1;

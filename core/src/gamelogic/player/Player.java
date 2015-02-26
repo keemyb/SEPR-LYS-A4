@@ -17,7 +17,6 @@ public class Player {
     private List<Resource> resources = new ArrayList<>();
     private List<Goal> goals = new ArrayList<>();
     private int playerNumber;
-    private int score = 0;
     private int money = INITIAL_AMOUNT_OF_MONEY;
 
     public Player(int playerNumber) {
@@ -51,7 +50,6 @@ public class Player {
 
     public void completeGoal(Goal goal) {
         goal.setComplete();
-        score += goal.getScore();
         money += goal.getMoney();
         changed();
     }
@@ -80,10 +78,6 @@ public class Player {
 
     public int getPlayerNumber() {
         return playerNumber;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public int getMoney() {

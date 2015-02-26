@@ -19,7 +19,7 @@ public class Train extends Resource {
     private Position position;
     private Station finalStation;                   // must correspond to finalPosition
     private List<Station> route;                   // must not contain current position
-    private List<Tuple<String, Integer>> history;   // station name and turn number
+    private List<Tuple<Station, Integer>> history;   // station name and turn number
 
 
     public Train(String name, int speed) {
@@ -70,22 +70,54 @@ public class Train extends Resource {
     }
 
     /**
-     * Returns the list of stations and the number of turns when they were visited.
-     *
-     * @return
+     * This method returns the list of tuples representing where this train has travelled.
+     * The first object in the tuple is the station visited, and the second object
+     * is the turn that this train travelled to that station.
+     * @return The train's history.
      */
-    public List<Tuple<String, Integer>> getHistory() {
+    public List<Tuple<Station, Integer>> getHistory() {
         return history;
     }
 
     /**
-     * Adds (stationName, turn) as the last entry to train history
-     *
-     * @param stationName name of station
-     * @param turn        number of turn when station was visited
+     * This method finds whether a train has travelled to a certain station on/after
+     * a specified turn.
+     * @param station The station that you want to check
+     * @param turn The minimum turn to consider
+     * @return true if the station appears in the history, on or after the turn specified
      */
-    public void addToHistory(String stationName, int turn) {
-        history.add(new Tuple<>(stationName, turn));
+    public boolean historyContains(Station station, int turn) {
+        for(Tuple<Station, Integer> entry: history) {
+            if(entry.getFirst().equals(station) && entry.getSecond() >= turn) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This method returns the last turn a station was visited.
+     * @param station The station to find.
+     * @return The turn it was last visited, otherwise null if it was not visited.
+     */
+    public Integer getLastTurnStationWasVisited(Station station) {
+        for (int i = history.size() - 1; i >= 0; i--) {
+            Tuple<Station, Integer> entry = history.get(i);
+            if (station.equals(entry.getFirst())) {
+                return entry.getSecond();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Adds (station, turn) as the last entry to train history
+     *
+     * @param station the station visited
+     * @param turn    number of turn when station was visited
+     */
+    public void addToHistory(Station station, int turn) {
+        history.add(new Tuple<>(station, turn));
     }
 
     @Override

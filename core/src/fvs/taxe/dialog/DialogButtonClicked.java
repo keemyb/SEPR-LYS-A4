@@ -53,7 +53,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                         }
 
                         train.setPosition(station.getLocation());
-                        train.addToHistory(station.getName(), PlayerManager.getTurnNumber());
+                        train.addToHistory(station, PlayerManager.getTurnNumber());
 
                         Gdx.input.setCursorImage(null, 0, 0);
 

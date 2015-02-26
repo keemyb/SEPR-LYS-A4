@@ -56,6 +56,11 @@ public class Player {
         changed();
     }
 
+    public void payPlayer(Player player, int amount) {
+        player.money += amount;
+        money -= amount;
+    }
+
     /**
      * Method is called whenever a property of this player changes, or one of the player's resources changes
      */

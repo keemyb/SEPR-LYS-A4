@@ -18,7 +18,6 @@ public abstract class TrainManager {
     public final static int CONFIG_MAX_TRAINS = 7;
     private final static Random random = new Random();
     private final static ArrayList<Tuple<String, Integer>> trainEntries;
-    private static List<TrainJelliedListener> trainJelliedListeners = new ArrayList<>();
 
     //Reading trains from json-file.
     static {
@@ -37,17 +36,6 @@ public abstract class TrainManager {
                 }
             }
             trainEntries.add(new Tuple<>(name, speed));
-        }
-    }
-
-    public static void subscribeTrainJellied(TrainJelliedListener listener) {
-        trainJelliedListeners.add(listener);
-    }
-
-    // being jellied, definition: to be destroyed by a jelly in a most gruesome manner
-    public static void trainJellied() {
-        for (TrainJelliedListener listener : trainJelliedListeners){
-            listener.changed();
         }
     }
 

@@ -43,17 +43,19 @@ public class Map {
 
 	private void parseConnections(JsonValue jsonVal) {
 		for (JsonValue connection = jsonVal.getChild("connections"); connection != null; connection = connection.next) {
-			String station1 = "";
-			String station2 = "";
+			String stationName1 = "";
+			String stationName2 = "";
 			for (JsonValue val = connection.child; val != null; val = val.next) {
 				if (val.name.equalsIgnoreCase("station1")) {
-					station1 = val.asString();
+					stationName1 = val.asString();
 				} else {
-					station2 = val.asString();
+					stationName2 = val.asString();
 				}
 			}
             // Pre-defined connections are Gold.
-			addConnection(station1, station2, Connection.Material.GOLD);
+            Station station1 = getStationByName(stationName1);
+            Station station2 = getStationByName(stationName2);
+			addConnection(new Connection(station1, station2, Connection.Material.GOLD));
 		}
 	}
 
@@ -72,10 +74,11 @@ public class Map {
 				else
 					isJunction = val.asBoolean();
 			}
+
 			if (isJunction)
-				addJunction(name, new Position(x, y));
-			else
-				addStation(name, new Position(x, y));
+                addJunction(new Junction(name, new Position(x, y)));
+            else
+                addStation(new Station(name, new Position(x, y)));
 		}
 	}
 
@@ -160,17 +163,13 @@ public class Map {
 		return stations.get(random.nextInt(stations.size()));
 	}
 
-	public Station addStation(String name, Position location) {
-		Station station = new Station(name, location);
+	public void addStation(Station station) {
 		stations.add(station);
-		return station;
 	}
 
-	public Junction addJunction(String name, Position location) {
-		Junction junction = new Junction(name, location);
+	public void addJunction(Junction junction) {
 		stations.add(junction);
 		junctions.add(junction);
-		return junction;
 	}
 
 	/**
@@ -222,16 +221,8 @@ public class Map {
 		return adjacentStations;
 	}
 
-	public Connection addConnection(Station station1, Station station2, Connection.Material material) {
-		Connection newConnection = new Connection(station1, station2, material);
-		connections.add(newConnection);
-		return newConnection;
-	}
-
-	public Connection addConnection(String stationName1, String stationName2, Connection.Material material) {
-		Station station1 = getStationByName(stationName1);
-		Station station2 = getStationByName(stationName2);
-		return addConnection(station1, station2, material);
+	public void addConnection(Connection connection) {
+		connections.add(connection);
 	}
 
 	public Station getStationByName(String name) {

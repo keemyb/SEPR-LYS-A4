@@ -21,19 +21,19 @@ public class MapTest extends LibGdxTest {
 
     @Test
     public void addStationAndConnectionTest() throws Exception {
-        String name1 = "station1";
-        String name2 = "station2";
-
+        Station station1 = new Station("Station 1", new Position(9999, 9999));
+        Station station2 = new Station("Station 2", new Position(200, 200));
+        Connection connection = new Connection(station1, station2, Connection.Material.GOLD);
 
         int previousSize = map.getStations().size();
 
-        map.addStation(name1, new Position(9999, 9999));
-        map.addStation(name2, new Position(200, 200));
+        map.addStation(station1);
+        map.addStation(station2);
 
         assertTrue("Failed to add stations", map.getStations().size() - previousSize == 2);
 
-        map.addConnection(name1, name2, Connection.Material.GOLD);
-        assertTrue("Connection addition failed", map.doesConnectionExist(name2, name1));
+        map.addConnection(connection);
+        assertTrue("Connection addition failed", map.doesConnectionExist(station1.getName(), station2.getName()));
 
         // Should throw an error by itself
         map.getStationByPosition(new Position(9999, 9999));

@@ -2,6 +2,7 @@ package gamelogic.map;
 
 import gamelogic.player.Player;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 
 /**
  * This class represents connection between two stations.
@@ -80,9 +81,8 @@ public class Connection {
             return (int) (Math.ceil(length) * rentPayablePerUnitLength);
         }
 
-        // TODO Scale the damage based on the fastest train.
         public float calculateDamageInflicted(Train train) {
-            return (1f - strength) * (float) train.getSpeed() / 100;
+            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
         }
 
         public String getName() {

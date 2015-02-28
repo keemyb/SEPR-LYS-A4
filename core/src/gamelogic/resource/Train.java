@@ -17,16 +17,18 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     private Position position;
-    private Station finalStation;                   // must correspond to finalPosition
-    private List<Station> route;                   // must not contain current position
-    private List<Tuple<Station, Integer>> history;   // station name and turn number
+    private Station finalStation;
+    private List<Station> route = new ArrayList<>();                   // must not contain current position
+    private List<Tuple<Station, Integer>> history = new ArrayList<>();   // station name and turn number
 
 
     public Train(String name, int speed) {
         this.name = name;
         this.speed = speed;
-        history = new ArrayList<>();
-        route = new ArrayList<>();
+    }
+
+    public Train(Train train) {
+        this(train.name, train.speed);
     }
 
     public int getSpeed() {
@@ -125,5 +127,33 @@ public class Train extends Resource {
         if (actor != null) {
             actor.remove();
         }
+    }
+
+    /**
+     * Trains are considered equal if they have the same name or speed
+     * Note that if you add power-ups that modify speed, you may want to
+     * change this method to either not consider speed at all, or it's
+     * original speed.
+     * @param o the object to compare with this train.
+     * @return true if the object is equal to this train, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Train train = (Train) o;
+
+        if (speed != train.speed) return false;
+        if (name != null ? !name.equals(train.name) : train.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = speed;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

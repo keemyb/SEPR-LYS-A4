@@ -61,8 +61,12 @@ public class TrainMoveController {
             public void run() {
                 train.addToHistory(station, PlayerManager.getTurnNumber());
                 if (train.getHistory().size() >= 2) {
-                    Connection visited = map.getConnectionBetween(train.getHistory().get(train.getHistory().size() - 2).getFirst(), station);
-                    ConnectionController.payRent(train, visited);
+                    Station secondLastStation = train.getHistory().get(train.getHistory().size() - 2).getFirst();
+                    // If a train backtracks then the connection will be null.
+                    if (secondLastStation != station) {
+                        Connection visited = map.getConnectionBetween(secondLastStation, station);
+                        ConnectionController.visitedConnection(train, visited);
+                    }
                 }
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());
@@ -106,7 +110,8 @@ public class TrainMoveController {
 
         for (final Station next : train.getRoute()) {
             Position nextPosition = next.getLocation();
-            float duration = getDistance(current, nextPosition) / train.getSpeed();
+            Connection connection = map.getConnectionBetween(current, nextPosition);
+            float duration = getDistance(current, nextPosition) / connection.calculateAdjustedTrainSpeed(train);
             action.addAction(moveTo(nextPosition.getX() - TrainActor.width / 2, nextPosition.getY() - TrainActor.height / 2, duration));
             Station station = Game.getInstance().getMap().getStationByPosition(nextPosition);
             if (station != null) {

@@ -43,12 +43,15 @@ public abstract class TrainManager {
         }
     }
 
-    public static List<String> getTrainNames() {
-        List<String> names = new ArrayList<>();
+    public static int getFastestTrainSpeed() {
+        int fastestTrainSpeed = 0;
         for (Train train : trains) {
-            names.add(train.getName());
+            int trainSpeed = train.getSpeed();
+            if (trainSpeed > fastestTrainSpeed) {
+                fastestTrainSpeed = trainSpeed;
+            }
         }
-        return names;
+        return fastestTrainSpeed;
     }
 
     public static Train getRandomTrain() {

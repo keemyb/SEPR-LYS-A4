@@ -111,7 +111,7 @@ public class TrainMoveController {
         for (final Station next : train.getRoute()) {
             Position nextPosition = next.getLocation();
             Connection connection = map.getConnectionBetween(current, nextPosition);
-            float duration = getDistance(current, nextPosition) / connection.calculateAdjustedTrainSpeed(train);
+            float duration = Position.getDistance(current, nextPosition) / connection.calculateAdjustedTrainSpeed(train);
             action.addAction(moveTo(nextPosition.getX() - TrainActor.width / 2, nextPosition.getY() - TrainActor.height / 2, duration));
             Station station = Game.getInstance().getMap().getStationByPosition(nextPosition);
             if (station != null) {
@@ -126,10 +126,6 @@ public class TrainMoveController {
         // remove previous actions to be cautious
         train.getActor().clearActions();
         train.getActor().addAction(action);
-    }
-
-    private float getDistance(Position a, Position b) {
-        return Vector2.dst(a.getX(), a.getY(), b.getX(), b.getY());
     }
 
     private void collisions(Station station) {

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * This class represents map in the game, containing stations and jellies.
+ * This class represents map in the game, containing stations.
  */
 public class Map {
 	private final double JUNCTION_FAILURE_RATE = 0.2;

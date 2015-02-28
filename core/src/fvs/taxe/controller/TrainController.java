@@ -1,6 +1,5 @@
 package fvs.taxe.controller;
 
-import com.badlogic.gdx.graphics.Color;
 import fvs.taxe.actor.TrainActor;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.player.Player;
@@ -8,7 +7,6 @@ import gamelogic.map.Station;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
-import gamelogic.resource.TrainJelliedListener;
 
 public class TrainController {
     private Context context;

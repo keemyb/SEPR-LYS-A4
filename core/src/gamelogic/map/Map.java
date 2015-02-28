@@ -113,18 +113,22 @@ public class Map {
 	 *         otherwise
 	 */
 	public boolean doesConnectionExist(Position a, Position b) {
-		for (Connection connection : connections) {
-			Position p1 = connection.getStation1().getLocation();
-			Position p2 = connection.getStation2().getLocation();
-			double dist1 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
-					p2.getY(), a.getX(), a.getY());
-			double dist2 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
-					p2.getY(), b.getX(), b.getY());
-			if (dist1 <= 0.0001 && dist2 <= 0.0001)
-				return true;
-		}
-		return false;
+        return getConnectionBetween(a, b) != null;
 	}
+
+    public Connection getConnectionBetween(Position a, Position b) {
+        for (Connection connection : connections) {
+            Position p1 = connection.getStation1().getLocation();
+            Position p2 = connection.getStation2().getLocation();
+            double dist1 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
+                    p2.getY(), a.getX(), a.getY());
+            double dist2 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
+                    p2.getY(), b.getX(), b.getY());
+            if (dist1 <= 0.0001 && dist2 <= 0.0001)
+                return connection;
+        }
+        return null;
+    }
 
     public boolean prospectiveConnectionIsValid(Connection prospectiveConnection) {
         Station station1 = prospectiveConnection.getStation1();

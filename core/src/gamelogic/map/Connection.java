@@ -23,6 +23,10 @@ public class Connection {
         length = Station.getDistance(station1, station2);
     }
 
+    public boolean isUpgradable(Material to) {
+        return material.isUpgradable(to);
+    }
+
     public void inflictDamage(Train train) {
         float damageToInflict = material.calculateDamageInflicted(train);
         health -= damageToInflict;
@@ -81,6 +85,18 @@ public class Connection {
             this.costPerUnitLength = costPerUnitLength;
             this.rentPayablePerUnitLength = rentPayablePerUnitLength;
             this.strength = strength;
+        }
+
+        public boolean isUpgradable(Material to) {
+            switch (this) {
+                case GOLD:
+                    return false;
+                case SILVER:
+                    return to.equals(GOLD);
+                case BRONZE:
+                    return true;
+            }
+            return false;
         }
 
         public int calculateTotalCost(float length) {

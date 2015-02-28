@@ -16,7 +16,7 @@ public class Goal {
     private Station destination;
     private int turnIssued;
     private boolean complete = false;
-    private String trainName = null;            // Train constraint
+    private Train requiredTrain = null;            // Train constraint
     private boolean quantifiable = false;       // Quantifiable or not
     private int turnLimit = 0;                  // If quantifiable: turn limits constraint
 
@@ -27,8 +27,8 @@ public class Goal {
         updateGoal();
     }
 
-    public void addTrainConstraint(String trainName) {
-        this.trainName = trainName;
+    public void addTrainConstraint(Train train) {
+        requiredTrain = train;
         updateGoal();
     }
 
@@ -46,15 +46,15 @@ public class Goal {
         int turnDestinationWasVisited = train.getLastTurnStationWasVisited(destination);
         if (turnOriginWasVisited > turnDestinationWasVisited) return false;
 
-        if (trainName != null) {
-            if (!train.toString().equals(trainName)) return false;
+        if (requiredTrain != null) {
+            if (!train.equals(requiredTrain)) return false;
         }
 
         return true;
     }
 
     public String toString() {
-        String trainString = (trainName == null) ? "train" : trainName;
+        String trainString = (requiredTrain == null) ? "train" : requiredTrain.getName();
         String turnLimit = Integer.toString(getTurnLimit());
         return "Send a " + trainString +
                 " from " + origin.getName() +

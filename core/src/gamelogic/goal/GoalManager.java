@@ -44,23 +44,23 @@ public abstract class GoalManager {
             int phase = Game.getInstance().getPhase();
             if (phase == 0) {
                 if (randDouble < 0.9) {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(4));
+                    goal.addTrainConstraint(TrainManager.trains.get(4));
                 } else {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(3));
+                    goal.addTrainConstraint(TrainManager.trains.get(3));
                 }
             } else if (phase == 1) {
                 if (randDouble < 0.15) {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(4));
+                    goal.addTrainConstraint(TrainManager.trains.get(4));
                 } else if (randDouble < 0.7) {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(3));
+                    goal.addTrainConstraint(TrainManager.trains.get(3));
                 } else {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(2));
+                    goal.addTrainConstraint(TrainManager.trains.get(2));
                 }
             } else {
                 if (randDouble < 0.6) {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(1));
+                    goal.addTrainConstraint(TrainManager.trains.get(1));
                 } else {
-                    goal.addTrainConstraint(TrainManager.getTrainNames().get(0));
+                    goal.addTrainConstraint(TrainManager.trains.get(0));
                 }
             }
         }

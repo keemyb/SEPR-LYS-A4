@@ -20,7 +20,7 @@ public abstract class TrainManager {
     private static final String DEFAULT_TRAIN_NAME = "NO NAME";
     private static final int DEFAULT_TRAIN_SPEED = 50;
 
-    private static List<Train> trains = new ArrayList<Train>();
+    public static List<Train> trains = new ArrayList<Train>();
 
     //Reading trains from json-file.
     static {

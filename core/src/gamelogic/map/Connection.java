@@ -29,6 +29,16 @@ public class Connection {
         if (health <= 0) health = 0;
     }
 
+    public int calculateAdjustedTrainSpeed(Train train) {
+        /* We always want the train to be atleast this fast
+        (as a % of it's usual speed) */
+        float lowerBound = 0.75f;
+
+        int trainSpeed = train.getSpeed();
+        float variableSpeedScale = (1f - lowerBound) * health;
+        return (int) ((float) trainSpeed * (lowerBound + variableSpeedScale));
+    }
+
     public int getRentPayable() {
         return material.calculateRentPayable(length);
     }

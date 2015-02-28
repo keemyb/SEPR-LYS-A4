@@ -110,7 +110,8 @@ public class TrainMoveController {
 
         for (final Station next : train.getRoute()) {
             Position nextPosition = next.getLocation();
-            float duration = getDistance(current, nextPosition) / train.getSpeed();
+            Connection connection = map.getConnectionBetween(current, nextPosition);
+            float duration = getDistance(current, nextPosition) / connection.calculateAdjustedTrainSpeed(train);
             action.addAction(moveTo(nextPosition.getX() - TrainActor.width / 2, nextPosition.getY() - TrainActor.height / 2, duration));
             Station station = Game.getInstance().getMap().getStationByPosition(nextPosition);
             if (station != null) {

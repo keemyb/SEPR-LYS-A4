@@ -23,6 +23,7 @@ public class MapTest extends LibGdxTest {
     public void addStationAndConnectionTest() throws Exception {
         Station station1 = new Station("Station 1", new Position(9999, 9999));
         Station station2 = new Station("Station 2", new Position(200, 200));
+        Connection connection = new Connection(station1, station2, Connection.Material.GOLD);
 
         int previousSize = map.getStations().size();
 
@@ -31,7 +32,7 @@ public class MapTest extends LibGdxTest {
 
         assertTrue("Failed to add stations", map.getStations().size() - previousSize == 2);
 
-        map.addConnection(station1, station2, Connection.Material.GOLD);
+        map.addConnection(connection);
         assertTrue("Connection addition failed", map.doesConnectionExist(station1.getName(), station2.getName()));
 
         // Should throw an error by itself

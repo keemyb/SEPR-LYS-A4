@@ -27,6 +27,10 @@ public class Connection {
         return material.isUpgradable(to);
     }
 
+    public int calculateUpgradeCost(Material to) {
+        return material.calculateUpgradeCost(to, length);
+    }
+
     public void inflictDamage(Train train) {
         float damageToInflict = material.calculateDamageInflicted(train);
         health -= damageToInflict;
@@ -105,6 +109,10 @@ public class Connection {
 
         public int calculateRentPayable(float length) {
             return (int) (Math.ceil(length) * rentPayablePerUnitLength);
+        }
+
+        public int calculateUpgradeCost(Material to, float length) {
+            return (int) ((to.costPerUnitLength - costPerUnitLength) * length);
         }
 
         public float calculateDamageInflicted(Train train) {

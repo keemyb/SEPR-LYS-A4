@@ -72,10 +72,11 @@ public class Map {
 				else
 					isJunction = val.asBoolean();
 			}
+
 			if (isJunction)
-				addJunction(name, new Position(x, y));
-			else
-				addStation(name, new Position(x, y));
+                addJunction(new Junction(name, new Position(x, y)));
+            else
+                addStation(new Station(name, new Position(x, y)));
 		}
 	}
 
@@ -160,17 +161,13 @@ public class Map {
 		return stations.get(random.nextInt(stations.size()));
 	}
 
-	public Station addStation(String name, Position location) {
-		Station station = new Station(name, location);
+	public void addStation(Station station) {
 		stations.add(station);
-		return station;
 	}
 
-	public Junction addJunction(String name, Position location) {
-		Junction junction = new Junction(name, location);
+	public void addJunction(Junction junction) {
 		stations.add(junction);
 		junctions.add(junction);
-		return junction;
 	}
 
 	/**

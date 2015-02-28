@@ -17,32 +17,36 @@ import java.util.Random;
 public abstract class TrainManager {
     public final static int CONFIG_MAX_TRAINS = 7;
     private final static Random random = new Random();
-    private final static ArrayList<Tuple<String, Integer>> trainEntries;
+    private static final String DEFAULT_TRAIN_NAME = "NO NAME";
+    private static final int DEFAULT_TRAIN_SPEED = 50;
+
+    private static List<Train> trains = new ArrayList<Train>();
 
     //Reading trains from json-file.
     static {
         JsonReader jsonReader = new JsonReader();
         JsonValue jsonVal = jsonReader.parse(Gdx.files.local("trains.json"));
 
-        trainEntries = new ArrayList<>();
-        for (JsonValue entry = jsonVal.getChild("trains"); entry != null; entry = entry.next()) {
-            String name = "";
-            int speed = 0;
-            for (JsonValue val = entry.child; val != null; val = val.next()) {
-                if (val.name.equalsIgnoreCase("name")) {
+        for(JsonValue train = jsonVal.getChild("trains"); train != null; train = train.next()) {
+            // If no name or speed is found these defaults will be used.
+            String name = DEFAULT_TRAIN_NAME;
+            int speed = DEFAULT_TRAIN_SPEED;
+            for(JsonValue val  = train.child; val != null; val = val.next()) {
+                if(val.name.equalsIgnoreCase("name")) {
                     name = val.asString();
                 } else {
                     speed = val.asInt();
                 }
             }
-            trainEntries.add(new Tuple<>(name, speed));
+            Train newTrain = new Train(name, speed);
+            trains.add(newTrain);
         }
     }
 
     public static List<String> getTrainNames() {
         List<String> names = new ArrayList<>();
-        for (Tuple<String, Integer> train : trainEntries) {
-            names.add(train.getFirst());
+        for (Train train : trains) {
+            names.add(train.getName());
         }
         return names;
     }
@@ -69,9 +73,8 @@ public abstract class TrainManager {
         }
 
         // returns a train with the given index
-        Tuple<String, Integer> entry = trainEntries.get(index);
-        return new Train(entry.getFirst(), entry.getSecond());
-
+        Train train = trains.get(index);
+        return new Train(train);
     }
 
     /**

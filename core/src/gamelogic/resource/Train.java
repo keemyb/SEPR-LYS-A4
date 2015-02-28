@@ -17,16 +17,18 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     private Position position;
-    private Station finalStation;                   // must correspond to finalPosition
-    private List<Station> route;                   // must not contain current position
-    private List<Tuple<Station, Integer>> history;   // station name and turn number
+    private Station finalStation;
+    private List<Station> route = new ArrayList<>();                   // must not contain current position
+    private List<Tuple<Station, Integer>> history = new ArrayList<>();   // station name and turn number
 
 
     public Train(String name, int speed) {
         this.name = name;
         this.speed = speed;
-        history = new ArrayList<>();
-        route = new ArrayList<>();
+    }
+
+    public Train(Train train) {
+        this(train.name, train.speed);
     }
 
     public int getSpeed() {

@@ -1,5 +1,11 @@
 package fvs.taxe.controller;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
@@ -19,9 +25,64 @@ public class ConnectionController {
     Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
     Connection selectedConnection;
 
+    private TextButton createConnection;
+    private TextButton repairConnection;
+    private TextButton upgradeConnection;
+    private TextButton removeConnection;
+    private TextButton cancel;
+    private Group connectionButtons = new Group();
 
     public ConnectionController(Context context) {
         this.context = context;
+        createConnection = new TextButton("Create Connection", context.getSkin());
+        repairConnection = new TextButton("Repair Connection", context.getSkin());
+        upgradeConnection = new TextButton("Upgrade Connection", context.getSkin());
+        removeConnection = new TextButton("Remove Connection", context.getSkin());
+        cancel = new TextButton("Cancel", context.getSkin());
+
+        map = context.getGameLogic().getMap();
+
+        StationController.subscribeStationClick(new StationClickListener() {
+            @Override
+            public void clicked(Station station) {
+                selectStation(station);
+            }
+        });
+
+        createConnection.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                createConnection();
+            }
+        });
+
+        repairConnection.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                repairConnection();
+            }
+        });
+
+        upgradeConnection.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradeConnection();
+            }
+        });
+
+        removeConnection.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                removeConnection();
+            }
+        });
+
+        cancel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                endConnectionModifications();
+            }
+        });
     }
 
     public static void payRent(Train train, Connection connection) {
@@ -38,6 +99,27 @@ public class ConnectionController {
         damageConnection(train, visited);
     }
 
+    private void showOptionButtons() {
+        GameState state = context.getGameLogic().getState();
+
+        connectionButtons.clearChildren();
+        cancel.setPosition(TaxeGame.WORLD_WIDTH - 100, TaxeGame.WORLD_HEIGHT - 33);
+        connectionButtons.addActor(cancel);
+
+        if (state.equals(GameState.CONNECTION_CREATE)) {
+            createConnection.setPosition(TaxeGame.WORLD_WIDTH - 260, TaxeGame.WORLD_HEIGHT - 33);
+            connectionButtons.addActor(createConnection);
+        } else if (state.equals(GameState.CONNECTION_EDIT)) {
+            upgradeConnection.setPosition(TaxeGame.WORLD_WIDTH - 260, TaxeGame.WORLD_HEIGHT - 33);
+            repairConnection.setPosition(TaxeGame.WORLD_WIDTH - 420, TaxeGame.WORLD_HEIGHT - 33);
+            removeConnection.setPosition(TaxeGame.WORLD_WIDTH - 590, TaxeGame.WORLD_HEIGHT - 33);
+            connectionButtons.addActor(upgradeConnection);
+            connectionButtons.addActor(repairConnection);
+            connectionButtons.addActor(removeConnection);
+        }
+
+        context.getStage().addActor(connectionButtons);
+    }
 
     public void selectStation(Station station) {
         GameState state = context.getGameLogic().getState();
@@ -131,13 +213,19 @@ public class ConnectionController {
 
     private void endConnectionModifications() {
         context.getGameLogic().setState(GameState.NORMAL);
+        connectionButtons.remove();
         context.getTopBarController().clearFlashMessage();
     }
 
     public void enterCreateConnectionMode() {
+        clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_CREATE);
+        showOptionButtons();
     }
+
     public void enterEditConnectionMode() {
+        clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_EDIT);
+        showOptionButtons();
     }
 }

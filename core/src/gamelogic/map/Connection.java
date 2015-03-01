@@ -40,6 +40,10 @@ public class Connection {
         return calculateRepairCost() + material.calculateUpgradeCost(to, length);
     }
 
+    public int calculateCost() {
+        return material.calculateTotalCost(length);
+    }
+
     public int calculateRepairCost() {
         return (int) (material.calculateRepairCost(length) * (1f - health));
     }

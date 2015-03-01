@@ -169,7 +169,7 @@ public class ConnectionController {
     }
 
     private void upgradeConnection() {
-        if (checkConnectionStatus()) {
+        if (checkConnectionStatus("upgrade")) {
             System.out.println("Upgraded to GOLD");
             selectedConnection.upgrade(Connection.Material.GOLD);
             PlayerManager.getCurrentPlayer().spendMoney(selectedConnection.calculateUpgradeCost(Connection.Material.GOLD));
@@ -178,7 +178,7 @@ public class ConnectionController {
     }
 
     private void repairConnection() {
-        if (checkConnectionStatus()) {
+        if (checkConnectionStatus("repair")) {
             System.out.println("Repaired connection");
             selectedConnection.repair();
             PlayerManager.getCurrentPlayer().spendMoney(selectedConnection.calculateRepairCost());
@@ -187,20 +187,20 @@ public class ConnectionController {
     }
 
     private void removeConnection() {
-        if (checkConnectionStatus()) {
+        if (checkConnectionStatus("remove")) {
             map.removeConnection(selectedConnection);
             clearSelected();
         }
     }
 
-    private boolean checkConnectionStatus() {
+    private boolean checkConnectionStatus(String action) {
         if (selectedConnection == null) {
             context.getTopBarController().displayFlashMessage(
                     "No connection selected" + dirtyPaddingHack, Color.BLACK, 1000);
             return false;
         } else if (selectedConnection.getOwner() == null) {
             context.getTopBarController().displayFlashMessage(
-                    "Cannot Modify Connection selected" + dirtyPaddingHack, Color.BLACK, 1000);
+                    "Cannot " + action + " selected connection" + dirtyPaddingHack, Color.BLACK, 1000);
             return false;
         } else if (selectedConnection.getOwner() != PlayerManager.getCurrentPlayer()) {
             context.getTopBarController().displayFlashMessage(

@@ -5,7 +5,11 @@ import gamelogic.player.Player;
 import gamelogic.resource.Train;
 
 public class ConnectionController {
-    private ConnectionController() {}
+    Context context;
+
+    public ConnectionController(Context context) {
+        this.context = context;
+    }
 
     public static void payRent(Train train, Connection connection) {
         Player payer = train.getPlayer();

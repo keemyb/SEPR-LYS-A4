@@ -39,6 +39,7 @@ public class GameScreen extends ScreenAdapter {
     private ResourceController resourceController;
     private GoalController goalController;
     private RouteController routeController;
+    private ConnectionController connectionController;
 
     public GameScreen(TaxeGame game) {
         this.game = game;
@@ -60,9 +61,11 @@ public class GameScreen extends ScreenAdapter {
         resourceController = new ResourceController(context);
         goalController = new GoalController(context);
         routeController = new RouteController(context);
+        connectionController = new ConnectionController(context);
 
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
+        context.setConnectionController(connectionController);
 
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override

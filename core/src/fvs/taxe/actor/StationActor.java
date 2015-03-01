@@ -12,7 +12,7 @@ import gamelogic.map.Position;
 import gamelogic.map.Station;
 
 public class StationActor extends Group {
-    private static int width = 20;
+    public static int width = 20;
     private static int height = 20;
     private Image stationDot = new Image(new Texture(Gdx.files.internal("station-dot.png")));
     public BitmapFont font;

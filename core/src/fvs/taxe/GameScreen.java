@@ -129,6 +129,7 @@ public class GameScreen extends ScreenAdapter {
 
         if (gameLogic.getState() == GameState.CONNECTION_CREATE ||
                 gameLogic.getState() == GameState.CONNECTION_EDIT) {
+            connectionController.drawSelectedStations();
             connectionController.drawSelectedConnection();
         }
 

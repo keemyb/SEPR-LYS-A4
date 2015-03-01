@@ -1,6 +1,8 @@
 package fvs.taxe.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -8,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
+import fvs.taxe.actor.JunctionActor;
+import fvs.taxe.actor.StationActor;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
+import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
@@ -34,6 +39,9 @@ public class ConnectionController {
     private TextButton cancel;
     private Group connectionButtons = new Group();
 
+    private float relativeStationHighlightSize = 1.7f;
+
+    private Color selectedStationColour = new Color(255/255.0f, 137/255.0f, 0f, 0.70f);
     private Color validTemporaryConnectionColour = new Color(0.2f, 1f, 0.2f, 1f);
     private Color invalidTemporaryConnectionColour = new Color(1f, 0f, 0f, 1f);
     private Color existingConnectionColour = new Color(0f, 0f, 1f, 1f);
@@ -222,9 +230,33 @@ public class ConnectionController {
         selectedConnection = null;
     }
 
+    public void drawSelectedStations() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.shapeRenderer.setColor(selectedStationColour);
+
+        int width;
+
+        for (Station station : selectedStations) {
+            if (station instanceof Junction) {
+                width = (int) (JunctionActor.width * relativeStationHighlightSize) / 2;
+            } else {
+                width = (int) (StationActor.width * relativeStationHighlightSize) / 2;
+            }
+            game.shapeRenderer.circle(station.getLocation().getX(),
+                    station.getLocation().getY(), width);
+        }
+
+        game.shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
     public void drawSelectedConnection() {
         if (selectedConnection == null) return;
 
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         if (context.getGameLogic().getState().equals(GameState.CONNECTION_CREATE)) {
@@ -244,6 +276,7 @@ public class ConnectionController {
                 StationController.CONNECTION_LINE_WIDTH);
 
         game.shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     private void endConnectionModifications() {

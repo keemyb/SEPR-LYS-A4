@@ -26,6 +26,35 @@ public class ConnectionController {
     }
 
 
+    public void selectStation(Station station) {
+        GameState state = context.getGameLogic().getState();
+        if (!state.equals(GameState.CONNECTION_CREATE)
+                && !state.equals(GameState.CONNECTION_EDIT)) {
+            return;
+        }
+        if (selectedStations.contains(station)) {
+            return;
+        }
+
+        if (selectedStations.size() == 2) {
+            selectedStations.remove();
+        }
+        selectedStations.add(station);
+        selectConnection();
+    }
+
+    private void selectConnection() {
+        if (selectedStations.size() != 2) return;
+
+        GameState state = context.getGameLogic().getState();
+
+        if (state.equals(GameState.CONNECTION_CREATE)) {
+            selectedConnection = new Connection(selectedStations.poll(), selectedStations.poll(), Connection.Material.BRONZE);
+        } else {
+            selectedConnection = map.getConnectionBetween(selectedStations.poll(), selectedStations.poll());
+        }
+    }
+
     public void enterCreateConnectionMode() {
         context.getGameLogic().setState(GameState.CONNECTION_CREATE);
     }

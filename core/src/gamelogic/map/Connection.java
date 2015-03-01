@@ -104,7 +104,7 @@ public class Connection {
             this.strength = strength;
         }
 
-        public boolean isUpgradable(Material to) {
+        private boolean isUpgradable(Material to) {
             switch (this) {
                 case GOLD:
                     return false;
@@ -116,36 +116,28 @@ public class Connection {
             return false;
         }
 
-        public int calculateRepairCost(float length) {
+        private int calculateRepairCost(float length) {
             return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
         }
 
-        public int calculateTotalCost(float length) {
+        private int calculateTotalCost(float length) {
             return (int) Math.ceil(length) * costPerUnitLength;
         }
 
-        public int calculateRentPayable(float length) {
+        private int calculateRentPayable(float length) {
             return (int) (Math.ceil(length) * rentPayablePerUnitLength);
         }
 
-        public int calculateUpgradeCost(Material to, float length) {
+        private int calculateUpgradeCost(Material to, float length) {
             return (int) ((to.costPerUnitLength - costPerUnitLength) * length);
         }
 
-        public float calculateDamageInflicted(Train train) {
+        private float calculateDamageInflicted(Train train) {
             return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
         }
 
         public String getName() {
             return name;
-        }
-
-        public int getCostPerUnitLength() {
-            return costPerUnitLength;
-        }
-
-        public float getStrength() {
-            return strength;
         }
     }
 }

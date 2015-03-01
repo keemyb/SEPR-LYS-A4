@@ -4,5 +4,7 @@ public enum GameState {
     NORMAL,
     PLACING,
     ROUTING,
-    ANIMATING
+    ANIMATING,
+    CONNECTION_CREATE,
+    CONNECTION_EDIT,
 }

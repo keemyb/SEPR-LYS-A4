@@ -1,6 +1,7 @@
 package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ConnectionController {
     Context context;
     Map map;
+    TaxeGame game;
 
     Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
     Connection selectedConnection;
@@ -32,12 +34,17 @@ public class ConnectionController {
     private TextButton cancel;
     private Group connectionButtons = new Group();
 
+    private Color validTemporaryConnectionColour = new Color(0.2f, 1f, 0.2f, 1f);
+    private Color invalidTemporaryConnectionColour = new Color(1f, 0f, 0f, 1f);
+    private Color existingConnectionColour = new Color(0f, 0f, 1f, 1f);
+
     // Workaround for the fact that the buttons take up lots of space
     private String dirtyPaddingHack = "                                                           " +
                                       "                                                           ";
 
     public ConnectionController(Context context) {
         this.context = context;
+        game = context.getTaxeGame();
         createConnection = new TextButton("Create Connection", context.getSkin());
         repairConnection = new TextButton("Repair Connection", context.getSkin());
         upgradeConnection = new TextButton("Upgrade Connection", context.getSkin());
@@ -213,6 +220,30 @@ public class ConnectionController {
     private void clearSelected() {
         selectedStations.clear();
         selectedConnection = null;
+    }
+
+    public void drawSelectedConnection() {
+        if (selectedConnection == null) return;
+
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        if (context.getGameLogic().getState().equals(GameState.CONNECTION_CREATE)) {
+            if (map.prospectiveConnectionIsValid(selectedConnection)) {
+                game.shapeRenderer.setColor(validTemporaryConnectionColour);
+            } else {
+                game.shapeRenderer.setColor(invalidTemporaryConnectionColour);
+            }
+        } else {
+            game.shapeRenderer.setColor(existingConnectionColour);
+        }
+
+        game.shapeRenderer.rectLine(selectedConnection.getStation1().getLocation().getX(),
+                selectedConnection.getStation1().getLocation().getY(),
+                selectedConnection.getStation2().getLocation().getX(),
+                selectedConnection.getStation2().getLocation().getY(),
+                StationController.CONNECTION_LINE_WIDTH);
+
+        game.shapeRenderer.end();
     }
 
     private void endConnectionModifications() {

@@ -127,6 +127,11 @@ public class GameScreen extends ScreenAdapter {
             stationController.displayNumberOfTrainsAtStations();
         }
 
+        if (gameLogic.getState() == GameState.CONNECTION_CREATE ||
+                gameLogic.getState() == GameState.CONNECTION_EDIT) {
+            connectionController.drawSelectedConnection();
+        }
+
         resourceController.drawHeaderText();
         goalController.showCurrentPlayerGoals();
 

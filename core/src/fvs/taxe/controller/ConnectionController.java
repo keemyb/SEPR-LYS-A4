@@ -24,4 +24,12 @@ public class ConnectionController {
         payRent(train, visited);
         damageConnection(train, visited);
     }
+
+
+    public void enterCreateConnectionMode() {
+        context.getGameLogic().setState(GameState.CONNECTION_CREATE);
+    }
+    public void enterEditConnectionMode() {
+        context.getGameLogic().setState(GameState.CONNECTION_EDIT);
+    }
 }

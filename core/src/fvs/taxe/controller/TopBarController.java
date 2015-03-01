@@ -19,6 +19,8 @@ public class TopBarController {
     private Context context;
     private Color controlsColor = Color.LIGHT_GRAY;
     private TextButton endTurnButton;
+    private TextButton createConnectionButton;
+    private TextButton editConnectionButton;
     private Label flashMessage;
 
     public TopBarController(Context context) {
@@ -104,6 +106,54 @@ public class TopBarController {
         });
 
         context.getStage().addActor(endTurnButton);
+    }
+
+    public void addCreateConnectionButton() {
+        createConnectionButton = new TextButton("Create Connection", context.getSkin());
+        createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 250.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        createConnectionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getConnectionController().enterCreateConnectionMode();
+            }
+        });
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.NORMAL) {
+                    createConnectionButton.setVisible(true);
+                } else {
+                    createConnectionButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(createConnectionButton);
+    }
+
+    public void addEditConnectionButton() {
+        editConnectionButton = new TextButton("Edit Connection", context.getSkin());
+        editConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 380.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        editConnectionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getConnectionController().enterEditConnectionMode();
+            }
+        });
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.NORMAL) {
+                    editConnectionButton.setVisible(true);
+                } else {
+                    editConnectionButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(editConnectionButton);
     }
 
     public void clearFlashMessage() {

@@ -149,6 +149,8 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         stationController.renderStations();
         topBarController.addEndTurnButton();
+        topBarController.addCreateConnectionButton();
+        topBarController.addEditConnectionButton();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 

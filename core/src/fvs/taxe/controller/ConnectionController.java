@@ -32,6 +32,10 @@ public class ConnectionController {
     private TextButton cancel;
     private Group connectionButtons = new Group();
 
+    // Workaround for the fact that the buttons take up lots of space
+    private String dirtyPaddingHack = "                                                           " +
+                                      "                                                           ";
+
     public ConnectionController(Context context) {
         this.context = context;
         createConnection = new TextButton("Create Connection", context.getSkin());
@@ -121,7 +125,7 @@ public class ConnectionController {
         context.getStage().addActor(connectionButtons);
     }
 
-    public void selectStation(Station station) {
+    private void selectStation(Station station) {
         GameState state = context.getGameLogic().getState();
         if (!state.equals(GameState.CONNECTION_CREATE)
                 && !state.equals(GameState.CONNECTION_EDIT)) {
@@ -189,24 +193,24 @@ public class ConnectionController {
         }
     }
 
-    public boolean checkConnectionStatus() {
+    private boolean checkConnectionStatus() {
         if (selectedConnection == null) {
             context.getTopBarController().displayFlashMessage(
-                    "No connection selected", Color.BLACK, 1000);
+                    "No connection selected" + dirtyPaddingHack, Color.BLACK, 1000);
             return false;
         } else if (selectedConnection.getOwner() == null) {
             context.getTopBarController().displayFlashMessage(
-                    "Cannot Remove Connection selected", Color.BLACK, 1000);
+                    "Cannot Modify Connection selected" + dirtyPaddingHack, Color.BLACK, 1000);
             return false;
         } else if (selectedConnection.getOwner() != PlayerManager.getCurrentPlayer()) {
             context.getTopBarController().displayFlashMessage(
-                    "You do not own this connection", Color.BLACK, 1000);
+                    "You do not own this connection" + dirtyPaddingHack, Color.BLACK, 1000);
             return false;
         }
         return true;
     }
 
-    public void clearSelected() {
+    private void clearSelected() {
         selectedStations.clear();
         selectedConnection = null;
     }

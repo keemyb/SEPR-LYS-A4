@@ -55,6 +55,12 @@ public class ConnectionController {
         }
     }
 
+
+    private void endConnectionModifications() {
+        context.getGameLogic().setState(GameState.NORMAL);
+        context.getTopBarController().clearFlashMessage();
+    }
+
     public void enterCreateConnectionMode() {
         context.getGameLogic().setState(GameState.CONNECTION_CREATE);
     }

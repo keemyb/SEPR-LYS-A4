@@ -23,12 +23,25 @@ public class Connection {
         length = Station.getDistance(station1, station2);
     }
 
+    public void upgrade(Material to) {
+        repair();
+        if (isUpgradable(to)) material = to;
+    }
+
+    public void repair() {
+        health = 1;
+    }
+
     public boolean isUpgradable(Material to) {
         return material.isUpgradable(to);
     }
 
     public int calculateUpgradeCost(Material to) {
-        return material.calculateUpgradeCost(to, length);
+        return calculateRepairCost() + material.calculateUpgradeCost(to, length);
+    }
+
+    public int calculateRepairCost() {
+        return (int) (material.calculateRepairCost(length) * (1f - health));
     }
 
     public void inflictDamage(Train train) {
@@ -40,7 +53,7 @@ public class Connection {
     public int calculateAdjustedTrainSpeed(Train train) {
         /* We always want the train to be atleast this fast
         (as a % of it's usual speed) */
-        float lowerBound = 0.75f;
+        float lowerBound = 0.5f;
 
         int trainSpeed = train.getSpeed();
         float variableSpeedScale = (1f - lowerBound) * health;
@@ -101,6 +114,10 @@ public class Connection {
                     return true;
             }
             return false;
+        }
+
+        public int calculateRepairCost(float length) {
+            return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
         }
 
         public int calculateTotalCost(float length) {

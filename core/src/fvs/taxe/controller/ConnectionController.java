@@ -1,11 +1,24 @@
 package fvs.taxe.controller;
 
+import fvs.taxe.TaxeGame;
+import gamelogic.game.GameState;
 import gamelogic.map.Connection;
+import gamelogic.map.Map;
+import gamelogic.map.Station;
 import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectionController {
     Context context;
+    Map map;
+
+    Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
+    Connection selectedConnection;
+
 
     public ConnectionController(Context context) {
         this.context = context;

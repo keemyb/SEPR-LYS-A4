@@ -23,6 +23,8 @@ public class Map {
 	private List<List<Float>> distances;
 	private Random random = new Random();
 
+    private boolean initialised = false;
+
 	public Map() {
 		stations = new ArrayList<>();
 		junctions = new ArrayList<>();
@@ -34,12 +36,14 @@ public class Map {
 		parseStations(jsonVal);
 		parseConnections(jsonVal);
 
-		for (Station s : stations)
-			if (s instanceof Junction)
-				junctions.add((Junction) s);
+        for (Station s : stations)
+			if (s instanceof Junction) {
+                junctions.add((Junction) s);
+            }
 
-		computeDistances();
-	}
+        computeDistances();
+        initialised = true;
+    }
 
 	private void parseConnections(JsonValue jsonVal) {
 		for (JsonValue connection = jsonVal.getChild("connections"); connection != null; connection = connection.next) {
@@ -223,7 +227,19 @@ public class Map {
 
 	public void addConnection(Connection connection) {
 		connections.add(connection);
+        /* Don't want to keep recomputing distances whilst we are adding
+        all the connections as the map is initialised */
+        if (initialised) {
+            distances.clear();
+            computeDistances();
+        }
 	}
+
+    public void removeConnection(Connection connection) {
+        connections.remove(connection);
+        distances.clear();
+        computeDistances();
+    }
 
 	public Station getStationByName(String name) {
         for (Station station : stations) {

@@ -13,6 +13,7 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogCreateConnection;
+import fvs.taxe.dialog.DialogUpgradeConnection;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
@@ -184,10 +185,7 @@ public class ConnectionController {
 
     private void upgradeConnection() {
         if (checkConnectionStatus("upgrade")) {
-            System.out.println("Upgraded to GOLD");
-            selectedConnection.upgrade(Connection.Material.GOLD);
-            PlayerManager.getCurrentPlayer().spendMoney(selectedConnection.calculateUpgradeCost(Connection.Material.GOLD));
-            clearSelected();
+            new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
     }
 

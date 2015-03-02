@@ -124,7 +124,7 @@ public class Connection {
                 case SILVER:
                     return to.equals(GOLD);
                 case BRONZE:
-                    return true;
+                    return !to.equals(BRONZE);
             }
             return false;
         }

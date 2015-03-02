@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import gamelogic.map.Position;
 
 public class JunctionActor extends Group {
-    private static int width = 16;
+    public static int width = 16;
     private static int height = 16;
 
     private Image defaultTexture = new Image(new Texture(Gdx.files.internal("junction-dot.png")));

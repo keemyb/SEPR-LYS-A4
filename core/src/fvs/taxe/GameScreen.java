@@ -39,6 +39,7 @@ public class GameScreen extends ScreenAdapter {
     private ResourceController resourceController;
     private GoalController goalController;
     private RouteController routeController;
+    private ConnectionController connectionController;
 
     public GameScreen(TaxeGame game) {
         this.game = game;
@@ -60,9 +61,11 @@ public class GameScreen extends ScreenAdapter {
         resourceController = new ResourceController(context);
         goalController = new GoalController(context);
         routeController = new RouteController(context);
+        connectionController = new ConnectionController(context);
 
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
+        context.setConnectionController(connectionController);
 
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override
@@ -124,6 +127,12 @@ public class GameScreen extends ScreenAdapter {
             stationController.displayNumberOfTrainsAtStations();
         }
 
+        if (gameLogic.getState() == GameState.CONNECTION_CREATE ||
+                gameLogic.getState() == GameState.CONNECTION_EDIT) {
+            connectionController.drawSelectedStations();
+            connectionController.drawSelectedConnection();
+        }
+
         resourceController.drawHeaderText();
         goalController.showCurrentPlayerGoals();
 
@@ -146,6 +155,8 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         stationController.renderStations();
         topBarController.addEndTurnButton();
+        topBarController.addCreateConnectionButton();
+        topBarController.addEditConnectionButton();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 

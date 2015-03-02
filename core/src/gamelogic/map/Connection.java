@@ -4,10 +4,16 @@ import gamelogic.player.Player;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This class represents connection between two stations.
  */
 public class Connection {
+    public static final List<Float> repairThresholds = new ArrayList<>(Arrays.asList(0.33f, 0.66f, 1f));
+
     private Station station1;
     private Station station2;
     private float length;
@@ -24,12 +30,13 @@ public class Connection {
     }
 
     public void upgrade(Material to) {
-        repair();
+        repair(1);
+        health = 0;
         if (isUpgradable(to)) material = to;
     }
 
-    public void repair() {
-        health = 1;
+    public void repair(float to) {
+        health = to;
     }
 
     public boolean isUpgradable(Material to) {
@@ -37,11 +44,15 @@ public class Connection {
     }
 
     public int calculateUpgradeCost(Material to) {
-        return calculateRepairCost() + material.calculateUpgradeCost(to, length);
+        return calculateRepairCost(1) + material.calculateUpgradeCost(to, length);
     }
 
-    public int calculateRepairCost() {
-        return (int) (material.calculateRepairCost(length) * (1f - health));
+    public int calculateCost() {
+        return material.calculateTotalCost(length);
+    }
+
+    public int calculateRepairCost(float to) {
+        return (int) (material.calculateRepairCost(length) * (to - health));
     }
 
     public void inflictDamage(Train train) {
@@ -88,6 +99,19 @@ public class Connection {
         return this.station2;
     }
 
+    public float getLength() {
+        return length;
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    @Override
+    public String toString() {
+        return "Connection from " + getStation1().getName() + " to " + getStation2().getName();
+    }
+
     public enum Material {
         GOLD("Gold", 50, 0.3f, 1),
         SILVER("Silver", 30, 0.2f, 0.8f),
@@ -111,7 +135,7 @@ public class Connection {
                 case SILVER:
                     return to.equals(GOLD);
                 case BRONZE:
-                    return true;
+                    return !to.equals(BRONZE);
             }
             return false;
         }
@@ -120,7 +144,7 @@ public class Connection {
             return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
         }
 
-        private int calculateTotalCost(float length) {
+        public int calculateTotalCost(float length) {
             return (int) Math.ceil(length) * costPerUnitLength;
         }
 

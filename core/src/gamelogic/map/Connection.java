@@ -92,6 +92,15 @@ public class Connection {
         return this.station2;
     }
 
+    public float getLength() {
+        return length;
+    }
+
+    @Override
+    public String toString() {
+        return "Connection from " + getStation1().getName() + " to " + getStation2().getName();
+    }
+
     public enum Material {
         GOLD("Gold", 50, 0.3f, 1),
         SILVER("Silver", 30, 0.2f, 0.8f),
@@ -124,7 +133,7 @@ public class Connection {
             return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
         }
 
-        private int calculateTotalCost(float length) {
+        public int calculateTotalCost(float length) {
             return (int) Math.ceil(length) * costPerUnitLength;
         }
 

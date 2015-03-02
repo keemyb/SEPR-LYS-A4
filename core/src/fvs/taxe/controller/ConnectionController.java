@@ -12,6 +12,7 @@ import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
+import fvs.taxe.dialog.DialogCreateConnection;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
@@ -174,9 +175,7 @@ public class ConnectionController {
             context.getTopBarController().displayFlashMessage(
                     "You have not selected two stations", Color.BLACK, 1000);
         } else if (map.prospectiveConnectionIsValid(selectedConnection)) {
-            map.addConnection(selectedConnection);
-            PlayerManager.getCurrentPlayer().addOwnedConnection(selectedConnection);
-            PlayerManager.getCurrentPlayer().spendMoney(selectedConnection.calculateCost());
+            new DialogCreateConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         } else {
             context.getTopBarController().displayFlashMessage(
                     "Cannot Create a Connection Here", Color.BLACK, 1000);

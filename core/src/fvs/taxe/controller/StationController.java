@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StationController {
-    public final static int CONNECTION_LINE_WIDTH = 3;
+    public final static int CONNECTION_LINE_WIDTH = 5;
     /*
     have to use CopyOnWriteArrayList because when we iterate through our listeners and execute
     their handler's method, one case unsubscribes from the event removing itself from this list
@@ -128,13 +128,13 @@ public class StationController {
         }
     }
 
-    public void renderConnections(List<Connection> connections, Color color) {
+    public void renderConnections(List<Connection> connections) {
         TaxeGame game = context.getTaxeGame();
 
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setColor(color);
 
         for (Connection connection : connections) {
+            game.shapeRenderer.setColor(connection.getColour()  );
             Position start = connection.getStation1().getLocation();
             Position end = connection.getStation2().getLocation();
             game.shapeRenderer.rectLine(start.getX(), start.getY(), end.getX(), end.getY(), CONNECTION_LINE_WIDTH);

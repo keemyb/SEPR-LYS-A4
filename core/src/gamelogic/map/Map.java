@@ -20,6 +20,7 @@ public class Map {
 	private List<Station> stations;
 	private List<Junction> junctions;
 	private List<Connection> connections;
+	private List<Connection> invalidConnections = new ArrayList<>();
 	private List<List<Float>> distances;
 	private Random random = new Random();
 
@@ -35,7 +36,7 @@ public class Map {
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
 		parseConnections(jsonVal);
-
+		parseInvalidConnection(jsonVal);
         for (Station s : stations)
 			if (s instanceof Junction) {
                 junctions.add((Junction) s);
@@ -63,6 +64,25 @@ public class Map {
 		}
 	}
 
+	private void parseInvalidConnection(JsonValue jsonVal) {
+		for (JsonValue connection = jsonVal.getChild("invalidConnections"); connection != null; connection = connection.next) {
+			String stationName1 = "";
+			String stationName2 = "";
+			for (JsonValue val = connection.child; val != null; val = val.next) {
+				if (val.name.equalsIgnoreCase("station1")) {
+					stationName1 = val.asString();
+				} else {
+					stationName2 = val.asString();
+				}
+			}
+			// Pre-defined connections are Gold.
+			Station station1 = getStationByName(stationName1);
+			Station station2 = getStationByName(stationName2);
+			invalidConnections.add(new Connection(station1, station2, Connection.Material.GOLD));
+
+		}
+
+	}
 	private void parseStations(JsonValue jsonVal) {
 		for (JsonValue station = jsonVal.getChild("stations"); station != null; station = station.next) {
 			String name = "";

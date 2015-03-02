@@ -13,6 +13,7 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogCreateConnection;
+import fvs.taxe.dialog.DialogRepairConnection;
 import fvs.taxe.dialog.DialogUpgradeConnection;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
@@ -191,10 +192,7 @@ public class ConnectionController {
 
     private void repairConnection() {
         if (checkConnectionStatus("repair")) {
-            System.out.println("Repaired connection");
-            selectedConnection.repair();
-            PlayerManager.getCurrentPlayer().spendMoney(selectedConnection.calculateRepairCost());
-            clearSelected();
+            new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
     }
 

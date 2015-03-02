@@ -4,10 +4,16 @@ import gamelogic.player.Player;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This class represents connection between two stations.
  */
 public class Connection {
+    public static final List<Float> repairThresholds = new ArrayList<>(Arrays.asList(0.33f, 0.66f, 1f));
+
     private Station station1;
     private Station station2;
     private float length;
@@ -24,12 +30,13 @@ public class Connection {
     }
 
     public void upgrade(Material to) {
-        repair();
+        repair(1);
+        health = 0;
         if (isUpgradable(to)) material = to;
     }
 
-    public void repair() {
-        health = 1;
+    public void repair(float to) {
+        health = to;
     }
 
     public boolean isUpgradable(Material to) {
@@ -37,15 +44,15 @@ public class Connection {
     }
 
     public int calculateUpgradeCost(Material to) {
-        return calculateRepairCost() + material.calculateUpgradeCost(to, length);
+        return calculateRepairCost(1) + material.calculateUpgradeCost(to, length);
     }
 
     public int calculateCost() {
         return material.calculateTotalCost(length);
     }
 
-    public int calculateRepairCost() {
-        return (int) (material.calculateRepairCost(length) * (1f - health));
+    public int calculateRepairCost(float to) {
+        return (int) (material.calculateRepairCost(length) * (to - health));
     }
 
     public void inflictDamage(Train train) {
@@ -94,6 +101,10 @@ public class Connection {
 
     public float getLength() {
         return length;
+    }
+
+    public float getHealth() {
+        return health;
     }
 
     @Override

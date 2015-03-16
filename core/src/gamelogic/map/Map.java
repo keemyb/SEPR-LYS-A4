@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import gamelogic.player.Player;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -236,7 +237,13 @@ public class Map {
 	}
 
     public void removeConnection(Connection connection) {
+        Player connectionOwner = connection.getOwner();
+        if (connectionOwner != null) {
+            connectionOwner.removeOwnedConnection(connection);
+        }
+
         connections.remove(connection);
+
         distances.clear();
         computeDistances();
     }

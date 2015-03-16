@@ -153,7 +153,7 @@ public class Connection {
         }
 
         private int calculateRepairCost(float length) {
-            return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
+            return (int) (length * Math.log10(costPerUnitLength));
         }
 
         public int calculateTotalCost(float length) {

@@ -21,12 +21,15 @@ public class ConnectionTest extends LibGdxTest {
     Connection bronzeConnection;
     Connection silverConnection;
     Connection goldConnection;
+    Connection longerConnection;
 
     @Before
     public void setUp() {
         bronzeConnection = new Connection(testStation1, testStation2, Connection.Material.BRONZE);
         silverConnection = new Connection(testStation1, testStation2, Connection.Material.SILVER);
         goldConnection = new Connection(testStation1, testStation2, Connection.Material.GOLD);
+        longerConnection = new Connection(testStation1, testStation3, Connection.Material.BRONZE);
+
     }
 
     @Test
@@ -119,8 +122,6 @@ public class ConnectionTest extends LibGdxTest {
 
     @Test
     public void testGetRentPayableVariableDistance() {
-        Connection longerConnection = new Connection(testStation1, testStation3, Connection.Material.BRONZE);
-
         int shortConnectionCost = bronzeConnection.getRentPayable();
         int longConnectionCost = longerConnection.getRentPayable();
 
@@ -141,8 +142,6 @@ public class ConnectionTest extends LibGdxTest {
 
     @Test
     public void testConnectionCostVariableDistance() {
-        Connection longerConnection = new Connection(testStation1, testStation3, Connection.Material.BRONZE);
-
         int shortConnectionCost = bronzeConnection.calculateCost();
         int longConnectionCost = longerConnection.calculateCost();
 
@@ -159,5 +158,36 @@ public class ConnectionTest extends LibGdxTest {
         assertTrue(bronzeConnectionCost > 0);
         assertTrue(silverConnectionCost > bronzeConnectionCost);
         assertTrue(goldConnectionCost > silverConnectionCost);
+    }
+
+    @Test
+    public void testRepairCostVariableDistance() {
+        bronzeConnection.inflictDamage(testTrain);
+        longerConnection.inflictDamage(testTrain);
+
+        int shortConnectionCost = bronzeConnection.calculateRepairCost(1);
+        int longConnectionCost = longerConnection.calculateRepairCost(1);
+
+        assertTrue(shortConnectionCost > 0);
+        assertTrue(longConnectionCost > shortConnectionCost);
+    }
+
+    @Test
+    public void testRepairCostVariableMaterial() {
+        // Making sure that silver and bronze connections have no health,
+        // for a fair comparison.
+        do {
+            bronzeConnection.inflictDamage(testTrain);
+            silverConnection.inflictDamage(testTrain);
+            goldConnection.inflictDamage(testTrain);
+        } while (silverConnection.getHealth() > 0);
+
+        int bronzeConnectionCost = bronzeConnection.calculateRepairCost(1);
+        int silverConnectionCost = silverConnection.calculateRepairCost(1);
+        int goldConnectionCost = goldConnection.calculateRepairCost(1);
+
+        assertTrue(bronzeConnectionCost > 0);
+        assertTrue(silverConnectionCost > bronzeConnectionCost);
+        assertEquals(0, goldConnectionCost);
     }
 }

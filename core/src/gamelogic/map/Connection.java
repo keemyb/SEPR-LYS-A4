@@ -31,9 +31,10 @@ public class Connection {
     }
 
     public void upgrade(Material to) {
-        repair(1);
-        health = 0;
-        if (isUpgradable(to)) material = to;
+        if (isUpgradable(to)) {
+            material = to;
+            repair(1);
+        }
     }
 
     public void repair(float to) {
@@ -152,7 +153,7 @@ public class Connection {
         }
 
         private int calculateRepairCost(float length) {
-            return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
+            return (int) (length * Math.log10(costPerUnitLength));
         }
 
         public int calculateTotalCost(float length) {
@@ -168,7 +169,9 @@ public class Connection {
         }
 
         private float calculateDamageInflicted(Train train) {
-            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            // Can't use TrainManager methods here, causes problems with tests
+//            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            return (1f - strength) * (float) train.getSpeed() / 75;
         }
 
         public String getName() {

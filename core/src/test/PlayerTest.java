@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class PlayerTest {
@@ -96,6 +97,6 @@ public class PlayerTest {
         map.addConnection(player1Connection);
         map.removeConnection(player1Connection);
 
-        assertTrue(player1.getConnectionsOwned().isEmpty());
+        assertFalse(player1.getConnectionsOwned().contains(player1Connection));
     }
 }

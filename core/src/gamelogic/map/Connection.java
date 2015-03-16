@@ -168,7 +168,9 @@ public class Connection {
         }
 
         private float calculateDamageInflicted(Train train) {
-            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            // Can't use TrainManager methods here, causes problems with tests
+//            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            return (1f - strength) * (float) train.getSpeed() / 75;
         }
 
         public String getName() {

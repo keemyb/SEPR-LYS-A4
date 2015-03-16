@@ -13,7 +13,8 @@ import static org.junit.Assert.assertTrue;
 
 public class ConnectionTest extends LibGdxTest {
     Station testStation1 = new Station("Test Station 1", new Position(0, 0));
-    Station testStation2 = new Station("Test Station 2", new Position(1, 1));
+    Station testStation2 = new Station("Test Station 2", new Position(10, 10));
+    Station testStation3 = new Station("Test Station 3", new Position(20, 20));
 
     Train testTrain = new Train("Test Train", 100);
 
@@ -114,5 +115,27 @@ public class ConnectionTest extends LibGdxTest {
         int adjustedSpeed = bronzeConnection.calculateAdjustedTrainSpeed(testTrain);
 
         assertTrue(normalSpeed > adjustedSpeed);
+    }
+
+    @Test
+    public void testGetRentPayableVariableDistance() {
+        Connection longerConnection = new Connection(testStation1, testStation3, Connection.Material.BRONZE);
+
+        int shortConnectionCost = bronzeConnection.getRentPayable();
+        int longConnectionCost = longerConnection.getRentPayable();
+
+        assertTrue(shortConnectionCost > 0);
+        assertTrue(longConnectionCost > shortConnectionCost);
+    }
+
+    @Test
+    public void testGetRentPayableVariableMaterial() {
+        int bronzeConnectionCost = bronzeConnection.getRentPayable();
+        int silverConnectionCost = silverConnection.getRentPayable();
+        int goldConnectionCost = goldConnection.getRentPayable();
+
+        assertTrue(bronzeConnectionCost > 0);
+        assertTrue(silverConnectionCost > bronzeConnectionCost);
+        assertTrue(goldConnectionCost > silverConnectionCost);
     }
 }

@@ -81,4 +81,38 @@ public class ConnectionTest extends LibGdxTest {
         goldConnection.inflictDamage(testTrain);
         assertEquals(currentHealth, goldConnection.getHealth(), 0.0f);
     }
+
+    @Test
+    public void testRepairConnection() {
+        bronzeConnection.inflictDamage(testTrain);
+        bronzeConnection.repair(1);
+
+        assertEquals(1, bronzeConnection.getHealth(), 0.0f);
+    }
+
+    @Test
+    public void testUpgradeDamagedConnection() {
+        bronzeConnection.inflictDamage(testTrain);
+
+        bronzeConnection.upgrade(Connection.Material.SILVER);
+        assertEquals(1, bronzeConnection.getHealth(), 0.0f);
+    }
+
+    @Test
+    public void testAdjustedTrainSpeedHealthyConnection() {
+        int expectedSpeed = testTrain.getSpeed();
+        int adjustedSpeed = bronzeConnection.calculateAdjustedTrainSpeed(testTrain);
+
+        assertEquals(expectedSpeed, adjustedSpeed);
+    }
+
+    @Test
+    public void testAdjustedTrainSpeedDamagedConnection() {
+        int normalSpeed = testTrain.getSpeed();
+
+        bronzeConnection.inflictDamage(testTrain);
+        int adjustedSpeed = bronzeConnection.calculateAdjustedTrainSpeed(testTrain);
+
+        assertTrue(normalSpeed > adjustedSpeed);
+    }
 }

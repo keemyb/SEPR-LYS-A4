@@ -31,9 +31,10 @@ public class Connection {
     }
 
     public void upgrade(Material to) {
-        repair(1);
-        health = 0;
-        if (isUpgradable(to)) material = to;
+        if (isUpgradable(to)) {
+            material = to;
+            repair(1);
+        }
     }
 
     public void repair(float to) {

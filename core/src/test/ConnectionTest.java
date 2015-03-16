@@ -138,4 +138,26 @@ public class ConnectionTest extends LibGdxTest {
         assertTrue(silverConnectionCost > bronzeConnectionCost);
         assertTrue(goldConnectionCost > silverConnectionCost);
     }
+
+    @Test
+    public void testConnectionCostVariableDistance() {
+        Connection longerConnection = new Connection(testStation1, testStation3, Connection.Material.BRONZE);
+
+        int shortConnectionCost = bronzeConnection.calculateCost();
+        int longConnectionCost = longerConnection.calculateCost();
+
+        assertTrue(shortConnectionCost > 0);
+        assertTrue(longConnectionCost > shortConnectionCost);
+    }
+
+    @Test
+    public void testConnectionCostVariableMaterial() {
+        int bronzeConnectionCost = bronzeConnection.calculateCost();
+        int silverConnectionCost = silverConnection.calculateCost();
+        int goldConnectionCost = goldConnection.calculateCost();
+
+        assertTrue(bronzeConnectionCost > 0);
+        assertTrue(silverConnectionCost > bronzeConnectionCost);
+        assertTrue(goldConnectionCost > silverConnectionCost);
+    }
 }

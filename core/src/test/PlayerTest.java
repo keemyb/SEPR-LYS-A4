@@ -77,4 +77,15 @@ public class PlayerTest {
         assertEquals(startingPlayer1Funds, player1.getMoney());
         assertEquals(startingPlayer2Funds, player2.getMoney());
     }
+
+    @Test
+    public void testPlayerSpendMoney() throws Exception {
+        int startingPlayer1Funds = player1.getMoney();
+        int amountToSpend = 50;
+        int expectedPlayer1Funds = startingPlayer1Funds - amountToSpend;
+
+        player1.spendMoney(amountToSpend);
+
+        assertEquals(expectedPlayer1Funds, player1.getMoney());
+    }
 }

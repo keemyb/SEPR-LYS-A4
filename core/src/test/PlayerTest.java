@@ -2,6 +2,7 @@ package test;
 
 import gamelogic.game.Game;
 import gamelogic.map.Connection;
+import gamelogic.map.Map;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
@@ -87,5 +88,14 @@ public class PlayerTest {
         player1.spendMoney(amountToSpend);
 
         assertEquals(expectedPlayer1Funds, player1.getMoney());
+    }
+
+    @Test
+    public void testRemoveConnection() throws Exception {
+        Map map = new Map();
+        map.addConnection(player1Connection);
+        map.removeConnection(player1Connection);
+
+        assertTrue(player1.getConnectionsOwned().isEmpty());
     }
 }

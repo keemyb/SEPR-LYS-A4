@@ -109,7 +109,7 @@ public class GameScreen extends ScreenAdapter {
 
         topBarController.drawBackground();
 
-        stationController.renderConnections(map.getConnections(), Color.GRAY);
+        stationController.renderConnections(map.getConnections());
 
         if (gameLogic.getState() == GameState.ROUTING) {
             routeController.drawRoute(Color.BLACK);

@@ -4,6 +4,7 @@ import gamelogic.player.Player;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
+import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +31,10 @@ public class Connection {
     }
 
     public void upgrade(Material to) {
-        repair(1);
-        health = 0;
-        if (isUpgradable(to)) material = to;
+        if (isUpgradable(to)) {
+            material = to;
+            repair(1);
+        }
     }
 
     public void repair(float to) {
@@ -45,6 +47,10 @@ public class Connection {
 
     public int calculateUpgradeCost(Material to) {
         return calculateRepairCost(1) + material.calculateUpgradeCost(to, length);
+    }
+
+    public Color getColour () {
+        return material.getColour();
     }
 
     public int calculateCost() {
@@ -113,19 +119,21 @@ public class Connection {
     }
 
     public enum Material {
-        GOLD("Gold", 50, 0.3f, 1),
-        SILVER("Silver", 30, 0.2f, 0.8f),
-        BRONZE("Bronze", 10, 0.1f, 0.5f);
+        GOLD("Gold", 50, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
+        SILVER("Silver", 30, 0.2f, 0.8f, Color.GRAY),
+        BRONZE("Bronze", 10, 0.1f, 0.5f, new Color(153/255f, 73/255f, 40/255f, 1f));
 
         private String name;
         private int costPerUnitLength;
         private float rentPayablePerUnitLength;
         private float strength;
-        Material(String name, int costPerUnitLength, float rentPayablePerUnitLength, float strength) {
+        private Color color;
+        Material(String name, int costPerUnitLength, float rentPayablePerUnitLength, float strength, Color color) {
             this.name = name;
             this.costPerUnitLength = costPerUnitLength;
             this.rentPayablePerUnitLength = rentPayablePerUnitLength;
             this.strength = strength;
+            this.color = color;
         }
 
         private boolean isUpgradable(Material to) {
@@ -140,8 +148,12 @@ public class Connection {
             return false;
         }
 
+        public Color getColour () {
+            return color;
+        }
+
         private int calculateRepairCost(float length) {
-            return (int) (length * (1f - strength) * Math.log10(costPerUnitLength));
+            return (int) (length * Math.log10(costPerUnitLength));
         }
 
         public int calculateTotalCost(float length) {
@@ -157,7 +169,9 @@ public class Connection {
         }
 
         private float calculateDamageInflicted(Train train) {
-            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            // Can't use TrainManager methods here, causes problems with tests
+//            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
+            return (1f - strength) * (float) train.getSpeed() / 75;
         }
 
         public String getName() {

@@ -8,6 +8,7 @@ import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import util.Timer;
 
 /**
  * This singleton class represents game instance. Game has three phases determined by the number of turns completed.
@@ -19,11 +20,14 @@ public class Game {
     private static Game instance;
     private final int CONFIG_PLAYERS = 2;
     public int totalTurns = 30;
+    public Timer timer;
     private Map map;
     private GameState state;
     private List<GameStateListener> gameStateListeners = new ArrayList<>();
 
     private Game() {
+        timer = new Timer();
+        timer.start();
         map = new Map();
         state = GameState.NORMAL;
         PlayerManager.createPlayers(CONFIG_PLAYERS);
@@ -69,6 +73,8 @@ public class Game {
 
     public void setState(GameState state) {
         this.state = state;
+        System.out.println("state of game is" + this.state);
+        System.out.println("Time elapsed is "+ this.timer.getElapsedMilliseconds());
         stateChanged();
     }
 
@@ -84,5 +90,11 @@ public class Game {
         for (GameStateListener listener : gameStateListeners) {
             listener.changed(state);
         }
+    }
+    public long getElapsedTimerTime(){
+        return (timer.getElapsedMilliseconds());
+    }
+    public void setTimerStop(){
+        timer.stop();
     }
 }

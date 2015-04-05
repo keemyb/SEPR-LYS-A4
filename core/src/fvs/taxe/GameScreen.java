@@ -63,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
         goalController = new GoalController(context);
         routeController = new RouteController(context);
         connectionController = new ConnectionController(context);
-
+        
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
         context.setConnectionController(connectionController);

@@ -5,6 +5,7 @@ import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Connection;
 import gamelogic.resource.Resource;
+import gamelogic.resource.Train;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,13 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This class represents player in the game. Players complete goals by using resources (trains and power-ups). By
+ * This class represents player in the game. Players complete goals by using trains (trains and power-ups). By
  * completing goals players get score.
  */
 public class Player {
     public static final int INITIAL_AMOUNT_OF_MONEY = 500;
 
-    private List<Resource> resources = new ArrayList<>();
+    private List<Train> trains = new ArrayList<>();
     private Set<Connection> connectionsOwned = new HashSet<>();
     private List<Goal> goals = new ArrayList<>();
     private int playerNumber;
@@ -28,18 +29,18 @@ public class Player {
         this.playerNumber = playerNumber;
     }
 
-    public List<Resource> getResources() {
-        return resources;
+    public List<Train> getTrains() {
+        return trains;
     }
 
-    public void addResource(Resource resource) {
-        resources.add(resource);
+    public void addTrain(Train train) {
+        trains.add(train);
         changed();
     }
 
-    public void removeResource(Resource resource) {
-        resources.remove(resource);
-        resource.dispose();
+    public void removeTrain(Train train) {
+        trains.remove(train);
+        train.dispose();
         changed();
     }
 
@@ -88,7 +89,7 @@ public class Player {
     }
 
     /**
-     * Method is called whenever a property of this player changes, or one of the player's resources changes
+     * Method is called whenever a property of this player changes, or one of the player's trains changes
      */
     public void changed() {
         PlayerManager.playerChanged();

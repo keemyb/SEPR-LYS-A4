@@ -33,7 +33,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
     public void clicked(Button button) {
         switch (button) {
             case TRAIN_DISCARD:
-                currentPlayer.removeResource(train);
+                currentPlayer.removeTrain(train);
                 break;
             case TRAIN_PLACE:
                 Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));

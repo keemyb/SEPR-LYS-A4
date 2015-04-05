@@ -28,7 +28,7 @@ public class TrainController {
     public void setTrainsVisible(Train train, boolean visible) {
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
+            for (Resource resource : player.getTrains()) {
                 if (resource instanceof Train) {
                     boolean trainAtStation = false;
                     for (Station station : context.getGameLogic().getMap().getStations()) {

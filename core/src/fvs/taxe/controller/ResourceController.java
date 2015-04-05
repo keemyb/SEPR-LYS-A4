@@ -45,7 +45,7 @@ public class ResourceController {
         resourceButtons.remove();
         resourceButtons.clear();
 
-        for (final Resource resource : player.getResources()) {
+        for (final Resource resource : player.getTrains()) {
             if (resource instanceof Train) {
                 Train train = (Train) resource;
 

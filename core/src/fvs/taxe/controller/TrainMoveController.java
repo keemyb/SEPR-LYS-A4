@@ -1,7 +1,6 @@
 package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -138,7 +137,7 @@ public class TrainMoveController {
         if (trainsToDestroy.size() > 0) {
             for (Train trainToDestroy : trainsToDestroy) {
                 trainToDestroy.getActor().remove();
-                trainToDestroy.getPlayer().removeResource(trainToDestroy);
+                trainToDestroy.getPlayer().removeTrain(trainToDestroy);
             }
 
             context.getTopBarController().displayFlashMessage("Two trains collided at a Junction.  They were both destroyed.", Color.RED, 2);
@@ -149,7 +148,7 @@ public class TrainMoveController {
         List<Train> trainsToDestroy = new ArrayList<>();
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
+            for (Resource resource : player.getTrains()) {
                 if (resource instanceof Train) {
                     Train otherTrain = (Train) resource;
                     if (otherTrain.getActor() == null) continue;

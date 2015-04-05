@@ -1,60 +1,46 @@
-
 package gamelogic.recording;
+
+import gamelogic.goal.Goal;
 import gamelogic.map.Position;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
+import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Stores the state of the game at every turn
  *
  */
-
-// Add a hashmap for random events as well such as junction failures.
-
 public class RecordState {
-    public HashMap turnHashMap;
-    public HashMap trainLocationHashMap;
-    private HashMap trainUsedHashMap;
-    private int playerID; // Player for which we are recording the states
+    private Integer turn;
+    private Map<Train, Position> trainPositions = new HashMap<>();
+    private Map<Integer, List<Goal>> playerGoals = new HashMap<>();
+    private Map<Integer, List<Train>> playerTrains = new HashMap<>();
+    private Map<Integer, Integer> playerMoney = new HashMap<>();
+    private Long delta;
 
-    private RecordState(int playerNumber ) {
-        HashMap<Integer, Integer> turnHashMap = new HashMap<>();
-        HashMap<Integer, Position> trainLocationHashMap = new HashMap<>();
-        HashMap<Integer, Train> trainUsedHashMap = new HashMap<>();
-        this.playerID = playerNumber;
+    RecordState(Long delta) {
+        this.delta = delta;
+        //TODO save turn number
+
+        for (Player player : PlayerManager.getAllPlayers()) {
+            for (Resource resource : player.getTrains()) {
+                if (!(resource instanceof Train)) continue;
+                Train train = (Train) resource;
+                trainPositions.put(train, train.getPosition());
+            }
+
+            Integer playerNumber = player.getPlayerNumber();
+
+            playerGoals.put(playerNumber, player.getGoals());
+
+            playerTrains.put(playerNumber, player.getTrains());
+
+            playerMoney.put(playerNumber, player.getMoney());
+        }
     }
-
-
-
-    public HashMap getTurnHashMap() {
-        return turnHashMap;
-    }
-
-    public void setTurnHashMap(int timeStamp, int turnNumber) {
-        this.turnHashMap.put(timeStamp, turnNumber);
-    }
-
-    public HashMap getTrainLocationHashMap() {
-        return trainLocationHashMap;
-    }
-
-    public void setTrainLocationHashMap(int turnNumber, Position trainPosition) {
-        this.trainLocationHashMap.put(turnNumber, trainPosition);
-    }
-
-    public HashMap getTrainUsedHashMap() {
-        return trainUsedHashMap;
-    }
-
-    public void setTrainUsedHashMap(int turnNumber, Train trainUsed) {
-        this.trainUsedHashMap.put(turnNumber, trainUsed);
-    }
-
-    public int getPlayerID() {
-        return playerID;
-    }
-
-
 }
-

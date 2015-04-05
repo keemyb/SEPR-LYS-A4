@@ -93,7 +93,7 @@ public abstract class GoalManager {
         for (Goal goal : player.getGoals()) {
             if (goal.isComplete(train)) {
                 player.completeGoal(goal);
-                player.removeResource(train);
+                player.removeTrain(train);
                 completedStrings.add("Player " + player.getPlayerNumber() + " completed a goal to " + goal.toString() + "!");
             }
         }

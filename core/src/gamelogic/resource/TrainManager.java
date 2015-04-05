@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import gamelogic.game.Game;
 import gamelogic.player.Player;
-import util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,12 +91,12 @@ public abstract class TrainManager {
     }
 
     public static void addTrainToPlayer(Player player, Train train) {
-        if (player.getResources().size() >= CONFIG_MAX_TRAINS) {
+        if (player.getTrains().size() >= CONFIG_MAX_TRAINS) {
             return;
         }
 
         train.setPlayer(player);
-        player.addResource(train);
+        player.addTrain(train);
     }
 
     public static String getLeftImageFileName(Train train) {

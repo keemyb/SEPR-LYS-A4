@@ -8,10 +8,7 @@ import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Stores the state of the game at every turn
@@ -44,6 +41,36 @@ public class RecordState {
             playerConnections.put(player, player.getConnectionsOwned());
 
             playerMoney.put(player, player.getMoney());
+        }
+    }
+
+    public void restorePlayerAttributes() {
+        for (Map.Entry entry : playerGoals.entrySet()) {
+            Player player = (Player) entry.getKey();
+            List<Goal> goals = (List<Goal>) entry.getValue();
+
+            player.setGoals(goals);
+        }
+
+        for (Map.Entry entry : playerTrains.entrySet()) {
+            Player player = (Player) entry.getKey();
+            List<Train> trains = (List<Train>) entry.getValue();
+
+            player.setTrains(trains);
+        }
+
+        for (Map.Entry entry : playerConnections.entrySet()) {
+            Player player = (Player) entry.getKey();
+            Set<Connection> connections = (Set<Connection>) entry.getValue();
+
+            player.setConnectionsOwned(connections);
+        }
+
+        for (Map.Entry entry : playerMoney.entrySet()) {
+            Player player = (Player) entry.getKey();
+            int money = (int) entry.getValue();
+
+            player.setMoney(money);
         }
     }
 }

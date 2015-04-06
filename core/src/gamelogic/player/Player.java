@@ -111,6 +111,22 @@ public class Player {
         return connectionsOwned;
     }
 
+    public void setTrains(List<Train> trains) {
+        this.trains = trains;
+    }
+
+    public void setConnectionsOwned(Set<Connection> connectionsOwned) {
+        this.connectionsOwned = connectionsOwned;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public boolean ownsConnection(Connection connection) {
         return connectionsOwned.contains(connection);
     }

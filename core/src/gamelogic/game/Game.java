@@ -4,6 +4,7 @@ import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.recording.RecordStateManager;
 import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ public class Game {
     private Map map;
     private GameState state;
     private List<GameStateListener> gameStateListeners = new ArrayList<>();
+    private RecordStateManager recordStateManager;
 
     private Game() {
         map = new Map();
+        recordStateManager = new RecordStateManager(this);
         state = GameState.NORMAL;
         PlayerManager.createPlayers(CONFIG_PLAYERS);
         PlayerManager.subscribeTurnChanged(new TurnListener() {
@@ -65,6 +68,10 @@ public class Game {
 
     public GameState getState() {
         return state;
+    }
+
+    public RecordStateManager getRecordStateManager() {
+        return recordStateManager;
     }
 
     public void setState(GameState state) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.Game;
+import gamelogic.recording.RecordStateManager;
 
 public class Context {
     private TaxeGame taxeGame;
@@ -59,6 +60,10 @@ public class Context {
 
     public void setConnectionController(ConnectionController connectionController) {
         this.connectionController = connectionController;
+    }
+
+    public RecordStateManager getRecordStateManager() {
+        return gameLogic.getRecordStateManager();
     }
 
 }

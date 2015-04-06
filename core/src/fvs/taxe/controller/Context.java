@@ -14,12 +14,14 @@ public class Context {
     private RouteController routeController;
     private TopBarController topBarController;
     private ConnectionController connectionController;
+    private ReplayController replayController;
 
     public Context(Stage stage, Skin skin, TaxeGame taxeGame, Game gameLogic) {
         this.stage = stage;
         this.skin = skin;
         this.taxeGame = taxeGame;
         this.gameLogic = gameLogic;
+        replayController = new ReplayController(this);
     }
 
     public Stage getStage() {
@@ -63,7 +65,10 @@ public class Context {
     }
 
     public RecordStateManager getRecordStateManager() {
-        return gameLogic.getRecordStateManager();
+        return replayController.getRecordStateManager();
     }
 
+    public ReplayController getReplayController() {
+        return replayController;
+    }
 }

@@ -19,6 +19,7 @@ public class TopBarController {
     private Context context;
     private Color controlsColor = Color.LIGHT_GRAY;
     private TextButton endTurnButton;
+    private TextButton advanceReplayButton;
     private TextButton createConnectionButton;
     private TextButton editConnectionButton;
     private Label flashMessage;
@@ -106,6 +107,31 @@ public class TopBarController {
         });
 
         context.getStage().addActor(endTurnButton);
+    }
+
+    public void addAdvanceReplayButton() {
+        advanceReplayButton = new TextButton("Advance", context.getSkin());
+        advanceReplayButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        advanceReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getReplayController().advanceReplay();
+            }
+        });
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.REPLAY_STATIC ||
+                        state == GameState.REPLAY_ANIMATING) {
+                    advanceReplayButton.setVisible(true);
+                } else {
+                    advanceReplayButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(advanceReplayButton);
     }
 
     public void addCreateConnectionButton() {

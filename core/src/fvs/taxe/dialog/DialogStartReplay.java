@@ -4,21 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import fvs.taxe.GameScreen;
-import fvs.taxe.MainMenuScreen;
-import fvs.taxe.TaxeGame;
+import fvs.taxe.controller.Context;
 import gamelogic.game.Game;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 
 public class DialogStartReplay extends Dialog {
-    private TaxeGame game;
-    private Game gameLogic;
+    private Context context;
 
-        public DialogStartReplay(TaxeGame game, Game gameLogic, Skin skin) {
+        public DialogStartReplay(Context context, Skin skin) {
             super("GAME OVER, do you want to view the replay?", skin);
-            this.game = game;
-            this.gameLogic = gameLogic;
+            this.context = context;
 
             int highscore = 0;
             int playernum = 0;
@@ -58,7 +54,7 @@ public class DialogStartReplay extends Dialog {
         @Override
         protected void result(Object obj) {
             if (obj == "REPLAY") {
-                gameLogic.startReplay();
+                context.getReplayController().startReplay();
             } else {
                 Gdx.app.exit();
             }

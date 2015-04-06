@@ -83,7 +83,7 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void changed(GameState state) {
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
-                    DialogStartReplay dialogStartReplay = new DialogStartReplay(GameScreen.this.game, gameLogic, skin);
+                    DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
                     dialogStartReplay.show(stage);
                 }
                 if (gameLogic.getState() != GameState.ANIMATING) {
@@ -155,6 +155,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
+        topBarController.addAdvanceReplayButton();
         topBarController.addEndTurnButton();
         topBarController.addCreateConnectionButton();
         topBarController.addEditConnectionButton();

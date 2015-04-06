@@ -22,10 +22,15 @@ public class RecordState {
     private Map<Player, List<Train>> playerTrains = new HashMap<>();
     private Map<Player, Set<Connection>> playerConnections = new HashMap<>();
     private Map<Player, Integer> playerMoney = new HashMap<>();
+
     private Long delta;
+
+    private gamelogic.map.Map map;
 
     RecordState(Long delta, gamelogic.map.Map map) {
         this.delta = delta;
+
+        this.map = map;
 
         turn = PlayerManager.getTurnNumber();
 
@@ -78,7 +83,19 @@ public class RecordState {
         }
     }
 
+    public void restoreConnections() {
+        map.setConnections(connections);
+    }
+
     public int getTurn() {
         return turn;
+    }
+
+    public Map<Train, Position> getTrainPositions() {
+        return trainPositions;
+    }
+
+    public Long getDelta() {
+        return delta;
     }
 }

@@ -235,6 +235,10 @@ public class Map {
 		return connections;
 	}
 
+    public void setConnections(List<Connection> connections) {
+        this.connections = connections;
+    }
+
 	public List<Station> getAdjacentStations(Station station) {
 		List<Station> adjacentStations = new ArrayList<>();
 		for (Connection c : connections) {

@@ -1,14 +1,14 @@
 package gamelogic.recording;
 
 import gamelogic.goal.Goal;
-import gamelogic.map.Connection;
-import gamelogic.map.Position;
+import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
 import java.util.*;
+import java.util.Map;
 
 /**
  * Stores the state of the game at every turn
@@ -16,6 +16,7 @@ import java.util.*;
  */
 public class RecordState {
     private Integer turn;
+    private List<Connection> connections;
     private Map<Train, Position> trainPositions = new HashMap<>();
     private Map<Player, List<Goal>> playerGoals = new HashMap<>();
     private Map<Player, List<Train>> playerTrains = new HashMap<>();
@@ -23,9 +24,12 @@ public class RecordState {
     private Map<Player, Integer> playerMoney = new HashMap<>();
     private Long delta;
 
-    RecordState(Long delta) {
+    RecordState(Long delta, gamelogic.map.Map map) {
         this.delta = delta;
-        //TODO save turn number
+
+        turn = PlayerManager.getTurnNumber();
+
+        connections = map.getConnections();
 
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getTrains()) {

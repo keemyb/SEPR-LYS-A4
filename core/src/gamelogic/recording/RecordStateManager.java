@@ -10,9 +10,15 @@ public class RecordStateManager {
 
     private Long lastTimePushed = System.currentTimeMillis();
 
+    private gamelogic.map.Map map;
+
+    public RecordStateManager(gamelogic.map.Map map) {
+        this.map = map;
+    }
+
     public void captureState() {
         Long delta = System.currentTimeMillis() - lastTimePushed;
-        RecordState recordState = new RecordState(delta);
+        RecordState recordState = new RecordState(delta, map);
 
         lastStatePushed++;
         recordStateMap.put(lastStatePushed, recordState);

@@ -1,5 +1,6 @@
 package gamelogic.recording;
 
+import fvs.taxe.actor.TrainActor;
 import gamelogic.goal.Goal;
 import gamelogic.map.*;
 import gamelogic.player.Player;
@@ -40,7 +41,12 @@ public class RecordState {
             for (Resource resource : player.getTrains()) {
                 if (!(resource instanceof Train)) continue;
                 Train train = (Train) resource;
-                trainPositions.put(train, train.getPosition());
+                TrainActor trainActor = train.getActor();
+                if (trainActor == null) continue;
+                float x = trainActor.getX();
+                float y = trainActor.getY();
+                if (x == -1 || y == -1) continue;
+                trainPositions.put(train, new Position(x, y));
             }
 
             playerGoals.put(player, player.getGoals());

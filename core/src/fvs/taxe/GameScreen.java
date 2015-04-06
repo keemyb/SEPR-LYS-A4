@@ -119,6 +119,7 @@ public class GameScreen extends ScreenAdapter {
         if (gameLogic.getState() == GameState.ANIMATING) {
             timeAnimated += delta;
             if (timeAnimated >= ANIMATION_TIME) {
+                context.getRecordStateManager().captureState();
                 gameLogic.setState(GameState.NORMAL);
                 timeAnimated = 0;
             }

@@ -41,10 +41,10 @@ public class ReplayController {
         recordStates = recordStateManager.getRecordStates();
         nextRecordState = recordStates.get(0);
 
-        advanceReplay();
+        advanceReplay(false);
     }
 
-    public void advanceReplay() {
+    public void advanceReplay(boolean userInitiated) {
         if (nextRecordState == null) return;
 
         RecordState previousRecordState = currentRecordState;
@@ -58,14 +58,16 @@ public class ReplayController {
         currentRecordState.restoreConnections();
         PlayerManager.setTurnNumber(currentRecordState.getTurn());
 
-        /* Don't want any interpolation if this is the first state,
-        or a new turn, or we are animating and interrupted.
-         */
-        if (previousRecordState == null
-                || currentRecordState.getTurn() > previousRecordState.getTurn()
-                || context.getGameLogic().getState() == GameState.REPLAY_ANIMATING) {
+        if (previousRecordState == null) {
             showNextStateAsKeyframe();
-        } else {
+        } else if (userInitiated) {
+            GameState currentState = context.getGameLogic().getState();
+            if (currentState == GameState.REPLAY_ANIMATING) {
+                showNextStateAsKeyframe();
+            } else {
+                showNextStateByInterpolation();
+            }
+        } else if (previousRecordState.getTurn() == currentRecordState.getTurn()) {
             showNextStateByInterpolation();
         }
     }
@@ -118,6 +120,7 @@ public class ReplayController {
             public void run() {
                 if (context.getGameLogic().getState() != GameState.REPLAY_STATIC) {
                     context.getGameLogic().setState(GameState.REPLAY_STATIC);
+                    advanceReplay(false);
                 }
             }
         });

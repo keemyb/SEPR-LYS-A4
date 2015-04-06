@@ -13,7 +13,7 @@ public class DialogStartReplay extends Dialog {
     private Context context;
 
         public DialogStartReplay(Context context, Skin skin) {
-            super("GAME OVER, do you want to view the replay?", skin);
+            super("GAME OVER", skin);
             this.context = context;
 
             int highscore = 0;
@@ -35,8 +35,8 @@ public class DialogStartReplay extends Dialog {
                 text("NO WINNER");
             }
 
-            button("Yes", "REPLAY");
-            button("No", "EXIT");
+            button("View Replay", "REPLAY");
+            button("Exit", "EXIT");
         }
 
         @Override

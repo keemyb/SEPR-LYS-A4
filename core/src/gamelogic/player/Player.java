@@ -113,18 +113,22 @@ public class Player {
 
     public void setTrains(List<Train> trains) {
         this.trains = trains;
+        changed();
     }
 
     public void setConnectionsOwned(Set<Connection> connectionsOwned) {
         this.connectionsOwned = connectionsOwned;
+        changed();
     }
 
     public void setGoals(List<Goal> goals) {
         this.goals = goals;
+        changed();
     }
 
     public void setMoney(int money) {
         this.money = money;
+        changed();
     }
 
     public boolean ownsConnection(Connection connection) {

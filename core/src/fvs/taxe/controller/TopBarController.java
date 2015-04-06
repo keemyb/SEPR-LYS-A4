@@ -108,9 +108,6 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
-
-
-
     public void addCreateConnectionButton() {
         createConnectionButton = new TextButton("Create Connection", context.getSkin());
         createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 250.0f, TaxeGame.WORLD_HEIGHT - 33.0f);

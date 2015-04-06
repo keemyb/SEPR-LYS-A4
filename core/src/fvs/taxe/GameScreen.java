@@ -18,7 +18,6 @@ import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
-import util.Timer;
 
 /**
  * This class represents screen shown while players are playing against each other.
@@ -42,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
     private RouteController routeController;
     private ConnectionController connectionController;
 
-    public GameScreen(final TaxeGame game) {
+    public GameScreen(TaxeGame game) {
         this.game = game;
         stage = new Stage(new StretchViewport(TaxeGame.WORLD_WIDTH, TaxeGame.WORLD_HEIGHT));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -83,7 +82,6 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void changed(GameState state) {
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
-                    gameLogic.setTimerStop();
                     DialogEndGame dia = new DialogEndGame(GameScreen.this.game, skin);
                     dia.show(stage);
                 }

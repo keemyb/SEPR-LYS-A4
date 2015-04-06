@@ -14,6 +14,7 @@ public class DialogStartGame extends Dialog {
         super("Select Game Length:", skin);
         this.game = game;
 
+        button("2 Turns", 2);
         button("15 Turns", 15);
         button("30 Turns", 30);
         button("45 Turns", 45);

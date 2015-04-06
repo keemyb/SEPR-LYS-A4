@@ -4,13 +4,11 @@ import gamelogic.game.Game;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordStateManager {
-    private Map<Integer, RecordState> recordStateMap = new HashMap<>();
-
-    private Integer lastStateCaptured = 0;
+    private List<RecordState> recordStates = new ArrayList<>();
 
     private Long lastTimePushed = System.currentTimeMillis();
 
@@ -35,8 +33,7 @@ public class RecordStateManager {
         RecordState recordState = new RecordState(delta, map);
         System.out.println("State captured");
 
-        lastStateCaptured++;
-        recordStateMap.put(lastStateCaptured, recordState);
+        recordStates.add(recordState);
     }
 
     /* Call this after every new turn, effectively normalising the time between states,
@@ -44,6 +41,10 @@ public class RecordStateManager {
     private void turnAnimationsStarted() {
         lastTimePushed = System.currentTimeMillis();
         captureState();
+    }
+
+    public List<RecordState> getRecordStates() {
+        return recordStates;
     }
 }
 

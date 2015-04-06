@@ -7,4 +7,6 @@ public enum GameState {
     ANIMATING,
     CONNECTION_CREATE,
     CONNECTION_EDIT,
+    REPLAY_ANIMATING,
+    REPLAY_STATIC
 }

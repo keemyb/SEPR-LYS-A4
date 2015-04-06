@@ -15,7 +15,7 @@ import java.util.Map;
  *
  */
 public class RecordState {
-    private Integer turn;
+    private int turn;
     private List<Connection> connections;
     private Map<Train, Position> trainPositions = new HashMap<>();
     private Map<Player, List<Goal>> playerGoals = new HashMap<>();
@@ -76,5 +76,9 @@ public class RecordState {
 
             player.setMoney(money);
         }
+    }
+
+    public int getTurn() {
+        return turn;
     }
 }

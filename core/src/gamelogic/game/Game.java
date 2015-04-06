@@ -4,6 +4,7 @@ import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.recording.RecordState;
 import gamelogic.recording.RecordStateManager;
 import gamelogic.resource.TrainManager;
 
@@ -23,7 +24,11 @@ public class Game {
     private Map map;
     private GameState state;
     private List<GameStateListener> gameStateListeners = new ArrayList<>();
+
     private RecordStateManager recordStateManager;
+    private List<RecordState> recordStates;
+    private RecordState currentRecordState;
+    private RecordState nextRecordState;
 
     private Game() {
         map = new Map();
@@ -91,5 +96,41 @@ public class Game {
         for (GameStateListener listener : gameStateListeners) {
             listener.changed(state);
         }
+    }
+
+    public void startReplay() {
+        recordStates = recordStateManager.getRecordStates();
+        nextRecordState = recordStates.get(0);
+
+        System.out.println("Start Replay");
+
+        advanceReplay();
+    }
+
+    public void advanceReplay() {
+        if (nextRecordState == null) return;
+
+        RecordState previousRecordState = currentRecordState;
+        currentRecordState = nextRecordState;
+        nextRecordState = recordStates.get(recordStates.indexOf(currentRecordState) + 1);
+
+        if (nextRecordState == null) return;
+
+        if (previousRecordState == null
+                || currentRecordState.getTurn() > previousRecordState.getTurn()) {
+            showNewTurnRecordState();
+        } else {
+            showSameTurnRecordState();
+        }
+    }
+
+    private void showNewTurnRecordState() {
+        // Keyframe State stub
+        System.out.println("Replay Keyframe");
+    }
+
+    private void showSameTurnRecordState() {
+        // Interpolation state stub
+        System.out.println("Replay Interpolation");
     }
 }

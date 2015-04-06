@@ -1,6 +1,5 @@
 package fvs.taxe.controller;
 
-import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -14,7 +13,6 @@ import gamelogic.resource.Train;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 
-import javax.swing.*;
 import java.util.List;
 
 public class ReplayController {
@@ -60,15 +58,19 @@ public class ReplayController {
         currentRecordState.restoreConnections();
         PlayerManager.setTurnNumber(currentRecordState.getTurn());
 
+        /* Don't want any interpolation if this is the first state,
+        or a new turn, or we are animating and interrupted.
+         */
         if (previousRecordState == null
-                || currentRecordState.getTurn() > previousRecordState.getTurn()) {
-            showNewTurnRecordState();
+                || currentRecordState.getTurn() > previousRecordState.getTurn()
+                || context.getGameLogic().getState() == GameState.REPLAY_ANIMATING) {
+            showNextStateAsKeyframe();
         } else {
-            showSameTurnRecordState();
+            showNextStateByInterpolation();
         }
     }
 
-    private void showNewTurnRecordState() {
+    private void showNextStateAsKeyframe() {
         for (java.util.Map.Entry entry : currentRecordState.getTrainPositions().entrySet()) {
             Train train = (Train) entry.getKey();
             Position position = (Position) entry.getValue();
@@ -91,10 +93,9 @@ public class ReplayController {
         context.getGameLogic().setState(GameState.REPLAY_STATIC);
     }
 
-    private void showSameTurnRecordState() {
+    private void showNextStateByInterpolation() {
         long delta = currentRecordState.getDelta();
 
-        context.getGameLogic().setState(GameState.REPLAY_ANIMATING);
         for (java.util.Map.Entry entry : currentRecordState.getTrainPositions().entrySet()) {
             Train train = (Train) entry.getKey();
             Position position = (Position) entry.getValue();
@@ -103,6 +104,7 @@ public class ReplayController {
 
             addMoveAction(train, position, delta);
         }
+        context.getGameLogic().setState(GameState.REPLAY_ANIMATING);
     }
 
     private void addMoveAction(Train train, Position position, long delta) {
@@ -114,7 +116,9 @@ public class ReplayController {
 
         action.addAction(new RunnableAction() {
             public void run() {
-                context.getGameLogic().setState(GameState.REPLAY_STATIC);
+                if (context.getGameLogic().getState() != GameState.REPLAY_STATIC) {
+                    context.getGameLogic().setState(GameState.REPLAY_STATIC);
+                }
             }
         });
 

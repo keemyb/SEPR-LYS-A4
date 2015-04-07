@@ -85,7 +85,11 @@ public class GameScreen extends ScreenAdapter {
                     DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
                     dialogStartReplay.show(stage);
                 }
-                if (gameLogic.getState() != GameState.ANIMATING) {
+                if (state == GameState.REPLAY_ANIMATING) {
+                    topBarController.displayMessage("Playing Replay", Color.BLACK);
+                } else if (state == GameState.REPLAY_STATIC) {
+                    topBarController.displayMessage("Replay Paused", Color.BLACK);
+                } else if (state != GameState.ANIMATING) {
                     topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
                 }
             }

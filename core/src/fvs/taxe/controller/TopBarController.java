@@ -163,7 +163,7 @@ public class TopBarController {
                 if (state == GameState.REPLAY_STATIC) {
                     playReplayButton.setVisible(true);
                 } else if (state == GameState.REPLAY_ANIMATING) {
-                    playReplayButton.setVisible(true);
+                    playReplayButton.setVisible(false);
                 } else {
                     playReplayButton.setVisible(false);
                 }

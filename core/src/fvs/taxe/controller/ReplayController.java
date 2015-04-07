@@ -16,6 +16,10 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 import java.util.List;
 
 public class ReplayController {
+    public static final float MIN_PLAYBACK_SPEED = 1f;
+    public static final float MAX_PLAYBACK_SPEED = 2f;
+    public static final float DEFAULT_PLAYBACK_SPEED = 1f;
+
     private Context context;
 
     private TrainController trainController;
@@ -25,7 +29,7 @@ public class ReplayController {
     private RecordState currentRecordState;
     private RecordState nextRecordState;
 
-    private int replaySpeedFactor = 1;
+    private float playBackSpeed = DEFAULT_PLAYBACK_SPEED;
 
     public ReplayController(Context context) {
         this.context = context;
@@ -137,7 +141,7 @@ public class ReplayController {
     }
 
     private void addMoveAction(Train train, Position position, long delta) {
-        float duration = (float) (delta * replaySpeedFactor) / 1000;
+        float duration = (delta / playBackSpeed) / 1000;
 
         SequenceAction action = Actions.sequence();
 
@@ -160,5 +164,9 @@ public class ReplayController {
         trainActor.addAction(action);
 
         trainActor.setVisible(true);
+    }
+
+    public void setPlayBackSpeed(float playBackSpeed) {
+        this.playBackSpeed = playBackSpeed;
     }
 }

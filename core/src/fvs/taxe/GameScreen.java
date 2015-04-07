@@ -157,6 +157,7 @@ public class GameScreen extends ScreenAdapter {
         stationController.renderStations();
         topBarController.addSkipReplayButton();
         topBarController.addPlayReplayButton();
+        topBarController.addReplaySlider();
         topBarController.addEndTurnButton();
         topBarController.addCreateConnectionButton();
         topBarController.addEditConnectionButton();

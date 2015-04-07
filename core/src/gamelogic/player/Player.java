@@ -65,6 +65,11 @@ public class Player {
         changed();
     }
 
+    public void discardGoal(Goal goal) {
+        goals.remove(goal);
+        changed();
+    }
+
     public void completeGoal(Goal goal) {
         goal.setComplete();
         money += goal.getMoney();

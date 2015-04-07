@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
+import fvs.taxe.dialog.DialogGoal;
 import gamelogic.goal.Goal;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
@@ -57,7 +58,7 @@ public class GoalController {
 
 		y -= 15;
 
-		for (Goal goal : playerGoals()) {
+		for (final Goal goal : playerGoals()) {
 			y -= 30;
 
 			TextButton button = new TextButton(goal.toString(),
@@ -67,9 +68,16 @@ public class GoalController {
 			final Station origin = goal.getOrigin();
 			final Station dest = goal.getDestination();
 
-			button.addListener(new ClickListener() {
+            final DialogGoal dialogGoal = new DialogGoal(goal, context.getSkin());
 
-				@Override
+            button.addListener(new ClickListener() {
+
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    dialogGoal.show(context.getStage());
+                }
+
+                @Override
 				public void enter(InputEvent event, float x, float y,
 						int pointer, Actor fromActor) {
 					originTip.setPosition(origin.getLocation().getX()-(originTip.getWidth()/2), origin

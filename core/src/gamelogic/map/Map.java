@@ -36,7 +36,7 @@ public class Map {
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
 		parseConnections(jsonVal);
-
+		parseInvalidConnection(jsonVal);
         for (Station s : stations)
 			if (s instanceof Junction) {
                 junctions.add((Junction) s);
@@ -63,6 +63,10 @@ public class Map {
 			addConnection(new Connection(station1, station2, Connection.Material.GOLD));
 		}
 
+        parseInvalidConnection(jsonVal);
+	}
+
+	private void parseInvalidConnection(JsonValue jsonVal) {
         for (JsonValue connection = jsonVal.getChild("invalidConnections"); connection != null; connection = connection.next) {
             String stationName1 = "";
             String stationName2 = "";
@@ -234,6 +238,10 @@ public class Map {
 	public List<Connection> getConnections() {
 		return connections;
 	}
+
+    public void setConnections(List<Connection> connections) {
+        this.connections = connections;
+    }
 
 	public List<Station> getAdjacentStations(Station station) {
 		List<Station> adjacentStations = new ArrayList<>();

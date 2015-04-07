@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.Game;
+import gamelogic.recording.RecordStateManager;
 
 public class Context {
     private TaxeGame taxeGame;
@@ -13,12 +14,14 @@ public class Context {
     private RouteController routeController;
     private TopBarController topBarController;
     private ConnectionController connectionController;
+    private ReplayController replayController;
 
     public Context(Stage stage, Skin skin, TaxeGame taxeGame, Game gameLogic) {
         this.stage = stage;
         this.skin = skin;
         this.taxeGame = taxeGame;
         this.gameLogic = gameLogic;
+        replayController = new ReplayController(this);
     }
 
     public Stage getStage() {
@@ -61,4 +64,11 @@ public class Context {
         this.connectionController = connectionController;
     }
 
+    public RecordStateManager getRecordStateManager() {
+        return replayController.getRecordStateManager();
+    }
+
+    public ReplayController getReplayController() {
+        return replayController;
+    }
 }

@@ -1,7 +1,6 @@
 package test;
 
 import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
 import gamelogic.resource.TrainManager;
 import org.junit.Test;
 
@@ -17,6 +16,6 @@ public class TrainManagerTest extends LibGdxTest {
             TrainManager.addRandomTrainToPlayer(player);
         }
 
-        assertTrue(player.getResources().size() == TrainManager.CONFIG_MAX_TRAINS);
+        assertTrue(player.getTrains().size() == TrainManager.CONFIG_MAX_TRAINS);
     }
 }

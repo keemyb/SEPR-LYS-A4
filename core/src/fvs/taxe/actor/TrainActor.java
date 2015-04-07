@@ -42,6 +42,8 @@ public class TrainActor extends Image {
             updateBounds();
             updateFacingDirection();
             train.setPosition(new Position(getX() + width / 2, getY() + height / 2));
+        } else if (Game.getInstance().getState() == GameState.REPLAY_ANIMATING) {
+            super.act(delta);
         }
     }
 

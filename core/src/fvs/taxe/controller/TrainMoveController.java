@@ -1,7 +1,6 @@
 package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -12,6 +11,7 @@ import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.goal.GoalManager;
 import gamelogic.player.PlayerManager;
+import gamelogic.recording.RecordStateManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -23,17 +23,14 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 public class TrainMoveController {
     private Context context;
     private Map map;
+    private RecordStateManager recordStateManager;
     private Train train;
 
     public TrainMoveController(Context context, Train train) {
         this.context = context;
         map = context.getGameLogic().getMap();
+        recordStateManager = context.getRecordStateManager();
         this.train = train;
-
-//      Uncomment to test player 1 paying fare for player 2
-//        for (Connection connection : map.getConnections()) {
-//            connection.setOwner(PlayerManager.getAllPlayers().get(1));
-//        }
 
         addMoveActions();
     }
@@ -68,6 +65,9 @@ public class TrainMoveController {
                         ConnectionController.visitedConnection(train, visited);
                     }
                 }
+
+                recordStateManager.captureState();
+
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());
                 collisions(station);
@@ -138,7 +138,7 @@ public class TrainMoveController {
         if (trainsToDestroy.size() > 0) {
             for (Train trainToDestroy : trainsToDestroy) {
                 trainToDestroy.getActor().remove();
-                trainToDestroy.getPlayer().removeResource(trainToDestroy);
+                trainToDestroy.getPlayer().removeTrain(trainToDestroy);
             }
 
             context.getTopBarController().displayFlashMessage("Two trains collided at a Junction.  They were both destroyed.", Color.RED, 2);
@@ -149,7 +149,7 @@ public class TrainMoveController {
         List<Train> trainsToDestroy = new ArrayList<>();
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
+            for (Resource resource : player.getTrains()) {
                 if (resource instanceof Train) {
                     Train otherTrain = (Train) resource;
                     if (otherTrain.getActor() == null) continue;

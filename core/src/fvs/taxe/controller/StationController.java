@@ -160,7 +160,7 @@ public class StationController {
         int count = 0;
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
+            for (Resource resource : player.getTrains()) {
                 if (resource instanceof Train) {
                     if (((Train) resource).getActor() != null) {
                         if (((Train) resource).getPosition().equals(station.getLocation())) {

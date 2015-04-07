@@ -6,7 +6,6 @@ import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.goal.Goal;
 import gamelogic.goal.GoalManager;
-import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class GoalManagerTest extends LibGdxTest {
 
         Goal goal = new Goal(station1, station2, 0);
         player1.addGoal(goal);
-        player1.addResource(train);
+        player1.addTrain(train);
 
         ArrayList<Station> route = new ArrayList<>();
         route.add(station1);

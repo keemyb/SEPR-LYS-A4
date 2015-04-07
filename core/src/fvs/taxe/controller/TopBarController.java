@@ -2,9 +2,14 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.GameState;
@@ -15,10 +20,14 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class TopBarController {
     public final static int CONTROLS_HEIGHT = 40;
+    public final static int SPEED_SLIDER_SEGMENTS = 8;
 
     private Context context;
     private Color controlsColor = Color.LIGHT_GRAY;
     private TextButton endTurnButton;
+    private TextButton skipReplayButton;
+    private TextButton playReplayButton;
+    private Slider replaySpeedSlider;
     private TextButton createConnectionButton;
     private TextButton editConnectionButton;
     private Label flashMessage;
@@ -108,6 +117,94 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
+    public void addSkipReplayButton() {
+        skipReplayButton = new TextButton("Skip", context.getSkin());
+        skipReplayButton.setPosition(TaxeGame.WORLD_WIDTH - 75.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        skipReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getReplayController().skipReplay();
+            }
+        });
+
+        skipReplayButton.setVisible(false);
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.REPLAY_STATIC) {
+                    skipReplayButton.setVisible(true);
+                } else if (state == GameState.REPLAY_ANIMATING) {
+                    skipReplayButton.setVisible(true);
+                } else {
+                    skipReplayButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(skipReplayButton);
+    }
+
+    public void addPlayReplayButton() {
+        playReplayButton = new TextButton("Play", context.getSkin());
+        playReplayButton.setPosition(TaxeGame.WORLD_WIDTH - 130.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        playReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getReplayController().playReplay();
+            }
+        });
+
+        playReplayButton.setVisible(false);
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.REPLAY_STATIC) {
+                    playReplayButton.setVisible(true);
+                } else if (state == GameState.REPLAY_ANIMATING) {
+                    playReplayButton.setVisible(false);
+                } else {
+                    playReplayButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(playReplayButton);
+    }
+
+    public void addReplaySlider() {
+        replaySpeedSlider = new Slider(ReplayController.MIN_PLAYBACK_SPEED,
+                ReplayController.MAX_PLAYBACK_SPEED,
+                (ReplayController.MAX_PLAYBACK_SPEED - ReplayController.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
+                false, context.getSkin());
+        replaySpeedSlider.setPosition(TaxeGame.WORLD_WIDTH - 300.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+
+        replaySpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                context.getReplayController().setPlayBackSpeed(replaySpeedSlider.getValue());
+            }
+        });
+
+        replaySpeedSlider.setVisible(false);
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (state == GameState.REPLAY_STATIC) {
+                    replaySpeedSlider.setVisible(true);
+                } else if (state == GameState.REPLAY_ANIMATING) {
+                    replaySpeedSlider.setVisible(true);
+                } else {
+                    replaySpeedSlider.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(replaySpeedSlider);
+    }
+
     public void addCreateConnectionButton() {
         createConnectionButton = new TextButton("Create Connection", context.getSkin());
         createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 250.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
@@ -159,6 +256,4 @@ public class TopBarController {
     public void clearFlashMessage() {
         displayFlashMessage("", Color.BLACK);
     }
-
-
 }

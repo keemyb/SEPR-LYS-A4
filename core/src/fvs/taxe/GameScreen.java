@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
-import fvs.taxe.dialog.DialogEndGame;
+import fvs.taxe.dialog.DialogStartReplay;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
@@ -62,7 +62,7 @@ public class GameScreen extends ScreenAdapter {
         goalController = new GoalController(context);
         routeController = new RouteController(context);
         connectionController = new ConnectionController(context);
-
+        
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
         context.setConnectionController(connectionController);
@@ -82,10 +82,14 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void changed(GameState state) {
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
-                    DialogEndGame dia = new DialogEndGame(GameScreen.this.game, skin);
-                    dia.show(stage);
+                    DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
+                    dialogStartReplay.show(stage);
                 }
-                if (gameLogic.getState() != GameState.ANIMATING) {
+                if (state == GameState.REPLAY_ANIMATING) {
+                    topBarController.displayMessage("Playing Replay", Color.BLACK);
+                } else if (state == GameState.REPLAY_STATIC) {
+                    topBarController.displayMessage("Replay Paused", Color.BLACK);
+                } else if (state != GameState.ANIMATING) {
                     topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
                 }
             }
@@ -118,6 +122,7 @@ public class GameScreen extends ScreenAdapter {
         if (gameLogic.getState() == GameState.ANIMATING) {
             timeAnimated += delta;
             if (timeAnimated >= ANIMATION_TIME) {
+                context.getRecordStateManager().captureState();
                 gameLogic.setState(GameState.NORMAL);
                 timeAnimated = 0;
             }
@@ -154,6 +159,9 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
+        topBarController.addSkipReplayButton();
+        topBarController.addPlayReplayButton();
+        topBarController.addReplaySlider();
         topBarController.addEndTurnButton();
         topBarController.addCreateConnectionButton();
         topBarController.addEditConnectionButton();

@@ -15,7 +15,6 @@ public abstract class PlayerManager {
     private static int turnNumber = 0;
     private static List<TurnListener> turnListeners = new ArrayList<>();
     private static List<PlayerChangedListener> playerListeners = new ArrayList<>();
-
     public static void createPlayers(int count) {
         for (int i = 0; i < count; i++) {
             players.add(new Player(i + 1));
@@ -47,6 +46,7 @@ public abstract class PlayerManager {
     public static void turnChanged() {
         if (turnNumber < Game.getInstance().totalTurns)
             turnNumber++;
+
         List<Goal> goalsToRemove = new ArrayList<>();
         for (Player player : players) {
             for (Goal goal : player.getGoals()) {
@@ -82,5 +82,9 @@ public abstract class PlayerManager {
 
     public static int getTurnNumber() {
         return turnNumber;
+    }
+
+    public static void setTurnNumber(int newTurnNumber) {
+        turnNumber = newTurnNumber;
     }
 }

@@ -24,7 +24,7 @@ public class DialogMultitrain extends Dialog {
         text("Choose which train you would like");
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getResources()) {
+            for (Resource resource : player.getTrains()) {
                 if (!(resource instanceof Train) || ((Train) resource).getPosition() == null) continue;
                 Train train = (Train) resource;
                 Position trainPosition = train.getPosition();

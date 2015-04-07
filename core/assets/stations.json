@@ -336,5 +336,15 @@
       "station1": "Junction 6",
       "station2": "Oslo"
     }
+  ],
+  "invalidConnections": [
+    {
+      "station1": "York",
+      "station2": "Oslo"
+    },
+    {
+      "station1": "London",
+      "station2": "Oslo"
+    }
   ]
 }

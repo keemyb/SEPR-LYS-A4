@@ -7,9 +7,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import gamelogic.player.Player;
 
 import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class represents map in the game, containing stations.
@@ -21,6 +19,7 @@ public class Map {
 	private List<Station> stations;
 	private List<Junction> junctions;
 	private List<Connection> connections;
+	private List<Set<String>> invalidConnections;
 	private List<List<Float>> distances;
 	private Random random = new Random();
 
@@ -30,6 +29,7 @@ public class Map {
 		stations = new ArrayList<>();
 		junctions = new ArrayList<>();
 		connections = new ArrayList<>();
+		invalidConnections = new ArrayList<>();
 		distances = new ArrayList<>();
 
 		JsonReader jsonReader = new JsonReader();
@@ -62,6 +62,22 @@ public class Map {
             Station station2 = getStationByName(stationName2);
 			addConnection(new Connection(station1, station2, Connection.Material.GOLD));
 		}
+
+        for (JsonValue connection = jsonVal.getChild("invalidConnections"); connection != null; connection = connection.next) {
+            String stationName1 = "";
+            String stationName2 = "";
+            for (JsonValue val = connection.child; val != null; val = val.next) {
+                if (val.name.equalsIgnoreCase("station1")) {
+                    stationName1 = val.asString();
+                } else {
+                    stationName2 = val.asString();
+                }
+            }
+            Set<String> stations = new HashSet<>();
+            stations.add(stationName1);
+            stations.add(stationName2);
+            invalidConnections.add(stations);
+        }
 	}
 
 	private void parseStations(JsonValue jsonVal) {
@@ -143,6 +159,10 @@ public class Map {
         Station station2 = prospectiveConnection.getStation2();
         if (doesConnectionExist(station1.getName(), station2.getName())) return false;
         if (doesProspectiveConnectionIntersectExisting(prospectiveConnection)) return false;
+        for (Set<String> invalidConnection : invalidConnections) {
+            if (invalidConnection.contains(station1.getName()) &&
+                    invalidConnection.contains(station2.getName())) return false;
+        }
         return true;
     }
 

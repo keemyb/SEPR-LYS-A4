@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
-import fvs.taxe.dialog.DialogEndGame;
 import fvs.taxe.dialog.DialogStartReplay;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
@@ -156,7 +155,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        topBarController.addAdvanceReplayButton();
+        topBarController.addSkipReplayButton();
+        topBarController.addPlayReplayButton();
         topBarController.addEndTurnButton();
         topBarController.addCreateConnectionButton();
         topBarController.addEditConnectionButton();

@@ -41,38 +41,65 @@ public class ReplayController {
         recordStates = recordStateManager.getRecordStates();
         nextRecordState = recordStates.get(0);
 
-        advanceReplay(false);
+        skipReplay();
     }
 
-    public void advanceReplay(boolean userInitiated) {
-        if (nextRecordState == null) return;
+    private boolean anyMoreRecordStates() {
+        return nextRecordState != null;
+    }
 
-        RecordState previousRecordState = currentRecordState;
+    private boolean nextStateIsKeyFrame() {
+        return nextRecordState.getTurn() != currentRecordState.getTurn();
+    }
+
+    private void loadNextState() {
         currentRecordState = nextRecordState;
 
         int nextRecordIndex = recordStates.indexOf(currentRecordState) + 1;
-        if (nextRecordIndex >= recordStates.size()) return;
-        nextRecordState = recordStates.get(nextRecordIndex);
-
-        currentRecordState.restorePlayerAttributes();
-        currentRecordState.restoreConnections();
-        PlayerManager.setTurnNumber(currentRecordState.getTurn());
-
-        if (previousRecordState == null) {
-            showNextStateAsKeyframe();
-        } else if (userInitiated) {
-            GameState currentState = context.getGameLogic().getState();
-            if (currentState == GameState.REPLAY_ANIMATING) {
-                showNextStateAsKeyframe();
-            } else {
-                showNextStateByInterpolation();
-            }
-        } else if (previousRecordState.getTurn() == currentRecordState.getTurn()) {
-            showNextStateByInterpolation();
+        if (nextRecordIndex < recordStates.size()) {
+            nextRecordState = recordStates.get(nextRecordIndex);
+        } else {
+            nextRecordState = null;
         }
     }
 
-    private void showNextStateAsKeyframe() {
+    private void loadNextKeyframeState() {
+        if (currentRecordState == null) {
+            loadNextState();
+        } else {
+            while (anyMoreRecordStates()) {
+                RecordState previousRecordState = currentRecordState;
+                loadNextState();
+                if (previousRecordState.getTurn() != currentRecordState.getTurn()) break;
+            }
+        }
+
+    }
+
+    public void playReplay() {
+        if (anyMoreRecordStates()) {
+            if (nextStateIsKeyFrame()) {
+                skipReplay();
+                playReplay();
+            } else {
+                loadNextState();
+                showCurrentStateViaInterpolation();
+            }
+        }
+    }
+
+    public void skipReplay() {
+        if (anyMoreRecordStates()) {
+            loadNextKeyframeState();
+            showCurrentStateAsKeyframe();
+
+            currentRecordState.restorePlayerAttributes();
+            currentRecordState.restoreConnections();
+            PlayerManager.setTurnNumber(currentRecordState.getTurn());
+        }
+    }
+
+    private void showCurrentStateAsKeyframe() {
         for (java.util.Map.Entry entry : currentRecordState.getTrainPositions().entrySet()) {
             Train train = (Train) entry.getKey();
             Position position = (Position) entry.getValue();
@@ -95,9 +122,10 @@ public class ReplayController {
         context.getGameLogic().setState(GameState.REPLAY_STATIC);
     }
 
-    private void showNextStateByInterpolation() {
+    private void showCurrentStateViaInterpolation() {
         long delta = currentRecordState.getDelta();
 
+        context.getGameLogic().setState(GameState.REPLAY_ANIMATING);
         for (java.util.Map.Entry entry : currentRecordState.getTrainPositions().entrySet()) {
             Train train = (Train) entry.getKey();
             Position position = (Position) entry.getValue();
@@ -106,7 +134,6 @@ public class ReplayController {
 
             addMoveAction(train, position, delta);
         }
-        context.getGameLogic().setState(GameState.REPLAY_ANIMATING);
     }
 
     private void addMoveAction(Train train, Position position, long delta) {
@@ -120,7 +147,10 @@ public class ReplayController {
             public void run() {
                 if (context.getGameLogic().getState() != GameState.REPLAY_STATIC) {
                     context.getGameLogic().setState(GameState.REPLAY_STATIC);
-                    advanceReplay(false);
+                    if (anyMoreRecordStates() && !nextStateIsKeyFrame()) {
+                        loadNextState();
+                        showCurrentStateViaInterpolation();
+                    }
                 }
             }
         });

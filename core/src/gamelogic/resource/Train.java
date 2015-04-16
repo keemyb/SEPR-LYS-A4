@@ -16,7 +16,6 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     private Position position;
-    private Station startStation;
     private Station finalStation;
     private Station location;
     private boolean isAtStation = false;
@@ -174,13 +173,6 @@ public class Train extends Resource {
 
     public void setAtStation(boolean isAtStation) {
         this.isAtStation = isAtStation;
-    }
-    public Station getStartStation() {
-        return startStation;
-    }
-
-    public void setStartStation(Station startStation) {
-        this.startStation = startStation;
     }
 
 }

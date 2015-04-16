@@ -22,6 +22,7 @@ public class DialogMultitrain extends Dialog {
         this.context = context;
 
         text("Choose which train you would like");
+        System.out.println("Trains at station: " + station.getTrainsAtStation());
 
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getTrains()) {
@@ -35,7 +36,11 @@ public class DialogMultitrain extends Dialog {
                     if (train.getFinalStation() != null) {
                         destination = " to " + (train.getFinalStation().getName());
                     }
-                    button(train.getName() + destination + " (Player " + train.getPlayer().getPlayerNumber() + ")", train);
+                    if (train.isOwnedBy(PlayerManager.getCurrentPlayer())){
+                        button(train.getName() + destination, train);
+                    }else{
+                        button(train.getName() + destination + " (Opponent's)", train);
+                    }
                     getButtonTable().row();
                     isTrain = true;
                 }

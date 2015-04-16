@@ -2,7 +2,6 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,6 +12,7 @@ import gamelogic.game.GameState;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
+import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;
@@ -103,10 +103,12 @@ public class RouteController {
 
     private void addRoutingButtons() {
         TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
+        TextButton discard = new TextButton("Discard", context.getSkin());
         TextButton cancel = new TextButton("Cancel", context.getSkin());
 
-        doneRouting.setPosition(TaxeGame.WORLD_WIDTH - 250, TaxeGame.WORLD_HEIGHT - 33);
-        cancel.setPosition(TaxeGame.WORLD_WIDTH - 100, TaxeGame.WORLD_HEIGHT - 33);
+        cancel.setPosition(TaxeGame.WORLD_WIDTH - 70, TaxeGame.WORLD_HEIGHT - 33);
+        discard.setPosition(TaxeGame.WORLD_WIDTH - 140, TaxeGame.WORLD_HEIGHT - 33);
+        doneRouting.setPosition(TaxeGame.WORLD_WIDTH - 270, TaxeGame.WORLD_HEIGHT - 33);
 
         cancel.addListener(new ClickListener() {
             @Override
@@ -127,6 +129,15 @@ public class RouteController {
             }
         });
 
+        discard.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                PlayerManager.getCurrentPlayer().removeTrain(train);
+                endRouting();
+            }
+        });
+
+        routingButtons.addActor(discard);
         routingButtons.addActor(doneRouting);
         routingButtons.addActor(cancel);
 

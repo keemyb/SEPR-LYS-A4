@@ -1,7 +1,6 @@
 package gamelogic.resource;
 
 import fvs.taxe.actor.TrainActor;
-import gamelogic.game.Game;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import util.Tuple;
@@ -17,7 +16,10 @@ public class Train extends Resource {
     private TrainActor actor;
     private int speed;
     private Position position;
+    private Station startStation;
     private Station finalStation;
+    private Station location;
+    private boolean isAtStation = false;
     private List<Station> route = new ArrayList<>();                   // must not contain current position
     private List<Tuple<Station, Integer>> history = new ArrayList<>();   // station name and turn number
 
@@ -64,6 +66,8 @@ public class Train extends Resource {
     }
 
     public void arrivedAtDestination() {
+        location = finalStation;
+        isAtStation = true;
         finalStation = null;
     }
 
@@ -156,4 +160,27 @@ public class Train extends Resource {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
+    public Station getLocation() {
+        return location;
+    }
+
+    public void setLocation(Station location) {
+        this.location = location;
+    }
+    public boolean isAtStation() {
+        return isAtStation;
+    }
+
+    public void setAtStation(boolean isAtStation) {
+        this.isAtStation = isAtStation;
+    }
+    public Station getStartStation() {
+        return startStation;
+    }
+
+    public void setStartStation(Station startStation) {
+        this.startStation = startStation;
+    }
+
 }

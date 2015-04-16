@@ -44,6 +44,8 @@ public class TrainMoveController {
             public void run() {
                 train.getActor().setVisible(true);
                 train.setPosition(new Position(-1, -1));
+                train.setAtStation(false);
+                train.setLocation(null);
             }
         };
     }

@@ -4,7 +4,6 @@ import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
-import gamelogic.recording.RecordStateManager;
 import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;

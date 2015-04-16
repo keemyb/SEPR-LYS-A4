@@ -13,11 +13,11 @@ import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogMultitrain;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
-import gamelogic.player.Player;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
+import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
@@ -63,7 +63,15 @@ public class StationController {
             public void clicked(InputEvent event, float x, float y) {
                 if (Game.getInstance().getState() == GameState.NORMAL) {
                     DialogMultitrain dia = new DialogMultitrain(station, context.getSkin(), context);
-                    if (dia.getIsTrain()) {
+                    if (station.getTrainsAtStation().size() == 1){
+                        Train train = station.getTrainsAtStation().get(0);
+                        if (train.isOwnedBy(PlayerManager.getCurrentPlayer())){
+                            context.getRouteController().begin(train);
+                        }else{
+                            context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
+                        }
+                    }
+                    else if (dia.getIsTrain()) {
                         dia.show(context.getStage());
                     }
                     else {
@@ -165,7 +173,10 @@ public class StationController {
                     if (((Train) resource).getActor() != null) {
                         if (((Train) resource).getPosition().equals(station.getLocation())) {
                             count++;
-                        }
+                        }//else if (((Train)resource).getActor() != null){
+                           // ((Train)resource).setAtStation(false);
+                            //((Train)resource).setLocation(null);
+                        //}
                     }
                 }
             }

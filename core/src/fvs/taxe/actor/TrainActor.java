@@ -12,7 +12,7 @@ import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
 public class TrainActor extends Image {
-    public static int width = 30;
+    public static int width = 60;
     public static int height = 25;
     public Train train;
     private Rectangle bounds;

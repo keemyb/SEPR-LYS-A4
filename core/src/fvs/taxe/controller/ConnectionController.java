@@ -39,7 +39,7 @@ public class ConnectionController {
     private TextButton repairConnection;
     private TextButton upgradeConnection;
     private TextButton removeConnection;
-    private TextButton cancel;
+    private TextButton done;
     private Group connectionButtons = new Group();
 
     private float relativeStationHighlightSize = 1.7f;
@@ -60,7 +60,7 @@ public class ConnectionController {
         repairConnection = new TextButton("Repair Connection", context.getSkin());
         upgradeConnection = new TextButton("Upgrade Connection", context.getSkin());
         removeConnection = new TextButton("Remove Connection", context.getSkin());
-        cancel = new TextButton("Cancel", context.getSkin());
+        done = new TextButton("Done", context.getSkin());
 
         map = context.getGameLogic().getMap();
 
@@ -99,7 +99,7 @@ public class ConnectionController {
             }
         });
 
-        cancel.addListener(new ClickListener() {
+        done.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 endConnectionModifications();
@@ -125,16 +125,21 @@ public class ConnectionController {
         GameState state = context.getGameLogic().getState();
 
         connectionButtons.clearChildren();
-        cancel.setPosition(TaxeGame.WORLD_WIDTH - 100, TaxeGame.WORLD_HEIGHT - 33);
-        connectionButtons.addActor(cancel);
+        done.setPosition(TaxeGame.WORLD_WIDTH - 70, TaxeGame.WORLD_HEIGHT - 33);
+        connectionButtons.addActor(done);
 
-        if (state.equals(GameState.CONNECTION_CREATE)) {
-            createConnection.setPosition(TaxeGame.WORLD_WIDTH - 260, TaxeGame.WORLD_HEIGHT - 33);
-            connectionButtons.addActor(createConnection);
+        if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
+            System.out.println("a");
+                if (map.prospectiveConnectionIsValid(selectedConnection)) {
+                    System.out.println("c");
+                    createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
+                    connectionButtons.addActor(createConnection);
+                }
+
         } else if (state.equals(GameState.CONNECTION_EDIT)) {
-            upgradeConnection.setPosition(TaxeGame.WORLD_WIDTH - 260, TaxeGame.WORLD_HEIGHT - 33);
-            repairConnection.setPosition(TaxeGame.WORLD_WIDTH - 420, TaxeGame.WORLD_HEIGHT - 33);
-            removeConnection.setPosition(TaxeGame.WORLD_WIDTH - 590, TaxeGame.WORLD_HEIGHT - 33);
+            upgradeConnection.setPosition(TaxeGame.WORLD_WIDTH - 245, TaxeGame.WORLD_HEIGHT - 33);
+            repairConnection.setPosition(TaxeGame.WORLD_WIDTH - 405, TaxeGame.WORLD_HEIGHT - 33);
+            removeConnection.setPosition(TaxeGame.WORLD_WIDTH - 577, TaxeGame.WORLD_HEIGHT - 33);
             connectionButtons.addActor(upgradeConnection);
             connectionButtons.addActor(repairConnection);
             connectionButtons.addActor(removeConnection);
@@ -169,8 +174,10 @@ public class ConnectionController {
             selectedConnection = new Connection(selectedStations.poll(), selectedStations.poll(), Connection.Material.BRONZE);
         } else {
             selectedConnection = map.getConnectionBetween(selectedStations.poll(), selectedStations.poll());
-        }
+        }showOptionButtons();
     }
+
+
 
     private void createConnection() {
         if (selectedConnection == null) {
@@ -291,4 +298,32 @@ public class ConnectionController {
         context.getGameLogic().setState(GameState.CONNECTION_EDIT);
         showOptionButtons();
     }
+    public void setSelectedStations(gamelogic.map.Connection connection){
+        Station station1 = connection.getStation1();
+        Station station2 = connection.getStation2();
+        if (selectedStations.size() == 2) {
+            selectedStations.remove();
+        }
+        selectedStations.add(station1);
+        selectedStations.add(station2);
+        selectConnection();
+    }
+    public void highlightConnection(Connection connection) {
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        game.shapeRenderer.setColor(validTemporaryConnectionColour);
+
+        game.shapeRenderer.rectLine(connection.getStation1().getLocation().getX(),
+                connection.getStation1().getLocation().getY(),
+                connection.getStation2().getLocation().getX(),
+                connection.getStation2().getLocation().getY(),
+                StationController.CONNECTION_LINE_WIDTH);
+
+        game.shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
 }

@@ -15,6 +15,7 @@ public class Context {
     private TopBarController topBarController;
     private ConnectionController connectionController;
     private ReplayController replayController;
+    private ResourceController resourceController;
 
     public Context(Stage stage, Skin skin, TaxeGame taxeGame, Game gameLogic) {
         this.stage = stage;

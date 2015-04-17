@@ -81,6 +81,7 @@ public class GameScreen extends ScreenAdapter {
         gameLogic.subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
+                resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
                     DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
                     dialogStartReplay.show(stage);

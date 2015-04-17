@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -206,8 +204,8 @@ public class TopBarController {
     }
 
     public void addCreateConnectionButton() {
-        createConnectionButton = new TextButton("Create Connection", context.getSkin());
-        createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 250.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        createConnectionButton = new TextButton("Add Track", context.getSkin());
+        createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 200.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
         createConnectionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -230,8 +228,8 @@ public class TopBarController {
     }
 
     public void addEditConnectionButton() {
-        editConnectionButton = new TextButton("Edit Connection", context.getSkin());
-        editConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 380.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        editConnectionButton = new TextButton("Edit Track", context.getSkin());
+        editConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 300.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
         editConnectionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

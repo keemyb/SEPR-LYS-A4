@@ -4,7 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
+import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.TrainClicked;
+import gamelogic.game.Game;
+import gamelogic.game.GameState;
+import gamelogic.map.Connection;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
@@ -31,11 +35,16 @@ public class ResourceController {
 
         game.batch.begin();
         game.fontSmall.setColor(Color.BLACK);
-        game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
+        if (Game.getInstance().getState() == GameState.CONNECTION_EDIT) {
+            game.fontSmall.draw(game.batch, "My Tracks:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
+        }else {
+            game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
+        }
         game.batch.end();
     }
 
     public void drawPlayerResources(Player player) {
+        System.out.println("4");
 
         float top = (float) TaxeGame.WORLD_HEIGHT;
         float x = 10.0f;
@@ -44,26 +53,44 @@ public class ResourceController {
 
         resourceButtons.remove();
         resourceButtons.clear();
+        if (Game.getInstance().getState() != GameState.CONNECTION_EDIT) {
+            for (final Resource resource : player.getTrains()) {
 
-        for (final Resource resource : player.getTrains()) {
-            if (resource instanceof Train) {
-                Train train = (Train) resource;
+                if (resource instanceof Train) {
+                    Train train = (Train) resource;
 
-                // don't show a button for trains that have been placed
-                if (train.getPosition() != null) {
-                    continue;
+                    // don't show a button for trains that have been placed
+                    if (train.getPosition() != null) {
+                        continue;
+                    }
+
+                    TrainClicked listener = new TrainClicked(context, train);
+
+                    TextButton button = new TextButton(resource.toString(), context.getSkin());
+                    button.setPosition(x, y);
+                    button.addListener(listener);
+
+                    resourceButtons.addActor(button);
+
+                    y -= 30;
                 }
-
-                TrainClicked listener = new TrainClicked(context, train);
-
-                TextButton button = new TextButton(resource.toString(), context.getSkin());
-                button.setPosition(x, y);
-                button.addListener(listener);
-
-                resourceButtons.addActor(button);
-
-                y -= 30;
             }
+        }
+        if (Game.getInstance().getState() == GameState.CONNECTION_EDIT){
+            resourceButtons.clear();
+            if (player.getConnectionsOwned() != null) {
+                for (Connection connection : player.getConnectionsOwned()) {
+                    TextButton button = new TextButton(connection.toString(), context.getSkin());
+                    button.setPosition(x, y);
+
+                    ConnectionClicked listener = new ConnectionClicked(context, connection);
+                    button.addListener(listener);
+
+                    resourceButtons.addActor(button);
+                    y -= 30;
+                }
+            }
+
         }
 
         context.getStage().addActor(resourceButtons);

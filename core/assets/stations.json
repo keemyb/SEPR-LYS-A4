@@ -345,16 +345,138 @@
     {
       "station1": "London",
       "station2": "Oslo"
-    }
-  ],
-  "invalidConnections": [
+    },
     {
-      "station1": "York",
+      "station1": "Paris",
       "station2": "Oslo"
     },
     {
-      "station1": "London",
+      "station1": "Copenhagen",
       "station2": "Oslo"
+    },
+    {
+      "station1": "Copenhagen",
+      "station2": "York"
+    },
+    {
+      "station1": "Copenhagen",
+      "station2": "London"
+    },
+    {
+      "station1": "Copenhagen",
+      "station2": "Paris"
+    },
+    {
+      "station1": "York",
+      "station2": "Lisbon"
+    },
+    {
+      "station1": "York",
+      "station2": "Madrid"
+    },
+    {
+      "station1": "London",
+      "station2": "Lisbon"
+    },
+    {
+      "station1": "London",
+      "station2": "Madrid"
+    },
+    {
+      "station1": "London",
+      "station2": "Hamburg"
+    },
+    {
+      "station1": "London",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "York",
+      "station2": "Hamburg"
+    },
+    {
+      "station1": "York",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Lisbon",
+      "station2": "Rome"
+    },
+    {
+      "station1": "Lisbon",
+      "station2": "Kosovo"
+    },
+    {
+      "station1": "Lisbon",
+      "station2": "Athens"
+    },
+    {
+      "station1": "Madrid",
+      "station2": "Rome"
+    },
+    {
+      "station1": "Madrid",
+      "station2": "Kosovo"
+    },
+    {
+      "station1": "Madrid",
+      "station2": "Athens"
+    },
+    {
+      "station1": "Rome",
+      "station2": "Kosovo"
+    },
+    {
+      "station1": "Athens",
+      "station2": "Istanbul"
+    },
+    {
+      "station1": "Copenhagen",
+      "station2": "Ankara"
+    },
+    {
+      "station1": "Ankara",
+      "station2": "Bucharest"
+    },
+    {
+      "station1": "Ankara",
+      "station2": "Kiev"
+    },
+    {
+      "station1": "Ankara",
+      "station2": "Moscow"
+    },
+    {
+      "station1": "Minsk",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Minsk",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Minsk",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Helsinki",
+      "station2": "Oslo"
+    },
+    {
+      "station1": "Helsinki",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Helsinki",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Helsinki",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Helsinki",
+      "station2": "Hamburg"
     }
   ]
 }

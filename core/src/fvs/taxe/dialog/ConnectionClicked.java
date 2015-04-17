@@ -1,5 +1,6 @@
 package fvs.taxe.dialog;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.controller.Context;
@@ -18,8 +19,8 @@ public class ConnectionClicked extends ClickListener {
     public void clicked(InputEvent event, float x, float y) {
         context.getConnectionController().setSelectedStations(connection);
     }
-    //@Override
-    //public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-    //    context.getConnectionController().highlightConnection(connection);
-    //}
+    @Override
+    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        context.getConnectionController().highlightConnection(connection);
+    }
 }

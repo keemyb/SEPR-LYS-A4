@@ -36,7 +36,7 @@ public class ResourceController {
         game.batch.begin();
         game.fontSmall.setColor(Color.BLACK);
         if (Game.getInstance().getState() == GameState.CONNECTION_EDIT) {
-            game.fontSmall.draw(game.batch, "My Tracks:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
+            game.fontSmall.draw(game.batch, "My Tracks:", 10, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
         }else {
             game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
         }
@@ -44,8 +44,6 @@ public class ResourceController {
     }
 
     public void drawPlayerResources(Player player) {
-        System.out.println("4");
-
         float top = (float) TaxeGame.WORLD_HEIGHT;
         float x = 10.0f;
         float y = top - 250.0f;

@@ -1,17 +1,22 @@
 package fvs.taxe.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import fvs.taxe.StationClickListener;
 import fvs.taxe.actor.TrainActor;
 import fvs.taxe.dialog.ResourceDialogButtonClicked;
 import fvs.taxe.dialog.DialogResourceTrain;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
+import gamelogic.map.Junction;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
+import gamelogic.resource.TrainManager;
 
 public class TrainController {
     private Context context;
@@ -88,11 +93,49 @@ public class TrainController {
             context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
         } else {
             context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
-        } if (train.getPosition() == null){
+        }
+
+        if (train.getPosition() == null){
             ResourceDialogButtonClicked listener = new ResourceDialogButtonClicked(context, currentPlayer, train);
             DialogResourceTrain dia = new DialogResourceTrain(train, context.getSkin(), train.getPosition() != null);
             dia.show(context.getStage());
             dia.subscribeClick(listener);
-        } else {context.getRouteController().beginRouting(train);}
+        } else {
+            context.getRouteController().beginRouting(train);
+        }
+    }
+
+    public void placeTrain(final Train train) {
+        Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
+        Gdx.input.setCursorImage(pixmap, 8, 10);
+        pixmap.dispose();
+
+        Game.getInstance().setState(GameState.PLACING);
+        setTrainsVisible(null, false);
+
+        StationController.subscribeStationClick(new StationClickListener() {
+            @Override
+            public void clicked(Station station) {
+                if (station instanceof Junction) {
+                    context.getTopBarController().displayFlashMessage("Trains cannot be placed at junctions.", Color.RED);
+                    return;
+                }
+
+                train.setPosition(station.getLocation());
+                train.addToHistory(station, PlayerManager.getTurnNumber());
+                train.setAtStation(true);
+                train.setLocation(station);
+
+                Gdx.input.setCursorImage(null, 0, 0);
+
+                TrainActor trainActor = renderTrain(train);
+                setTrainsVisible(null, true);
+                train.setActor(trainActor);
+
+                StationController.unsubscribeStationClick(this);
+                Game.getInstance().setState(GameState.NORMAL);
+            }
+        });
+
     }
 }

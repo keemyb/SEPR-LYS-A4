@@ -11,12 +11,12 @@ import gamelogic.player.PlayerManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
-public class DialogMultiTrain extends Dialog {
+public class DialogMultitrain extends Dialog {
 
     private Context context;
     private boolean isTrain = false;
 
-    public DialogMultiTrain(Station station, Skin skin, Context context) {
+    public DialogMultitrain(Station station, Skin skin, Context context) {
         super(station.getName(), skin);
 
         this.context = context;

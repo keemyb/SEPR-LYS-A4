@@ -2,7 +2,9 @@ package fvs.taxe.dialog;
 
 import fvs.taxe.Button;
 import fvs.taxe.controller.Context;
+import gamelogic.game.GameEvent;
 import gamelogic.player.Player;
+import gamelogic.replay.ReplayEvent;
 import gamelogic.resource.Train;
 
 public class ResourceDialogButtonClicked implements ResourceDialogClickListener {
@@ -20,6 +22,7 @@ public class ResourceDialogButtonClicked implements ResourceDialogClickListener 
     public void clicked(Button button) {
         switch (button) {
             case TRAIN_DISCARD:
+                context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_DISCARD));
                 currentPlayer.removeTrain(train);
                 break;
             case TRAIN_PLACE:

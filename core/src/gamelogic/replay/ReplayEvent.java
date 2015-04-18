@@ -12,4 +12,8 @@ public class ReplayEvent {
         this.object = object;
         this.time = System.currentTimeMillis();
     }
+
+    public ReplayEvent(GameEvent gameEvent) {
+        this(gameEvent, null);
+    }
 }

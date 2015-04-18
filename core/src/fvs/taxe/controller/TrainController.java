@@ -48,8 +48,10 @@ public class TrainController {
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_TRAIN) {
                     Train train = (Train) object;
-
                     selected(train);
+                } else if (event == GameEvent.CLICKED_PLACE_TRAIN) {
+                    Train train = (Train) object;
+                    placeTrain(train);
                 }
             }
         });
@@ -117,7 +119,7 @@ public class TrainController {
 
         if (train.getPosition() == null){
             ResourceDialogButtonClicked listener = new ResourceDialogButtonClicked(context, currentPlayer, train);
-            DialogResourceTrain dia = new DialogResourceTrain(train, context.getSkin(), train.getPosition() != null);
+            DialogResourceTrain dia = new DialogResourceTrain(train, context, train.getPosition() != null);
             dia.show(context.getStage());
             dia.subscribeClick(listener);
         } else {
@@ -126,6 +128,8 @@ public class TrainController {
     }
 
     public void placeTrain(final Train train) {
+        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN));
+
         Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
         Gdx.input.setCursorImage(pixmap, 8, 10);
         pixmap.dispose();

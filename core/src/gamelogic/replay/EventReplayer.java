@@ -1,5 +1,6 @@
 package gamelogic.replay;
 
+import com.badlogic.gdx.utils.Array;
 import fvs.taxe.controller.*;
 import gamelogic.game.GameEvent;
 import gamelogic.map.Station;
@@ -76,7 +77,7 @@ public class EventReplayer {
     }
 
     public void fireReplayEvent(GameEvent gameEvent, Object object) {
-        for (ReplayListener listener : replayListeners) {
+        for (ReplayListener listener : new ArrayList<>(replayListeners)) {
             listener.replay(gameEvent, object);
         }
     }

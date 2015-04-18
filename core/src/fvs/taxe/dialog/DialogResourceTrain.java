@@ -25,9 +25,6 @@ public class DialogResourceTrain extends Dialog {
 
         button("Discard", "DISCARD");
         button("Cancel", "CLOSE");
-
-
-
     }
 
     @Override

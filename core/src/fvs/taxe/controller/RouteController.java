@@ -40,7 +40,7 @@ public class RouteController {
         });
     }
 
-    public void begin(Train train) {
+    public void beginRouting(Train train) {
         this.train = train;
         isRouting = true;
         stations.clear();
@@ -50,7 +50,7 @@ public class RouteController {
         addRoutingButtons();
 
 
-        TrainController trainController = new TrainController(context);
+        TrainController trainController = context.getTrainController();
         trainController.setTrainsVisible(train, false);
         train.getActor().setVisible(true);
     }
@@ -155,7 +155,7 @@ public class RouteController {
         routingButtons.remove();
         isRouting = false;
 
-        TrainController trainController = new TrainController(context);
+        TrainController trainController = context.getTrainController();
         trainController.setTrainsVisible(train, true);
         train.getActor().setVisible(context.getGameLogic().getMap().getStationByPosition(train.getPosition()) == null);
         context.getTopBarController().clearFlashMessage();

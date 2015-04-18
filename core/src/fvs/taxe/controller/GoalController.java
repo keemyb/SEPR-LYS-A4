@@ -68,7 +68,7 @@ public class GoalController {
 			final Station origin = goal.getOrigin();
 			final Station dest = goal.getDestination();
 
-            final DialogGoal dialogGoal = new DialogGoal(goal, context.getSkin());
+            final DialogGoal dialogGoal = new DialogGoal(context, goal);
 
             button.addListener(new ClickListener() {
 
@@ -119,5 +119,13 @@ public class GoalController {
 
     private String playerGoalHeader() {
         return "Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + " Goals:";
+    }
+
+    public void removeGoal(Goal goal) {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            if (player.getGoals().contains(goal)) {
+                player.discardGoal(goal);
+            }
+        }
     }
 }

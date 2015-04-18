@@ -15,6 +15,7 @@ import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogCreateConnection;
 import fvs.taxe.dialog.DialogRepairConnection;
 import fvs.taxe.dialog.DialogUpgradeConnection;
+import gamelogic.game.Game;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
@@ -326,4 +327,48 @@ public class ConnectionController {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
+    public void createConnection(Connection connection, Connection.Material material) {
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        connection.upgrade(material);
+        int connectionCost = connection.calculateCost();
+        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
+                currentPlayer.getMoney() <= connectionCost) {
+            context.getTopBarController().displayFlashMessage(
+                    "Not enough money to create connection", Color.BLACK, 1000);
+        } else {
+            context.getGameLogic().getMap().addConnection(connection);
+            currentPlayer.addOwnedConnection(connection);
+            currentPlayer.spendMoney(connection.calculateCost());
+            System.out.println("Purchased a " + material + " connection");
+        }
+    }
+
+    public void repairConnection(Connection connection, float repairThreshold) {
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        int repairCost = connection.calculateRepairCost(repairThreshold);
+        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
+                currentPlayer.getMoney() <= repairCost) {
+            context.getTopBarController().displayFlashMessage(
+                    "Not enough money to repair connection", Color.BLACK, 1000);
+        } else {
+            connection.repair(repairThreshold);
+            currentPlayer.spendMoney(repairCost);
+            System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
+        }
+    }
+
+    public void upgradeConnection(Connection connection, Connection.Material material) {
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        connection.upgrade(material);
+        int upgradeCost = connection.calculateCost();
+        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
+                currentPlayer.getMoney() <= upgradeCost) {
+            context.getTopBarController().displayFlashMessage(
+                    "Not enough money to upgrade connection", Color.BLACK, 1000);
+        } else {
+            context.getGameLogic().getMap().addConnection(connection);
+            currentPlayer.spendMoney(connection.calculateCost());
+            System.out.println("Upgraded a connection to " + material);
+        }
+    }
 }

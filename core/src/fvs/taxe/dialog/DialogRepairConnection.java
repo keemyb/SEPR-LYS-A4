@@ -52,21 +52,8 @@ public class DialogRepairConnection extends Dialog {
 
     @Override
     protected void result(Object obj) {
-        if (obj instanceof Float) {
-            Player currentPlayer = PlayerManager.getCurrentPlayer();
-            float repairThreshold = (float) obj;
-            int repairCost = connection.calculateRepairCost(repairThreshold);
-            if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                    currentPlayer.getMoney() <= repairCost) {
-                context.getTopBarController().displayFlashMessage(
-                        "Not enough money to repair connection", Color.BLACK, 1000);
-            } else {
-                connection.repair(repairThreshold);
-                currentPlayer.spendMoney(repairCost);
-                System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
-            }
-        } else {
-            this.remove();
-        }
+        if (!(obj instanceof Float)) return;
+
+        context.getConnectionController().repairConnection(connection, (float) obj);
     }
 }

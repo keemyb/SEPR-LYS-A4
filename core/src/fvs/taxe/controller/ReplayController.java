@@ -34,7 +34,7 @@ public class ReplayController {
     public ReplayController(Context context) {
         this.context = context;
         recordStateManager = new RecordStateManager(context.getGameLogic());
-        trainController = new TrainController(context);
+        trainController = context.getTrainController();
     }
 
     public RecordStateManager getRecordStateManager() {

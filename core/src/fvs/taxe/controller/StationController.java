@@ -10,7 +10,7 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
-import fvs.taxe.dialog.DialogMultitrain;
+import fvs.taxe.dialog.DialogMultiTrain;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
@@ -62,11 +62,11 @@ public class StationController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (Game.getInstance().getState() == GameState.NORMAL) {
-                    DialogMultitrain dia = new DialogMultitrain(station, context.getSkin(), context);
+                    DialogMultiTrain dia = new DialogMultiTrain(station, context.getSkin(), context);
                     if (station.getTrainsAtStation().size() == 1){
                         Train train = station.getTrainsAtStation().get(0);
                         if (train.isOwnedBy(PlayerManager.getCurrentPlayer())){
-                            context.getRouteController().begin(train);
+                            context.getRouteController().beginRouting(train);
                         }else{
                             context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
                         }

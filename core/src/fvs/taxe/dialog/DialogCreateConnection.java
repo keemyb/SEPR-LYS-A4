@@ -1,14 +1,11 @@
 package fvs.taxe.dialog;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
 import gamelogic.game.Game;
 import gamelogic.map.Connection;
-import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
 
 public class DialogCreateConnection extends Dialog {
 
@@ -47,23 +44,8 @@ public class DialogCreateConnection extends Dialog {
 
     @Override
     protected void result(Object obj) {
-        if (obj instanceof Connection.Material) {
-            Player currentPlayer = PlayerManager.getCurrentPlayer();
-            Connection.Material material = (Connection.Material) obj;
-            connection.upgrade(material);
-            int connectionCost = connection.calculateCost();
-            if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                    currentPlayer.getMoney() <= connectionCost) {
-                context.getTopBarController().displayFlashMessage(
-                        "Not enough money to create connection", Color.BLACK, 1000);
-            } else {
-                context.getGameLogic().getMap().addConnection(connection);
-                currentPlayer.addOwnedConnection(connection);
-                currentPlayer.spendMoney(connection.calculateCost());
-                System.out.println("Purchased a " + material + " connection");
-            }
-        } else {
-            this.remove();
-        }
+        if (!(obj instanceof Connection.Material)) return;
+
+        context.getConnectionController().createConnection(connection, (Connection.Material) obj);
     }
 }

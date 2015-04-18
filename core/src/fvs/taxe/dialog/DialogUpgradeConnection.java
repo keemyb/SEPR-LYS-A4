@@ -49,22 +49,8 @@ public class DialogUpgradeConnection extends Dialog {
 
     @Override
     protected void result(Object obj) {
-        if (obj instanceof Connection.Material) {
-            Player currentPlayer = PlayerManager.getCurrentPlayer();
-            Connection.Material material = (Connection.Material) obj;
-            connection.upgrade(material);
-            int upgradeCost = connection.calculateCost();
-            if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                    currentPlayer.getMoney() <= upgradeCost) {
-                context.getTopBarController().displayFlashMessage(
-                        "Not enough money to upgrade connection", Color.BLACK, 1000);
-            } else {
-                context.getGameLogic().getMap().addConnection(connection);
-                currentPlayer.spendMoney(connection.calculateCost());
-                System.out.println("Upgraded a connection to " + material);
-            }
-        } else {
-            this.remove();
-        }
+        if (!(obj instanceof Connection.Material)) return;
+
+        context.getConnectionController().upgradeConnection(connection, (Connection.Material) obj);
     }
 }

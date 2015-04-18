@@ -18,12 +18,12 @@ import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
-public class DialogButtonClicked implements ResourceDialogClickListener {
+public class ResourceDialogButtonClicked implements ResourceDialogClickListener {
     private Context context;
     private Player currentPlayer;
     private Train train;
 
-    public DialogButtonClicked(Context context, Player player, Train train) {
+    public ResourceDialogButtonClicked(Context context, Player player, Train train) {
         this.currentPlayer = player;
         this.train = train;
         this.context = context;
@@ -41,7 +41,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                 pixmap.dispose();
 
                 Game.getInstance().setState(GameState.PLACING);
-                TrainController trainController = new TrainController(context);
+                TrainController trainController = context.getTrainController();
                 trainController.setTrainsVisible(null, false);
 
                 StationController.subscribeStationClick(new StationClickListener() {
@@ -59,7 +59,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
 
                         Gdx.input.setCursorImage(null, 0, 0);
 
-                        TrainController trainController = new TrainController(context);
+                        TrainController trainController = context.getTrainController();
                         TrainActor trainActor = trainController.renderTrain(train);
                         trainController.setTrainsVisible(null, true);
                         train.setActor(trainActor);
@@ -71,8 +71,7 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
 
                 break;
             case TRAIN_ROUTE:
-                context.getRouteController().begin(train);
-
+                context.getRouteController().beginRouting(train);
                 break;
         }
     }

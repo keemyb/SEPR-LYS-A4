@@ -14,11 +14,13 @@ import gamelogic.resource.Train;
 
 public class DialogGoal extends Dialog {
 
+    private Context context;
     private Goal goal;
 
-    public DialogGoal(Goal goal, Skin skin) {
-        super(goal.toString(), skin);
+    public DialogGoal(Context context, Goal goal) {
+        super(goal.toString(), context.getSkin());
 
+        this.context = context;
         this.goal = goal;
 
         text("Would you like to discard this goal?");
@@ -42,11 +44,7 @@ public class DialogGoal extends Dialog {
     @Override
     protected void result(Object obj) {
         if (obj == "YES") {
-            for (Player player : PlayerManager.getAllPlayers()) {
-                if (player.getGoals().contains(goal)) {
-                    player.discardGoal(goal);
-                }
-            }
+            context.getGoalController().removeGoal(goal);
         }
     }
 }

@@ -16,6 +16,8 @@ public class Context {
     private ConnectionController connectionController;
     private ReplayController replayController;
     private ResourceController resourceController;
+    private GoalController goalController;
+    private TrainController trainController;
 
     public Context(Stage stage, Skin skin, TaxeGame taxeGame, Game gameLogic) {
         this.stage = stage;
@@ -71,5 +73,21 @@ public class Context {
 
     public ReplayController getReplayController() {
         return replayController;
+    }
+
+    public GoalController getGoalController() {
+        return goalController;
+    }
+
+    public void setGoalController(GoalController goalController) {
+        this.goalController = goalController;
+    }
+
+    public TrainController getTrainController() {
+        return trainController;
+    }
+
+    public void setTrainController(TrainController trainController) {
+        this.trainController = trainController;
     }
 }

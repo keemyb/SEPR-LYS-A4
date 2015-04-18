@@ -34,12 +34,13 @@ public class GameScreen extends ScreenAdapter {
     private Tooltip tooltip;
     private Context context;
 
+    private ConnectionController connectionController;
+    private GoalController goalController;
+    private ResourceController resourceController;
+    private RouteController routeController;
     private StationController stationController;
     private TopBarController topBarController;
-    private ResourceController resourceController;
-    private GoalController goalController;
-    private RouteController routeController;
-    private ConnectionController connectionController;
+    private TrainController trainController;
 
     public GameScreen(TaxeGame game) {
         this.game = game;
@@ -56,16 +57,19 @@ public class GameScreen extends ScreenAdapter {
         tooltip = new Tooltip(skin);
         stage.addActor(tooltip);
 
+        connectionController = new ConnectionController(context);
+        goalController = new GoalController(context);
+        resourceController = new ResourceController(context);
+        routeController = new RouteController(context);
         stationController = new StationController(context, tooltip);
         topBarController = new TopBarController(context);
-        resourceController = new ResourceController(context);
-        goalController = new GoalController(context);
-        routeController = new RouteController(context);
-        connectionController = new ConnectionController(context);
-        
+        trainController = new TrainController(context);
+
+        context.setConnectionController(connectionController);
+        context.setGoalController(goalController);
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
-        context.setConnectionController(connectionController);
+        context.setTrainController(trainController);
 
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override

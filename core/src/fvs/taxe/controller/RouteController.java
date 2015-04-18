@@ -8,11 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ import java.util.List;
 
 public class RouteController {
     private Context context;
+    private EventReplayer eventReplayer;
+
     private Group routingButtons = new Group();
     private List<Station> stations = new ArrayList<>();
     private boolean isRouting = false;
@@ -29,6 +35,7 @@ public class RouteController {
 
     public RouteController(Context context) {
         this.context = context;
+        eventReplayer = context.getEventReplayer();
 
         StationController.subscribeStationClick(new StationClickListener() {
             @Override
@@ -38,9 +45,24 @@ public class RouteController {
                 }
             }
         });
+
+        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_ROUTING_DISCARD_TRAIN) {
+                    discardRouting();
+                } else if (event == GameEvent.CLICKED_ROUTING_DONE) {
+                    doneRouting();
+                } else if (event == GameEvent.CLICKED_ROUTING_CANCEL) {
+                    cancelRouting();
+                }
+            }
+        });
     }
 
     public void beginRouting(Train train) {
+        eventReplayer.playBackReplayEvent(new ReplayEvent(GameEvent.CLICKED_BEGIN_ROUTING));
+
         this.train = train;
         isRouting = true;
         stations.clear();
@@ -48,7 +70,6 @@ public class RouteController {
         totalRouteDistance = 0;
         context.getGameLogic().setState(GameState.ROUTING);
         addRoutingButtons();
-
 
         TrainController trainController = context.getTrainController();
         trainController.setTrainsVisible(train, false);
@@ -87,8 +108,6 @@ public class RouteController {
             context.getTopBarController().displayFlashMessage(
                     "This route will take approximately " + totalTurns() + " turns to complete.", Color.BLACK, 1000);
 
-
-
             canEndRouting = !(station instanceof Junction);
         }
     }
@@ -102,7 +121,7 @@ public class RouteController {
     }
 
     private void addRoutingButtons() {
-        TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
+        final TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
         TextButton discard = new TextButton("Discard", context.getSkin());
         TextButton cancel = new TextButton("Cancel", context.getSkin());
 
@@ -110,30 +129,24 @@ public class RouteController {
         discard.setPosition(TaxeGame.WORLD_WIDTH - 140, TaxeGame.WORLD_HEIGHT - 33);
         doneRouting.setPosition(TaxeGame.WORLD_WIDTH - 270, TaxeGame.WORLD_HEIGHT - 33);
 
-        cancel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                endRouting();
-            }
-        });
-
         doneRouting.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!canEndRouting) {
-                    context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
-                    return;
-                }
-                confirmed();
-                endRouting();
+                doneRouting();
             }
         });
 
         discard.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                PlayerManager.getCurrentPlayer().removeTrain(train);
-                endRouting();
+                discardRouting();
+            }
+        });
+
+        cancel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cancelRouting();
             }
         });
 
@@ -142,6 +155,27 @@ public class RouteController {
         routingButtons.addActor(cancel);
 
         context.getStage().addActor(routingButtons);
+    }
+
+    private void doneRouting() {
+        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DONE));
+        if (!canEndRouting) {
+            context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
+            return;
+        }
+        confirmed();
+        endRouting();
+    }
+
+    private void discardRouting() {
+        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DISCARD_TRAIN));
+        PlayerManager.getCurrentPlayer().removeTrain(train);
+        endRouting();
+    }
+
+    private void cancelRouting() {
+        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_CANCEL));
+        endRouting();
     }
 
     private void confirmed() {

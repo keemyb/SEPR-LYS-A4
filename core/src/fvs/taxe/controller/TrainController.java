@@ -128,7 +128,7 @@ public class TrainController {
     }
 
     public void placeTrain(final Train train) {
-        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN));
+        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN, train));
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
         Gdx.input.setCursorImage(pixmap, 8, 10);

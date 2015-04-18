@@ -23,8 +23,8 @@ public class TopBarController {
     private Context context;
     private Color controlsColor = Color.LIGHT_GRAY;
     private TextButton endTurnButton;
-    private TextButton skipReplayButton;
     private TextButton playReplayButton;
+    private TextButton pauseReplayButton;
     private Slider replaySpeedSlider;
     private TextButton createConnectionButton;
     private TextButton editConnectionButton;
@@ -115,7 +115,19 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
-    public void addSkipReplayButton() {
+    public void addPauseReplayButton() {
+        pauseReplayButton = new TextButton("Pause", context.getSkin());
+        pauseReplayButton.setPosition(100f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        pauseReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getEventReplayer().pause();
+            }
+        });
+
+        pauseReplayButton.setVisible(true);
+
+        context.getStage().addActor(pauseReplayButton);
     }
 
     public void addPlayReplayButton() {

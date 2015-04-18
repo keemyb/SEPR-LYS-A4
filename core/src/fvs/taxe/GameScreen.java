@@ -159,7 +159,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        topBarController.addSkipReplayButton();
+        topBarController.addPauseReplayButton();
         topBarController.addPlayReplayButton();
         topBarController.addReplaySlider();
         topBarController.addEndTurnButton();

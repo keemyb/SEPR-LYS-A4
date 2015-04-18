@@ -1,12 +1,15 @@
 package gamelogic.replay;
 
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.*;
 import fvs.taxe.controller.*;
 import gamelogic.game.GameEvent;
 import gamelogic.map.Station;
 import gamelogic.resource.Train;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ public class EventReplayer {
     List<ReplayEvent> eventInstances = new ArrayList<>();
     ReplayEvent eventInstanceLastPlayed;
     ReplayEvent eventInstanceToPlayNext;
-    Timer timer;
+    com.badlogic.gdx.utils.Timer timer = new com.badlogic.gdx.utils.Timer();
 
     ConnectionController connectionController;
     GoalController goalController;
@@ -26,8 +29,6 @@ public class EventReplayer {
 
     public EventReplayer(Context context) {
         this.context = context;
-        timer = new Timer(0, null);
-
         connectionController = context.getConnectionController();
         goalController = context.getGoalController();
         routeController = context.getRouteController();
@@ -50,8 +51,6 @@ public class EventReplayer {
     public void start() {
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
-
-//        play();
     }
 
     public void play() {
@@ -63,9 +62,20 @@ public class EventReplayer {
         int nextEventIndex = eventInstances.indexOf(eventInstanceLastPlayed) + 1;
         if (nextEventIndex < eventInstances.size()) {
             eventInstanceToPlayNext = eventInstances.get(nextEventIndex);
+            timer.scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
+                @Override
+                public void run() {
+                    play();
+                }
+            }, 5);
         } else {
             eventInstanceToPlayNext = null;
         }
+    }
+
+    public void pause() {
+        timer.clear();
+        timer.stop();
     }
 
     public boolean anyMoreEventsToPlay() {

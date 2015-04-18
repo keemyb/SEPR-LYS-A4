@@ -11,7 +11,6 @@ import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.goal.GoalManager;
 import gamelogic.player.PlayerManager;
-import gamelogic.recording.RecordStateManager;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
@@ -23,13 +22,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
 public class TrainMoveController {
     private Context context;
     private Map map;
-    private RecordStateManager recordStateManager;
     private Train train;
 
     public TrainMoveController(Context context, Train train) {
         this.context = context;
         map = context.getGameLogic().getMap();
-        recordStateManager = context.getRecordStateManager();
         this.train = train;
 
         addMoveActions();
@@ -67,8 +64,6 @@ public class TrainMoveController {
                         ConnectionController.visitedConnection(train, visited);
                     }
                 }
-
-                recordStateManager.captureState();
 
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());

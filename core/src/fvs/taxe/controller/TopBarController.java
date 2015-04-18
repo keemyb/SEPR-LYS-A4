@@ -116,91 +116,12 @@ public class TopBarController {
     }
 
     public void addSkipReplayButton() {
-        skipReplayButton = new TextButton("Skip", context.getSkin());
-        skipReplayButton.setPosition(TaxeGame.WORLD_WIDTH - 75.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
-        skipReplayButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                context.getReplayController().skipReplay();
-            }
-        });
-
-        skipReplayButton.setVisible(false);
-
-        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
-            @Override
-            public void changed(GameState state) {
-                if (state == GameState.REPLAY_STATIC) {
-                    skipReplayButton.setVisible(true);
-                } else if (state == GameState.REPLAY_ANIMATING) {
-                    skipReplayButton.setVisible(true);
-                } else {
-                    skipReplayButton.setVisible(false);
-                }
-            }
-        });
-
-        context.getStage().addActor(skipReplayButton);
     }
 
     public void addPlayReplayButton() {
-        playReplayButton = new TextButton("Play", context.getSkin());
-        playReplayButton.setPosition(TaxeGame.WORLD_WIDTH - 130.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
-        playReplayButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                context.getReplayController().playReplay();
-            }
-        });
-
-        playReplayButton.setVisible(false);
-
-        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
-            @Override
-            public void changed(GameState state) {
-                if (state == GameState.REPLAY_STATIC) {
-                    playReplayButton.setVisible(true);
-                } else if (state == GameState.REPLAY_ANIMATING) {
-                    playReplayButton.setVisible(false);
-                } else {
-                    playReplayButton.setVisible(false);
-                }
-            }
-        });
-
-        context.getStage().addActor(playReplayButton);
     }
 
     public void addReplaySlider() {
-        replaySpeedSlider = new Slider(ReplayController.MIN_PLAYBACK_SPEED,
-                ReplayController.MAX_PLAYBACK_SPEED,
-                (ReplayController.MAX_PLAYBACK_SPEED - ReplayController.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
-                false, context.getSkin());
-        replaySpeedSlider.setPosition(TaxeGame.WORLD_WIDTH - 300.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
-
-        replaySpeedSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                context.getReplayController().setPlayBackSpeed(replaySpeedSlider.getValue());
-            }
-        });
-
-        replaySpeedSlider.setVisible(false);
-
-        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
-            @Override
-            public void changed(GameState state) {
-                if (state == GameState.REPLAY_STATIC) {
-                    replaySpeedSlider.setVisible(true);
-                } else if (state == GameState.REPLAY_ANIMATING) {
-                    replaySpeedSlider.setVisible(true);
-                } else {
-                    replaySpeedSlider.setVisible(false);
-                }
-            }
-        });
-
-        context.getStage().addActor(replaySpeedSlider);
     }
 
     public void addCreateConnectionButton() {

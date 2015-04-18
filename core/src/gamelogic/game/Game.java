@@ -2,8 +2,10 @@ package gamelogic.game;
 
 import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
+import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;

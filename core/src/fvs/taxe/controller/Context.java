@@ -19,6 +19,8 @@ public class Context {
     private TrainController trainController;
     private EventReplayer eventReplayer;
 
+    boolean replaying = false;
+
     public Context(Stage stage, Skin skin, TaxeGame taxeGame, Game gameLogic) {
         this.stage = stage;
         this.skin = skin;
@@ -85,5 +87,13 @@ public class Context {
 
     public void setTrainController(TrainController trainController) {
         this.trainController = trainController;
+    }
+
+    public boolean isReplaying() {
+        return replaying;
+    }
+
+    public void setReplaying(boolean replaying) {
+        this.replaying = replaying;
     }
 }

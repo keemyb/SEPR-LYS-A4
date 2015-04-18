@@ -9,20 +9,27 @@ import fvs.taxe.dialog.ResourceDialogButtonClicked;
 import fvs.taxe.dialog.DialogResourceTrain;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Junction;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
 public class TrainController {
     private Context context;
+    private EventReplayer eventReplayer;
 
     public TrainController(Context context) {
         this.context = context;
+        this.eventReplayer = context.getEventReplayer();
+
         gamelogic.player.PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
@@ -32,6 +39,17 @@ public class TrainController {
                         setTrainLocation(train);
 
                     }
+                }
+            }
+        });
+
+        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_TRAIN) {
+                    Train train = (Train) object;
+
+                    selected(train);
                 }
             }
         });
@@ -78,6 +96,8 @@ public class TrainController {
     }
 
     public void selected(Train train) {
+        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
+
         if (Game.getInstance().getState() != GameState.NORMAL) return;
         System.out.println("train clicked");
 
@@ -136,6 +156,5 @@ public class TrainController {
                 Game.getInstance().setState(GameState.NORMAL);
             }
         });
-
     }
 }

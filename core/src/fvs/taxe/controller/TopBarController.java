@@ -119,6 +119,18 @@ public class TopBarController {
     }
 
     public void addPlayReplayButton() {
+        playReplayButton = new TextButton("Play", context.getSkin());
+        playReplayButton.setPosition(0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        playReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getEventReplayer().play();
+            }
+        });
+
+        playReplayButton.setVisible(true);
+
+        context.getStage().addActor(playReplayButton);
     }
 
     public void addReplaySlider() {

@@ -38,84 +38,44 @@ public class EventReplayer {
     }
 
     public void saveReplayEvent(ReplayEvent event) {
+        if (context.isReplaying()) return;
         eventInstances.add(event);
     }
 
     public void playBackReplayEvent(ReplayEvent event) {
-        switch (event.gameEvent) {
-            case CLICKED_TRAIN:
-                break;
-            case CLICKED_PLACE_TRAIN:
-                break;
-            case CLICKED_PLACE_TRAIN_DISCARD:
-                break;
-            case CLICKED_STATION:
-                break;
-            case CLICKED_CHOOSE_ROUTE:
-                break;
-            case CLICKED_CHOOSE_ROUTE_DISCARD:
-                break;
-            case CLICKED_ROUTE_COMPLETE:
-                break;
-            case CLICKED_ROUTE_COMPLETE_CANCEL:
-                break;
-            case CLICKED_END_TURN:
-                break;
-            case CLICKED_GOAL_BUTTON:
-                break;
-            case CLICKED_DISCARD_GOAL:
-                break;
-            case CLICKED_DISCARD_GOAL_CANCEL:
-                break;
-            case CLICKED_CONNECTION_BUTTON:
-                break;
-            case CLICKED_ADD_CONNECTION:
-                break;
-            case CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL:
-                break;
-            case CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL_CANCEL:
-                break;
-            case CLICKED_EDIT_CONNECTION:
-                break;
-            case CLICKED_REPAIR_CONNECTION:
-                break;
-            case CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT:
-                break;
-            case CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT_CANCEL:
-                break;
-            case CLICKED_UPGRADE_CONNECTION:
-                break;
-            case CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL:
-                break;
-            case CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL_CANCEL:
-                break;
-            case CLICKED_REMOVE_CONNECTION:
-                break;
-            case CLICKED_REMOVE_CONNECTION_CANCEL:
-                break;
-        }
+        fireReplayEvent(event.gameEvent, event.object);
     }
 
     public void start() {
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
 
-        play();
+//        play();
     }
 
-    private void play() {
-        if (eventInstanceToPlayNext == null) return;
+    public void play() {
+        if (!anyMoreEventsToPlay()) return;
 
         playBackReplayEvent(eventInstanceToPlayNext);
         eventInstanceLastPlayed = eventInstanceToPlayNext;
-        eventInstanceToPlayNext = eventInstances.get(eventInstances.indexOf(eventInstanceLastPlayed) + 1);
+
+        int nextEventIndex = eventInstances.indexOf(eventInstanceLastPlayed) + 1;
+        if (nextEventIndex < eventInstances.size()) {
+            eventInstanceToPlayNext = eventInstances.get(nextEventIndex);
+        } else {
+            eventInstanceToPlayNext = null;
+        }
     }
 
-    public static void subscribeReplayEvent(ReplayListener listener) {
+    public boolean anyMoreEventsToPlay() {
+        return eventInstanceToPlayNext != null;
+    }
+
+    public void subscribeReplayEvent(ReplayListener listener) {
         replayListeners.add(listener);
     }
 
-    public static void fireReplayEvent(GameEvent gameEvent, Object object) {
+    public void fireReplayEvent(GameEvent gameEvent, Object object) {
         for (ReplayListener listener : replayListeners) {
             listener.replay(gameEvent, object);
         }

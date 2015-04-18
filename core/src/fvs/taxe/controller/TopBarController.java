@@ -10,9 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.TaxeGame;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -43,6 +46,15 @@ public class TopBarController {
                     default:
                         controlsColor = Color.LIGHT_GRAY;
                         break;
+                }
+            }
+        });
+
+        context.getEventReplayer().subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_END_TURN) {
+                    endTurnButton.getClickListener().clicked(null, 0, 0);
                 }
             }
         });
@@ -97,6 +109,7 @@ public class TopBarController {
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_END_TURN));
                 PlayerManager.turnOver();
             }
         });

@@ -31,6 +31,7 @@ import gamelogic.resource.Train;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -128,6 +129,13 @@ public class ConnectionController {
                 } else if (event == GameEvent.CLICKED_STATION) {
                     Station station = (Station) object;
                     selectStation(station);
+                } else if (event == GameEvent.CLICKED_NEW_CONNECTION) {
+                    createConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL) {
+                    List<Object> connectionAndMaterial = (List) object;
+                    Connection connection = (Connection) connectionAndMaterial.get(0);
+                    Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
+                    createConnection(connection, material);
                 }
             }
         });
@@ -205,6 +213,7 @@ public class ConnectionController {
 
 
     private void createConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_NEW_CONNECTION));
         if (selectedConnection == null) {
             context.getTopBarController().displayFlashMessage(
                     "You have not selected two stations", Color.BLACK, 1000);
@@ -355,6 +364,10 @@ public class ConnectionController {
     }
 
     public void createConnection(Connection connection, Connection.Material material) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL, new ArrayList<>(
+                Arrays.asList(connection, material)
+        )));
+
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         connection.upgrade(material);
         int connectionCost = connection.calculateCost();

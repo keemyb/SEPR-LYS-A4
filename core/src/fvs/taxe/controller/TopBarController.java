@@ -17,6 +17,7 @@ import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
+import gamelogic.replay.ReplayModeListener;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -139,7 +140,14 @@ public class TopBarController {
             }
         });
 
-        pauseReplayButton.setVisible(true);
+        pauseReplayButton.setVisible(EventReplayer.isReplaying());
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                pauseReplayButton.setVisible(isReplaying);
+            }
+        });
 
         context.getStage().addActor(pauseReplayButton);
     }
@@ -154,7 +162,14 @@ public class TopBarController {
             }
         });
 
-        playReplayButton.setVisible(true);
+        playReplayButton.setVisible(EventReplayer.isReplaying());
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                playReplayButton.setVisible(isReplaying);
+            }
+        });
 
         context.getStage().addActor(playReplayButton);
     }
@@ -166,10 +181,19 @@ public class TopBarController {
                 false, context.getSkin());
         replaySpeedSlider.setPosition(110, TaxeGame.WORLD_HEIGHT - 33.0f);
 
+        replaySpeedSlider.setVisible(EventReplayer.isReplaying());
+
         replaySpeedSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 EventReplayer.setPlayBackSpeed(replaySpeedSlider.getValue());
+            }
+        });
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                replaySpeedSlider.setVisible(isReplaying);
             }
         });
 

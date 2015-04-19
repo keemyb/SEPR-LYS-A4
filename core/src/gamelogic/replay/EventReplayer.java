@@ -29,6 +29,7 @@ public class EventReplayer {
     static boolean isReplaying = false;
 
     private static List<ReplayListener> replayListeners = new ArrayList<>();
+    private static List<ReplayModeListener> replayModeListeners = new ArrayList<>();
     private static float playBackSpeed = 1;
 
     public EventReplayer(Context context) {
@@ -41,10 +42,6 @@ public class EventReplayer {
 
     public static void setPlayBackSpeed(float playBackSpeed) {
         EventReplayer.playBackSpeed = playBackSpeed;
-    }
-
-    public void reset() {
-        eventInstances.clear();
     }
 
     public static void saveReplayEvent(ReplayEvent event) {
@@ -60,7 +57,7 @@ public class EventReplayer {
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
 
-        isReplaying = true;
+        setReplaying(true);
 
         PlayerManager.reset();
         clearTrainActors();
@@ -131,7 +128,22 @@ public class EventReplayer {
         }
     }
 
+    public static void subscribeReplayModeEvent(ReplayModeListener listener) {
+        replayModeListeners.add(listener);
+    }
+
+    public static void replayModeChanged() {
+        for (ReplayModeListener listener : new ArrayList<>(replayModeListeners)) {
+            listener.changed(isReplaying);
+        }
+    }
+
     public static boolean isReplaying() {
         return isReplaying;
+    }
+
+    public static void setReplaying(boolean willBeReplaying) {
+        isReplaying = willBeReplaying;
+        replayModeChanged();
     }
 }

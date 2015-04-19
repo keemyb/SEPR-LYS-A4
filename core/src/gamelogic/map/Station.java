@@ -51,13 +51,11 @@ public class Station {
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Resource resource : player.getTrains()) {
                 Train train = (Train) resource;
-                System.out.println("-----Train Name: " + train.getName() + "------Train Location: " + train.getLocation());
                 if (train.getLocation() == this) {
                     trainsAtStation.add(train);
                 }
             }
         }
-        System.out.println("Trains at station: " + trainsAtStation);
         return trainsAtStation;
     }
 

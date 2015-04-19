@@ -136,6 +136,13 @@ public class ConnectionController {
                     Connection connection = (Connection) connectionAndMaterial.get(0);
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     createConnection(connection, material);
+                } else if (event == GameEvent.CLICKED_UPGRADE_CONNECTION) {
+                    upgradeConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL) {
+                    List<Object> connectionAndMaterial = (List) object;
+                    Connection connection = (Connection) connectionAndMaterial.get(0);
+                    Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
+                    upgradeConnection(connection, material);
                 }
             }
         });
@@ -226,6 +233,7 @@ public class ConnectionController {
     }
 
     private void upgradeConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_UPGRADE_CONNECTION));
         if (checkConnectionStatus("upgrade")) {
             new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
@@ -336,7 +344,7 @@ public class ConnectionController {
         showOptionButtons();
     }
     public void setSelectedStations(gamelogic.map.Connection connection){
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON, connection));
         Station station1 = connection.getStation1();
         Station station2 = connection.getStation2();
         if (selectedStations.size() == 2) {
@@ -402,6 +410,10 @@ public class ConnectionController {
     }
 
     public void upgradeConnection(Connection connection, Connection.Material material) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL, new ArrayList<>(
+                Arrays.asList(connection, material)
+        )));
+
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         connection.upgrade(material);
         int upgradeCost = connection.calculateCost();

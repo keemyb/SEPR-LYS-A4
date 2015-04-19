@@ -239,10 +239,6 @@ public class Map {
 		return connections;
 	}
 
-    public void setConnections(List<Connection> connections) {
-        this.connections = connections;
-    }
-
 	public List<Station> getAdjacentStations(Station station) {
 		List<Station> adjacentStations = new ArrayList<>();
 		for (Connection c : connections) {
@@ -270,7 +266,10 @@ public class Map {
             connectionOwner.removeOwnedConnection(connection);
         }
 
-        connections.remove(connection);
+		// for some reason a connection may be contained multiple times
+		while(connections.contains(connection)) {
+			connections.remove(connection);
+		}
 
         distances.clear();
         computeDistances();

@@ -6,9 +6,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.map.Connection;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 
 public class DialogUpgradeConnection extends Dialog {
 
@@ -33,6 +37,16 @@ public class DialogUpgradeConnection extends Dialog {
         }
 
         button("Cancel", "CANCEL");
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL ||
+                        event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL_CANCEL) {
+                    result("CANCEL");
+                }
+            }
+        });
     }
 
     @Override
@@ -48,9 +62,12 @@ public class DialogUpgradeConnection extends Dialog {
     }
 
     @Override
-    protected void result(Object obj) {
-        if (!(obj instanceof Connection.Material)) return;
-
-        context.getConnectionController().upgradeConnection(connection, (Connection.Material) obj);
+    protected void result(Object object) {
+        if (object == "CANCEL") {
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL_CANCEL));
+            this.remove();
+        } else {
+            context.getConnectionController().upgradeConnection(connection, (Connection.Material) object);
+        }
     }
 }

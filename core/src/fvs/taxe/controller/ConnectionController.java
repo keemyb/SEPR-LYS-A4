@@ -372,11 +372,14 @@ public class ConnectionController {
     }
 
     public void createConnection(Connection connection, Connection.Material material) {
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_CONNECTION, new ArrayList<>(
+                Arrays.asList(currentPlayer, connection, material)
+        )));
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL, new ArrayList<>(
                 Arrays.asList(connection, material)
         )));
 
-        Player currentPlayer = PlayerManager.getCurrentPlayer();
         connection.upgrade(material);
         int connectionCost = connection.calculateCost();
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
@@ -388,10 +391,6 @@ public class ConnectionController {
             currentPlayer.addOwnedConnection(connection);
             currentPlayer.spendMoney(connection.calculateCost());
             System.out.println("Purchased a " + material + " connection");
-
-            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_CONNECTION, new ArrayList<>(
-                    Arrays.asList(currentPlayer, connection, material)
-            )));
         }
     }
 
@@ -415,15 +414,14 @@ public class ConnectionController {
         )));
 
         Player currentPlayer = PlayerManager.getCurrentPlayer();
-        connection.upgrade(material);
-        int upgradeCost = connection.calculateCost();
+        int upgradeCost = connection.calculateUpgradeCost(material);
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
                 currentPlayer.getMoney() <= upgradeCost) {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to upgrade connection", Color.BLACK, 1000);
         } else {
-            context.getGameLogic().getMap().addConnection(connection);
-            currentPlayer.spendMoney(connection.calculateCost());
+            connection.upgrade(material);
+            currentPlayer.spendMoney(upgradeCost);
             System.out.println("Upgraded a connection to " + material);
         }
     }

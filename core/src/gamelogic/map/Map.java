@@ -266,10 +266,7 @@ public class Map {
             connectionOwner.removeOwnedConnection(connection);
         }
 
-		// for some reason a connection may be contained multiple times
-		while(connections.contains(connection)) {
-			connections.remove(connection);
-		}
+		connections.remove(connection);
 
         distances.clear();
         computeDistances();

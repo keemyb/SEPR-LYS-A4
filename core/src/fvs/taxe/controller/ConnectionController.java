@@ -26,6 +26,7 @@ import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;
@@ -111,6 +112,25 @@ public class ConnectionController {
                 endConnectionModifications();
             }
         });
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE) {
+                    enterCreateConnectionMode();
+                } else if (event == GameEvent.CLICKED_EDIT_CONNECTION_MODE) {
+                    enterEditConnectionMode();
+                } else if (event == GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE) {
+                    endConnectionModifications();
+                } else if (event == GameEvent.CLICKED_CONNECTION_BUTTON) {
+                    Connection connection = (Connection) object;
+                    setSelectedStations(connection);
+                } else if (event == GameEvent.CLICKED_STATION) {
+                    Station station = (Station) object;
+                    selectStation(station);
+                }
+            }
+        });
     }
 
     public static void payRent(Train train, Connection connection) {
@@ -156,8 +176,7 @@ public class ConnectionController {
 
     private void selectStation(Station station) {
         GameState state = context.getGameLogic().getState();
-        if (!state.equals(GameState.CONNECTION_CREATE)
-                && !state.equals(GameState.CONNECTION_EDIT)) {
+        if (!state.equals(GameState.CONNECTION_CREATE)) {
             return;
         }
         if (selectedStations.contains(station)) {
@@ -288,23 +307,27 @@ public class ConnectionController {
     }
 
     private void endConnectionModifications() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE));
         context.getGameLogic().setState(GameState.NORMAL);
         connectionButtons.remove();
         context.getTopBarController().clearFlashMessage();
     }
 
     public void enterCreateConnectionMode() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE));
         clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_CREATE);
         showOptionButtons();
     }
 
     public void enterEditConnectionMode() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_EDIT_CONNECTION_MODE));
         clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_EDIT);
         showOptionButtons();
     }
     public void setSelectedStations(gamelogic.map.Connection connection){
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON));
         Station station1 = connection.getStation1();
         Station station2 = connection.getStation2();
         if (selectedStations.size() == 2) {
@@ -315,7 +338,6 @@ public class ConnectionController {
         selectConnection();
     }
     public void highlightConnection(Connection connection) {
-
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

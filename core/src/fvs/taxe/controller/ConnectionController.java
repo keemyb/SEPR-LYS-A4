@@ -13,6 +13,7 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogCreateConnection;
+import fvs.taxe.dialog.DialogRemoveConnection;
 import fvs.taxe.dialog.DialogRepairConnection;
 import fvs.taxe.dialog.DialogUpgradeConnection;
 import gamelogic.game.Game;
@@ -150,6 +151,11 @@ public class ConnectionController {
                     Connection connection = (Connection) connectionAndRepairAmount.get(0);
                     float repairAmount = (float) connectionAndRepairAmount.get(1);
                     repairConnection(connection, repairAmount);
+                } else if (event == GameEvent.CLICKED_REMOVE_CONNECTION) {
+                    removeConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION) {
+                    Connection connection = (Connection) object;
+                    removeConnection(connection);
                 }
             }
         });
@@ -177,9 +183,7 @@ public class ConnectionController {
         connectionButtons.addActor(done);
 
         if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
-            System.out.println("a");
                 if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                    System.out.println("c");
                     createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
                     connectionButtons.addActor(createConnection);
                 }
@@ -221,10 +225,8 @@ public class ConnectionController {
             selectedConnection = new Connection(selectedStations.poll(), selectedStations.poll(), Connection.Material.BRONZE);
         } else {
             selectedConnection = map.getConnectionBetween(selectedStations.poll(), selectedStations.poll());
-        }showOptionButtons();
+        } showOptionButtons();
     }
-
-
 
     private void createConnection() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_NEW_CONNECTION));
@@ -254,9 +256,9 @@ public class ConnectionController {
     }
 
     private void removeConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REMOVE_CONNECTION));
         if (checkConnectionStatus("remove")) {
-            map.removeConnection(selectedConnection);
-            clearSelected();
+            new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
         }
     }
 
@@ -351,6 +353,7 @@ public class ConnectionController {
         context.getGameLogic().setState(GameState.CONNECTION_EDIT);
         showOptionButtons();
     }
+
     public void setSelectedStations(gamelogic.map.Connection connection){
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON, connection));
         Station station1 = connection.getStation1();
@@ -400,6 +403,8 @@ public class ConnectionController {
             currentPlayer.spendMoney(connection.calculateCost());
             System.out.println("Purchased a " + material + " connection");
         }
+
+        clearSelected();
     }
 
     public void repairConnection(Connection connection, float repairThreshold) {
@@ -418,6 +423,8 @@ public class ConnectionController {
             currentPlayer.spendMoney(repairCost);
             System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
         }
+
+        clearSelected();
     }
 
     public void upgradeConnection(Connection connection, Connection.Material material) {
@@ -436,5 +443,18 @@ public class ConnectionController {
             currentPlayer.spendMoney(upgradeCost);
             System.out.println("Upgraded a connection to " + material);
         }
+
+        clearSelected();
+    }
+
+    public void removeConnection(Connection connection) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION, connection));
+
+        // Added twice for some reason on replay
+        while (map.getConnections().contains(connection)) {
+            map.removeConnection(connection);
+        }
+
+        clearSelected();
     }
 }

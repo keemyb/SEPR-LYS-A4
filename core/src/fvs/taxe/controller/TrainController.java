@@ -33,7 +33,6 @@ public class TrainController {
         gamelogic.player.PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                System.out.println("----------------------");
                 for (Player player : PlayerManager.getAllPlayers()){
                     for (Train train : player.getTrains()){
                         setTrainLocation(train);
@@ -66,7 +65,6 @@ public class TrainController {
     }
 
     public void setTrainLocation (Train train) {
-        System.out.println(train.getName() + " Is At Station: " + train.isAtStation());
         if (!train.isAtStation()) {
             train.setLocation(null);
         } else {

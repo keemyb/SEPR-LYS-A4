@@ -10,11 +10,11 @@ public enum GameEvent {
     CLICKED_ROUTING_DISCARD_TRAIN,
     CLICKED_ROUTING_DONE,
     CLICKED_ROUTING_CANCEL,
-    CLICKED_END_TURN,
-    BROKEN_JUNCTION,
-    ADD_GOAL,
-    ADD_TRAIN,
-    ADD_CONNECTION,
+    CLICKED_END_TURN(3),
+    BROKEN_JUNCTION(0),
+    ADD_GOAL(0),
+    ADD_TRAIN(0),
+    ADD_CONNECTION(0),
     CLICKED_GOAL_BUTTON,
     CLICKED_DISCARD_GOAL,
     CLICKED_DISCARD_GOAL_CANCEL,
@@ -35,4 +35,15 @@ public enum GameEvent {
     CLICKED_CHOOSE_REMOVE_CONNECTION,
     CLICKED_CHOOSE_REMOVE_CONNECTION_CANCEL,
     ;
+
+    private static final float DEFAULT_DELAY = 1.5f;
+    public float delay;
+
+    GameEvent(float delay) {
+        this.delay = delay;
+    }
+
+    GameEvent() {
+        this.delay = DEFAULT_DELAY;
+    }
 }

@@ -88,7 +88,7 @@ public class EventReplayer {
                 public void run() {
                     play();
                 }
-            }, 1);
+            }, eventInstanceToPlayNext.gameEvent.delay);
         } else {
             eventInstanceToPlayNext = null;
         }

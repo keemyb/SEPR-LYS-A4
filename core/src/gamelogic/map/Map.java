@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import gamelogic.game.GameEvent;
 import gamelogic.player.Player;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
 
 import java.awt.geom.Line2D;
 import java.util.*;
@@ -217,14 +220,19 @@ public class Map {
 	}
 
 	private void breakRandomJunction(List<Junction> junctions) {
-		if (random.nextDouble() <= JUNCTION_FAILURE_RATE
-				&& !junctions.isEmpty()) {
+		if (!EventReplayer.isReplaying() && !junctions.isEmpty() && random.nextDouble() <= JUNCTION_FAILURE_RATE) {
 			Junction junction = junctions.get(random.nextInt(junctions.size()));
-			junction.setFailureDuration(JUNCTION_FAILURE_DURATION);
-			lastBroken = junction;
-			System.out.println(junction.getName() + " has failed! Oh noes!");
+			breakJunction(junction);
+			EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.BROKEN_JUNCTION, junction));
+		} else {
+			lastBroken = null;
 		}
-		else {lastBroken = null;}
+	}
+
+	public void breakJunction(Junction junction) {
+		junction.setFailureDuration(JUNCTION_FAILURE_DURATION);
+		lastBroken = junction;
+		EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.BROKEN_JUNCTION, junction));
 	}
 
 	public Junction getLastBroken() {

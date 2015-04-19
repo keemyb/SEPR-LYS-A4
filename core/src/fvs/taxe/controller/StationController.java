@@ -20,6 +20,7 @@ import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Resource;
@@ -39,7 +40,7 @@ public class StationController {
     private Context context;
     private Tooltip tooltip;
 
-    public StationController(Context context, Tooltip tooltip) {
+    public StationController(final Context context, Tooltip tooltip) {
         this.context = context;
         this.tooltip = tooltip;
 
@@ -49,6 +50,16 @@ public class StationController {
                 if (event == GameEvent.CLICKED_STATION) {
                     Station station = (Station) object;
                     stationClicked(station);
+                }
+            }
+        });
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.BROKEN_JUNCTION) {
+                    Junction junction = (Junction) object;
+                    context.getGameLogic().getMap().breakJunction(junction);
                 }
             }
         });

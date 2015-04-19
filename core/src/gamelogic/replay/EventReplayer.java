@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventReplayer {
+    public static final float MIN_PLAYBACK_SPEED = 1;
+    public static final float MAX_PLAYBACK_SPEED = 3;
+
     Context context;
     static List<ReplayEvent> eventInstances = new ArrayList<>();
     ReplayEvent eventInstanceLastPlayed;
@@ -25,6 +28,7 @@ public class EventReplayer {
     static boolean isReplaying = false;
 
     private static List<ReplayListener> replayListeners = new ArrayList<>();
+    private static float playBackSpeed = 1;
 
     public EventReplayer(Context context) {
         this.context = context;
@@ -32,6 +36,10 @@ public class EventReplayer {
         goalController = context.getGoalController();
         routeController = context.getRouteController();
         trainController = context.getTrainController();
+    }
+
+    public static void setPlayBackSpeed(float playBackSpeed) {
+        EventReplayer.playBackSpeed = playBackSpeed;
     }
 
     public void reset() {
@@ -88,7 +96,7 @@ public class EventReplayer {
                 public void run() {
                     play();
                 }
-            }, eventInstanceToPlayNext.gameEvent.delay);
+            }, eventInstanceToPlayNext.gameEvent.delay / playBackSpeed);
         } else {
             eventInstanceToPlayNext = null;
         }

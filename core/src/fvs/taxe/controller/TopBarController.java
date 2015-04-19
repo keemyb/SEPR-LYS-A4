@@ -14,6 +14,7 @@ import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
 
@@ -130,7 +131,7 @@ public class TopBarController {
 
     public void addPauseReplayButton() {
         pauseReplayButton = new TextButton("Pause", context.getSkin());
-        pauseReplayButton.setPosition(100f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        pauseReplayButton.setPosition(50f, TaxeGame.WORLD_HEIGHT - 33.0f);
         pauseReplayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -159,6 +160,20 @@ public class TopBarController {
     }
 
     public void addReplaySlider() {
+        replaySpeedSlider = new Slider(EventReplayer.MIN_PLAYBACK_SPEED,
+                EventReplayer.MAX_PLAYBACK_SPEED,
+                (EventReplayer.MAX_PLAYBACK_SPEED - EventReplayer.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
+                false, context.getSkin());
+        replaySpeedSlider.setPosition(110, TaxeGame.WORLD_HEIGHT - 33.0f);
+
+        replaySpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                EventReplayer.setPlayBackSpeed(replaySpeedSlider.getValue());
+            }
+        });
+
+        context.getStage().addActor(replaySpeedSlider);
     }
 
     public void addCreateConnectionButton() {

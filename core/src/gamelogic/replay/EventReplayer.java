@@ -1,21 +1,18 @@
 package gamelogic.replay;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.*;
 import fvs.taxe.controller.*;
 import gamelogic.game.GameEvent;
-import gamelogic.map.Station;
-import gamelogic.resource.Train;
+import gamelogic.map.Connection;
+import gamelogic.map.Map;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 
-import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventReplayer {
     Context context;
-    List<ReplayEvent> eventInstances = new ArrayList<>();
+    static List<ReplayEvent> eventInstances = new ArrayList<>();
     ReplayEvent eventInstanceLastPlayed;
     ReplayEvent eventInstanceToPlayNext;
     com.badlogic.gdx.utils.Timer timer = new com.badlogic.gdx.utils.Timer();
@@ -24,6 +21,8 @@ public class EventReplayer {
     GoalController goalController;
     RouteController routeController;
     TrainController trainController;
+
+    static boolean isReplaying = false;
 
     private static List<ReplayListener> replayListeners = new ArrayList<>();
 
@@ -39,8 +38,8 @@ public class EventReplayer {
         eventInstances.clear();
     }
 
-    public void saveReplayEvent(ReplayEvent event) {
-        if (context.isReplaying()) return;
+    public static void saveReplayEvent(ReplayEvent event) {
+        if (isReplaying) return;
         eventInstances.add(event);
     }
 
@@ -51,6 +50,28 @@ public class EventReplayer {
     public void start() {
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
+
+        isReplaying = true;
+
+        PlayerManager.reset();
+        resetMapAttributes();
+        resetPlayerAttributes();
+    }
+
+    private void resetMapAttributes() {
+        Map map = context.getGameLogic().getMap();
+
+        for (Connection connection : new ArrayList<>(map.getConnections())) {
+            if (connection.getOwner() != null) {
+                map.removeConnection(connection);
+            }
+        }
+    }
+
+    private void resetPlayerAttributes() {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            player.reset();
+        }
     }
 
     public void play() {
@@ -67,7 +88,7 @@ public class EventReplayer {
                 public void run() {
                     play();
                 }
-            }, 5);
+            }, 1);
         } else {
             eventInstanceToPlayNext = null;
         }
@@ -82,7 +103,7 @@ public class EventReplayer {
         return eventInstanceToPlayNext != null;
     }
 
-    public void subscribeReplayEvent(ReplayListener listener) {
+    public static void subscribeReplayEvent(ReplayListener listener) {
         replayListeners.add(listener);
     }
 
@@ -90,5 +111,9 @@ public class EventReplayer {
         for (ReplayListener listener : new ArrayList<>(replayListeners)) {
             listener.replay(gameEvent, object);
         }
+    }
+
+    public static boolean isReplaying() {
+        return isReplaying;
     }
 }

@@ -32,6 +32,19 @@ public class Train extends Resource {
         this(train.name, train.speed);
     }
 
+    public void reset() {
+        if (actor != null) {
+            actor.remove();
+            actor = null;
+        }
+        position = null;
+        finalStation = null;
+        location = null;
+        isAtStation = false;
+        route.clear();
+        history.clear();
+    }
+
     public int getSpeed() {
         return speed;
     }

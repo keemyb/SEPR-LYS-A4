@@ -7,13 +7,19 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
+import gamelogic.goal.Goal;
 import gamelogic.map.Connection;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
+
+import java.util.List;
 
 public class ResourceController {
     private Context context;
@@ -28,6 +34,57 @@ public class ResourceController {
                 drawPlayerResources(PlayerManager.getCurrentPlayer());
             }
         });
+
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.ADD_GOAL) {
+                    handleNewGoal(object);
+                } else if (event == GameEvent.ADD_TRAIN) {
+                    handleNewTrain(object);
+                } else if (event == GameEvent.ADD_CONNECTION) {
+                    handleNewConnection(object);
+                }
+            }
+        });
+    }
+
+    private void handleNewGoal(Object object) {
+        List<Object> playerAndGoal = (List<Object>) object;
+        Player player = (Player) playerAndGoal.get(0);
+        Goal goal = (Goal) playerAndGoal.get(1);
+
+        goal.resetComplete();
+        goal.updateGoal();
+
+        if (!player.getGoals().contains(goal)) {
+            player.addGoal(goal);
+        }
+    }
+
+    private void handleNewTrain(Object object) {
+        List<Object> playerAndTrain = (List<Object>) object;
+        Player player = (Player) playerAndTrain.get(0);
+        Train train = (Train) playerAndTrain.get(1);
+
+        train.reset();
+
+        player.removeTrain(train);
+        player.addTrain(train);
+    }
+
+    private void handleNewConnection(Object object) {
+        List<Object> playerAndConnection = (List<Object>) object;
+        Player player = (Player) playerAndConnection.get(0);
+        Connection connection = (Connection) playerAndConnection.get(1);
+        Connection.Material material = (Connection.Material) playerAndConnection.get(2);
+
+        connection.setMaterial(material);
+        connection.repair(1);
+
+        context.getGameLogic().getMap().addConnection(connection);
+        player.getConnectionsOwned().add(connection);
     }
 
     public void drawHeaderText() {

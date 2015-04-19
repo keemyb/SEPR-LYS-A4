@@ -113,6 +113,10 @@ public class Connection {
         return health;
     }
 
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
     @Override
     public String toString() {
         return "Connection from " + getStation1().getName() + " to " + getStation2().getName();

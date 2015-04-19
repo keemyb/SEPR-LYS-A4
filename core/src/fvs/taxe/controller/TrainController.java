@@ -153,6 +153,7 @@ public class TrainController {
                 Gdx.input.setCursorImage(null, 0, 0);
 
                 TrainActor trainActor = renderTrain(train);
+                System.out.println("actor");
                 setTrainsVisible(null, true);
                 train.setActor(trainActor);
 

@@ -15,6 +15,15 @@ public abstract class PlayerManager {
     private static int turnNumber = 0;
     private static List<TurnListener> turnListeners = new ArrayList<>();
     private static List<PlayerChangedListener> playerListeners = new ArrayList<>();
+
+    public static void reset() {
+        startingPlayer = players.size() - 1;
+        currentPlayerNumber = startingPlayer;
+        turnNumber = 0;
+
+        turnOver();
+    }
+
     public static void createPlayers(int count) {
         for (int i = 0; i < count; i++) {
             players.add(new Player(i + 1));

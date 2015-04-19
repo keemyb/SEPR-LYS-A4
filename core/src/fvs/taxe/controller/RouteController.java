@@ -24,7 +24,6 @@ import java.util.List;
 
 public class RouteController {
     private Context context;
-    private EventReplayer eventReplayer;
 
     private Group routingButtons = new Group();
     private List<Station> stations = new ArrayList<>();
@@ -35,7 +34,6 @@ public class RouteController {
 
     public RouteController(Context context) {
         this.context = context;
-        eventReplayer = context.getEventReplayer();
 
         StationController.subscribeStationClick(new StationClickListener() {
             @Override
@@ -46,10 +44,12 @@ public class RouteController {
             }
         });
 
-        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_ROUTING_DISCARD_TRAIN) {
+                if (event == GameEvent.CLICKED_BEGIN_ROUTING) {
+                    beginRouting((Train) object);
+                } else if (event == GameEvent.CLICKED_ROUTING_DISCARD_TRAIN) {
                     discardRouting();
                 } else if (event == GameEvent.CLICKED_ROUTING_DONE) {
                     doneRouting();
@@ -61,7 +61,7 @@ public class RouteController {
     }
 
     public void beginRouting(Train train) {
-        eventReplayer.playBackReplayEvent(new ReplayEvent(GameEvent.CLICKED_BEGIN_ROUTING));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_BEGIN_ROUTING, train));
 
         this.train = train;
         isRouting = true;
@@ -158,7 +158,7 @@ public class RouteController {
     }
 
     private void doneRouting() {
-        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DONE));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DONE));
         if (!canEndRouting) {
             context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
             return;
@@ -168,13 +168,13 @@ public class RouteController {
     }
 
     private void discardRouting() {
-        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DISCARD_TRAIN));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DISCARD_TRAIN));
         PlayerManager.getCurrentPlayer().removeTrain(train);
         endRouting();
     }
 
     private void cancelRouting() {
-        eventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_CANCEL));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_CANCEL));
         endRouting();
     }
 

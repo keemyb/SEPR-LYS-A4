@@ -16,6 +16,7 @@ import fvs.taxe.dialog.DialogCreateConnection;
 import fvs.taxe.dialog.DialogRepairConnection;
 import fvs.taxe.dialog.DialogUpgradeConnection;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
@@ -23,8 +24,12 @@ import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
 import gamelogic.resource.Train;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -340,6 +345,10 @@ public class ConnectionController {
             currentPlayer.addOwnedConnection(connection);
             currentPlayer.spendMoney(connection.calculateCost());
             System.out.println("Purchased a " + material + " connection");
+
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_CONNECTION, new ArrayList<>(
+                    Arrays.asList(currentPlayer, connection, material)
+            )));
         }
     }
 

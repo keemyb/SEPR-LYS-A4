@@ -54,7 +54,7 @@ public class TopBarController {
             @Override
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_END_TURN) {
-                    endTurnButton.getClickListener().clicked(null, 0, 0);
+                    PlayerManager.turnOver();
                 }
             }
         });

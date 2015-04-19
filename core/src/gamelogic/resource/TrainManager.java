@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.player.Player;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -87,7 +91,8 @@ public abstract class TrainManager {
      * @param player the player that will receive the train
      */
     public static void addRandomTrainToPlayer(Player player) {
-        addTrainToPlayer(player, getRandomTrain());
+        Train train = getRandomTrain();
+        addTrainToPlayer(player, train);
     }
 
     public static void addTrainToPlayer(Player player, Train train) {
@@ -97,6 +102,10 @@ public abstract class TrainManager {
 
         train.setPlayer(player);
         player.addTrain(train);
+
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_TRAIN, new ArrayList<>(
+                Arrays.asList(player, train)
+        )));
     }
 
     public static String getLeftImageFileName(Train train) {

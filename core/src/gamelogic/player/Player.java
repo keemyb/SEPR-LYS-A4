@@ -29,6 +29,14 @@ public class Player {
         this.playerNumber = playerNumber;
     }
 
+    public void reset() {
+        trains.clear();
+        connectionsOwned.clear();
+        goals.clear();
+
+        money = INITIAL_AMOUNT_OF_MONEY;
+    }
+
     public List<Train> getTrains() {
         return trains;
     }
@@ -120,24 +128,4 @@ public class Player {
         this.trains = trains;
         changed();
     }
-
-    public void setConnectionsOwned(Set<Connection> connectionsOwned) {
-        this.connectionsOwned = connectionsOwned;
-        changed();
-    }
-
-    public void setGoals(List<Goal> goals) {
-        this.goals = goals;
-        changed();
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-        changed();
-    }
-
-    public boolean ownsConnection(Connection connection) {
-        return connectionsOwned.contains(connection);
-    }
-
 }

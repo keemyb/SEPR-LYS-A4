@@ -68,8 +68,6 @@ public class ResourceController {
         Player player = (Player) playerAndTrain.get(0);
         Train train = (Train) playerAndTrain.get(1);
 
-        train.reset();
-
         player.removeTrain(train);
         player.addTrain(train);
     }

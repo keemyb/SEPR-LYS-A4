@@ -6,6 +6,7 @@ import gamelogic.map.Connection;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.resource.Train;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +63,17 @@ public class EventReplayer {
         isReplaying = true;
 
         PlayerManager.reset();
+        clearTrainActors();
         resetMapAttributes();
         resetPlayerAttributes();
+    }
+
+    private void clearTrainActors() {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            for (Train train : player.getTrains()) {
+                train.reset();
+            }
+        }
     }
 
     private void resetMapAttributes() {

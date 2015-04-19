@@ -143,6 +143,13 @@ public class ConnectionController {
                     Connection connection = (Connection) connectionAndMaterial.get(0);
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     upgradeConnection(connection, material);
+                } else if (event == GameEvent.CLICKED_REPAIR_CONNECTION) {
+                    repairConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT) {
+                    List<Object> connectionAndRepairAmount = (List) object;
+                    Connection connection = (Connection) connectionAndRepairAmount.get(0);
+                    float repairAmount = (float) connectionAndRepairAmount.get(1);
+                    repairConnection(connection, repairAmount);
                 }
             }
         });
@@ -240,6 +247,7 @@ public class ConnectionController {
     }
 
     private void repairConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REPAIR_CONNECTION));
         if (checkConnectionStatus("repair")) {
             new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
@@ -395,6 +403,10 @@ public class ConnectionController {
     }
 
     public void repairConnection(Connection connection, float repairThreshold) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT, new ArrayList<>(
+                Arrays.asList(connection, repairThreshold)
+        )));
+
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         int repairCost = connection.calculateRepairCost(repairThreshold);
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&

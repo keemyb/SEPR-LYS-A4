@@ -1,18 +1,19 @@
 package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import fvs.taxe.dialog.DialogGoal;
+import fvs.taxe.dialog.GoalClicked;
+import gamelogic.game.GameEvent;
 import gamelogic.goal.Goal;
-import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class GoalController {
     private Context context;
     private Group goalButtons = new Group();
 
-    private Tooltip originTip;
+	private Tooltip originTip;
     private Tooltip destTip;
     
     public GoalController(Context context) {
@@ -30,6 +31,19 @@ public class GoalController {
         destTip = new Tooltip(context.getSkin());
         context.getStage().addActor(originTip);
         context.getStage().addActor(destTip);
+
+		EventReplayer.subscribeReplayEvent(new ReplayListener() {
+			@Override
+			public void replay(GameEvent event, Object object) {
+				if (event == GameEvent.CLICKED_GOAL_BUTTON) {
+					Goal goal = (Goal) object;
+					selectedGoal(goal);
+				} else if (event == GameEvent.CLICKED_DISCARD_GOAL) {
+					Goal goal = (Goal) object;
+					discardGoal(goal);
+				}
+			}
+		});
     }
 
     private List<Goal> playerGoals() {
@@ -58,47 +72,15 @@ public class GoalController {
 
 		y -= 15;
 
-		for (final Goal goal : playerGoals()) {
-			y -= 30;
-
-			TextButton button = new TextButton(goal.toString(),
-					context.getSkin());
+		for (Goal goal : playerGoals()) {
+			TextButton button = new TextButton(goal.toString(), context.getSkin());
 			button.setPosition(x, y);
 
-			final Station origin = goal.getOrigin();
-			final Station dest = goal.getDestination();
+			GoalClicked listener = new GoalClicked(context, goal, this);
+			button.addListener(listener);
 
-            final DialogGoal dialogGoal = new DialogGoal(context, goal);
-
-            button.addListener(new ClickListener() {
-
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    dialogGoal.show(context.getStage());
-                }
-
-                @Override
-				public void enter(InputEvent event, float x, float y,
-						int pointer, Actor fromActor) {
-					originTip.setPosition(origin.getLocation().getX()-(originTip.getWidth()/2), origin
-							.getLocation().getY()+12);
-					originTip.show(origin.getName());
-					
-					destTip.setPosition(dest.getLocation().getX()-(destTip.getWidth()/2), dest.getLocation()
-							.getY()+12);
-					destTip.show(dest.getName());
-					
-					
-				}
-
-				@Override
-				public void exit(InputEvent event, float x, float y,
-						int pointer, Actor toActor) { //return to normal
-					originTip.hide();
-					destTip.hide();
-				}
-			});
 			goalButtons.addActor(button);
+			y -= 30;
 		}
 
 		context.getStage().addActor(goalButtons);
@@ -121,11 +103,25 @@ public class GoalController {
         return "Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + " Goals:";
     }
 
-    public void removeGoal(Goal goal) {
+    public void discardGoal(Goal goal) {
         for (Player player : PlayerManager.getAllPlayers()) {
             if (player.getGoals().contains(goal)) {
+				EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_DISCARD_GOAL, goal));
                 player.discardGoal(goal);
             }
         }
     }
+
+	public void selectedGoal(Goal goal) {
+		EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_GOAL_BUTTON, goal));
+		new DialogGoal(context, goal).show(context.getStage());
+	}
+
+	public Tooltip getOriginTip() {
+		return originTip;
+	}
+
+	public Tooltip getDestTip() {
+		return destTip;
+	}
 }

@@ -2,15 +2,12 @@ package fvs.taxe.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
+import gamelogic.game.GameEvent;
 import gamelogic.goal.Goal;
-import gamelogic.map.Position;
-import gamelogic.map.Station;
-import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
-import gamelogic.resource.Resource;
-import gamelogic.resource.Train;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 
 public class DialogGoal extends Dialog {
 
@@ -27,6 +24,16 @@ public class DialogGoal extends Dialog {
 
         button("Yes", "YES");
         button("No", "NO");
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_DISCARD_GOAL ||
+                        event == GameEvent.CLICKED_DISCARD_GOAL_CANCEL) {
+                    result("NO");
+                }
+            }
+        });
     }
 
     @Override
@@ -44,7 +51,10 @@ public class DialogGoal extends Dialog {
     @Override
     protected void result(Object obj) {
         if (obj == "YES") {
-            context.getGoalController().removeGoal(goal);
+            context.getGoalController().discardGoal(goal);
+        } else {
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_DISCARD_GOAL_CANCEL));
+            this.remove();
         }
     }
 }

@@ -4,6 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.Button;
+import fvs.taxe.controller.Context;
+import gamelogic.game.GameEvent;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;
@@ -11,9 +16,13 @@ import java.util.List;
 
 public class DialogResourceTrain extends Dialog {
     private List<ResourceDialogClickListener> clickListeners = new ArrayList<ResourceDialogClickListener>();
+    private Context context;
+    private EventReplayer eventReplayer;
 
-    public DialogResourceTrain(Train train, Skin skin, boolean trainPlaced) {
-        super(train.toString(), skin);
+    public DialogResourceTrain(Train train, Context context, boolean trainPlaced) {
+        super(train.toString(), context.getSkin());
+        this.context = context;
+        eventReplayer = context.getEventReplayer();
 
         text("What do you want to do with this train?");
 
@@ -25,6 +34,17 @@ public class DialogResourceTrain extends Dialog {
 
         button("Discard", "DISCARD");
         button("Cancel", "CLOSE");
+
+        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_PLACE_TRAIN ||
+                        event == GameEvent.CLICKED_PLACE_TRAIN_DISCARD ||
+                        event == GameEvent.CLICKED_PLACE_TRAIN_CANCEL) {
+                    result("CLOSE");
+                }
+            }
+        });
     }
 
     @Override
@@ -52,6 +72,7 @@ public class DialogResourceTrain extends Dialog {
     @Override
     protected void result(Object obj) {
         if (obj == "CLOSE") {
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_CANCEL));
             this.remove();
         } else if (obj == "DISCARD") {
             clicked(Button.TRAIN_DISCARD);

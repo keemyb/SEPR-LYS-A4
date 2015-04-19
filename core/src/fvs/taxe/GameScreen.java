@@ -90,11 +90,7 @@ public class GameScreen extends ScreenAdapter {
                     DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
                     dialogStartReplay.show(stage);
                 }
-                if (state == GameState.REPLAY_ANIMATING) {
-                    topBarController.displayMessage("Playing Replay", Color.BLACK);
-                } else if (state == GameState.REPLAY_STATIC) {
-                    topBarController.displayMessage("Replay Paused", Color.BLACK);
-                } else if (state != GameState.ANIMATING) {
+                if (state != GameState.ANIMATING) {
                     topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
                 }
             }
@@ -127,7 +123,6 @@ public class GameScreen extends ScreenAdapter {
         if (gameLogic.getState() == GameState.ANIMATING) {
             timeAnimated += delta;
             if (timeAnimated >= ANIMATION_TIME) {
-                context.getRecordStateManager().captureState();
                 gameLogic.setState(GameState.NORMAL);
                 timeAnimated = 0;
             }
@@ -164,7 +159,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        topBarController.addSkipReplayButton();
+        topBarController.addPauseReplayButton();
         topBarController.addPlayReplayButton();
         topBarController.addReplaySlider();
         topBarController.addEndTurnButton();

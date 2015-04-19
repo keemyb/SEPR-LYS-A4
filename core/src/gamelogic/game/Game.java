@@ -4,6 +4,7 @@ import gamelogic.goal.GoalManager;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
 import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
@@ -30,11 +31,7 @@ public class Game {
         PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override
             public void changed() {
-                for (Player player : PlayerManager.getAllPlayers()) {
-                    GoalManager.addRandomGoalToPlayer(player);
-                    TrainManager.addRandomTrainToPlayer(player);
-                    TrainManager.addRandomTrainToPlayer(player);
-                }
+                givePlayersGoalAndTrains();
             }
         });
     }
@@ -42,12 +39,14 @@ public class Game {
     public static Game getInstance() {
         if (instance == null) {
             instance = new Game();
-            instance.initialisePlayers(); // Can't be called in the constructor, as requires game instance to exist
+            instance.givePlayersGoalAndTrains(); // Can't be called in the constructor, as requires game instance to exist
         }
         return instance;
     }
 
-    private void initialisePlayers() {
+    private void givePlayersGoalAndTrains() {
+        if (EventReplayer.isReplaying()) return;
+
         for (Player player : PlayerManager.getAllPlayers()) {
             GoalManager.addRandomGoalToPlayer(player);
             TrainManager.addRandomTrainToPlayer(player);

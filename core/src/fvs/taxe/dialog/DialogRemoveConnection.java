@@ -4,23 +4,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import fvs.taxe.controller.Context;
 import gamelogic.game.GameEvent;
-import gamelogic.goal.Goal;
+import gamelogic.map.Connection;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
 
-public class DialogGoal extends Dialog {
+public class DialogRemoveConnection extends Dialog {
 
     private Context context;
-    private Goal goal;
+    private Connection connection;
 
-    public DialogGoal(Context context, Goal goal) {
-        super(goal.toString(), context.getSkin());
+    public DialogRemoveConnection(Context context, Connection connection) {
+        super(connection.toString(), context.getSkin());
 
         this.context = context;
-        this.goal = goal;
+        this.connection = connection;
 
-        text("Would you like to discard this goal?");
+        text("Would you like to destroy your connection?");
 
         button("Yes", "YES");
         button("No", "NO");
@@ -28,8 +28,8 @@ public class DialogGoal extends Dialog {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_DISCARD_GOAL ||
-                        event == GameEvent.CLICKED_DISCARD_GOAL_CANCEL) {
+                if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION ||
+                        event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION_CANCEL) {
                     result("NO");
                 }
             }
@@ -51,9 +51,9 @@ public class DialogGoal extends Dialog {
     @Override
     protected void result(Object obj) {
         if (obj == "YES") {
-            context.getGoalController().discardGoal(goal);
+            context.getConnectionController().removeConnection(connection);
         } else {
-            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_DISCARD_GOAL_CANCEL));
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION_CANCEL));
             this.remove();
         }
     }

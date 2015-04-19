@@ -1,15 +1,19 @@
 package gamelogic.goal;
 
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -78,7 +82,12 @@ public abstract class GoalManager {
     }
 
     public static void addRandomGoalToPlayer(Player player) {
-        player.addGoal(generateRandom(PlayerManager.getTurnNumber()));
+        Goal goal = generateRandom(PlayerManager.getTurnNumber());
+        player.addGoal(goal);
+
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_GOAL, new ArrayList<>(
+                Arrays.asList(player, goal)
+        )));
     }
 
     /**

@@ -9,29 +9,48 @@ import fvs.taxe.dialog.ResourceDialogButtonClicked;
 import fvs.taxe.dialog.DialogResourceTrain;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Junction;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 import gamelogic.resource.TrainManager;
 
 public class TrainController {
     private Context context;
+    private EventReplayer eventReplayer;
 
     public TrainController(Context context) {
         this.context = context;
+        this.eventReplayer = context.getEventReplayer();
+
         gamelogic.player.PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                System.out.println("----------------------");
                 for (Player player : PlayerManager.getAllPlayers()){
                     for (Train train : player.getTrains()){
                         setTrainLocation(train);
 
                     }
+                }
+            }
+        });
+
+        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_TRAIN) {
+                    Train train = (Train) object;
+                    selected(train);
+                } else if (event == GameEvent.CLICKED_PLACE_TRAIN) {
+                    Train train = (Train) object;
+                    placeTrain(train);
                 }
             }
         });
@@ -46,7 +65,6 @@ public class TrainController {
     }
 
     public void setTrainLocation (Train train) {
-        System.out.println(train.getName() + " Is At Station: " + train.isAtStation());
         if (!train.isAtStation()) {
             train.setLocation(null);
         } else {
@@ -78,6 +96,8 @@ public class TrainController {
     }
 
     public void selected(Train train) {
+        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
+
         if (Game.getInstance().getState() != GameState.NORMAL) return;
         System.out.println("train clicked");
 
@@ -97,7 +117,7 @@ public class TrainController {
 
         if (train.getPosition() == null){
             ResourceDialogButtonClicked listener = new ResourceDialogButtonClicked(context, currentPlayer, train);
-            DialogResourceTrain dia = new DialogResourceTrain(train, context.getSkin(), train.getPosition() != null);
+            DialogResourceTrain dia = new DialogResourceTrain(train, context, train.getPosition() != null);
             dia.show(context.getStage());
             dia.subscribeClick(listener);
         } else {
@@ -106,6 +126,8 @@ public class TrainController {
     }
 
     public void placeTrain(final Train train) {
+        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN, train));
+
         Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
         Gdx.input.setCursorImage(pixmap, 8, 10);
         pixmap.dispose();
@@ -129,6 +151,7 @@ public class TrainController {
                 Gdx.input.setCursorImage(null, 0, 0);
 
                 TrainActor trainActor = renderTrain(train);
+                System.out.println("actor");
                 setTrainsVisible(null, true);
                 train.setActor(trainActor);
 
@@ -136,6 +159,5 @@ public class TrainController {
                 Game.getInstance().setState(GameState.NORMAL);
             }
         });
-
     }
 }

@@ -13,9 +13,11 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
 import fvs.taxe.dialog.DialogCreateConnection;
+import fvs.taxe.dialog.DialogRemoveConnection;
 import fvs.taxe.dialog.DialogRepairConnection;
 import fvs.taxe.dialog.DialogUpgradeConnection;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Connection;
 import gamelogic.map.Junction;
@@ -23,8 +25,14 @@ import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -106,6 +114,51 @@ public class ConnectionController {
                 endConnectionModifications();
             }
         });
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE) {
+                    enterCreateConnectionMode();
+                } else if (event == GameEvent.CLICKED_EDIT_CONNECTION_MODE) {
+                    enterEditConnectionMode();
+                } else if (event == GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE) {
+                    endConnectionModifications();
+                } else if (event == GameEvent.CLICKED_CONNECTION_BUTTON) {
+                    Connection connection = (Connection) object;
+                    setSelectedStations(connection);
+                } else if (event == GameEvent.CLICKED_STATION) {
+                    Station station = (Station) object;
+                    selectStation(station);
+                } else if (event == GameEvent.CLICKED_NEW_CONNECTION) {
+                    createConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL) {
+                    List<Object> connectionAndMaterial = (List) object;
+                    Connection connection = (Connection) connectionAndMaterial.get(0);
+                    Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
+                    createConnection(connection, material);
+                } else if (event == GameEvent.CLICKED_UPGRADE_CONNECTION) {
+                    upgradeConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL) {
+                    List<Object> connectionAndMaterial = (List) object;
+                    Connection connection = (Connection) connectionAndMaterial.get(0);
+                    Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
+                    upgradeConnection(connection, material);
+                } else if (event == GameEvent.CLICKED_REPAIR_CONNECTION) {
+                    repairConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT) {
+                    List<Object> connectionAndRepairAmount = (List) object;
+                    Connection connection = (Connection) connectionAndRepairAmount.get(0);
+                    float repairAmount = (float) connectionAndRepairAmount.get(1);
+                    repairConnection(connection, repairAmount);
+                } else if (event == GameEvent.CLICKED_REMOVE_CONNECTION) {
+                    removeConnection();
+                } else if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION) {
+                    Connection connection = (Connection) object;
+                    removeConnection(connection);
+                }
+            }
+        });
     }
 
     public static void payRent(Train train, Connection connection) {
@@ -130,9 +183,7 @@ public class ConnectionController {
         connectionButtons.addActor(done);
 
         if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
-            System.out.println("a");
                 if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                    System.out.println("c");
                     createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
                     connectionButtons.addActor(createConnection);
                 }
@@ -151,8 +202,7 @@ public class ConnectionController {
 
     private void selectStation(Station station) {
         GameState state = context.getGameLogic().getState();
-        if (!state.equals(GameState.CONNECTION_CREATE)
-                && !state.equals(GameState.CONNECTION_EDIT)) {
+        if (!state.equals(GameState.CONNECTION_CREATE)) {
             return;
         }
         if (selectedStations.contains(station)) {
@@ -175,12 +225,11 @@ public class ConnectionController {
             selectedConnection = new Connection(selectedStations.poll(), selectedStations.poll(), Connection.Material.BRONZE);
         } else {
             selectedConnection = map.getConnectionBetween(selectedStations.poll(), selectedStations.poll());
-        }showOptionButtons();
+        } showOptionButtons();
     }
 
-
-
     private void createConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_NEW_CONNECTION));
         if (selectedConnection == null) {
             context.getTopBarController().displayFlashMessage(
                     "You have not selected two stations", Color.BLACK, 1000);
@@ -193,21 +242,23 @@ public class ConnectionController {
     }
 
     private void upgradeConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_UPGRADE_CONNECTION));
         if (checkConnectionStatus("upgrade")) {
             new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
     }
 
     private void repairConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REPAIR_CONNECTION));
         if (checkConnectionStatus("repair")) {
             new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
         }
     }
 
     private void removeConnection() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REMOVE_CONNECTION));
         if (checkConnectionStatus("remove")) {
-            map.removeConnection(selectedConnection);
-            clearSelected();
+            new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
         }
     }
 
@@ -283,23 +334,28 @@ public class ConnectionController {
     }
 
     private void endConnectionModifications() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE));
         context.getGameLogic().setState(GameState.NORMAL);
         connectionButtons.remove();
         context.getTopBarController().clearFlashMessage();
     }
 
     public void enterCreateConnectionMode() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE));
         clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_CREATE);
         showOptionButtons();
     }
 
     public void enterEditConnectionMode() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_EDIT_CONNECTION_MODE));
         clearSelected();
         context.getGameLogic().setState(GameState.CONNECTION_EDIT);
         showOptionButtons();
     }
+
     public void setSelectedStations(gamelogic.map.Connection connection){
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON, connection));
         Station station1 = connection.getStation1();
         Station station2 = connection.getStation2();
         if (selectedStations.size() == 2) {
@@ -310,7 +366,6 @@ public class ConnectionController {
         selectConnection();
     }
     public void highlightConnection(Connection connection) {
-
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -329,6 +384,13 @@ public class ConnectionController {
 
     public void createConnection(Connection connection, Connection.Material material) {
         Player currentPlayer = PlayerManager.getCurrentPlayer();
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_CONNECTION, new ArrayList<>(
+                Arrays.asList(currentPlayer, connection, material)
+        )));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL, new ArrayList<>(
+                Arrays.asList(connection, material)
+        )));
+
         connection.upgrade(material);
         int connectionCost = connection.calculateCost();
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
@@ -341,9 +403,15 @@ public class ConnectionController {
             currentPlayer.spendMoney(connection.calculateCost());
             System.out.println("Purchased a " + material + " connection");
         }
+
+        clearSelected();
     }
 
     public void repairConnection(Connection connection, float repairThreshold) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT, new ArrayList<>(
+                Arrays.asList(connection, repairThreshold)
+        )));
+
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         int repairCost = connection.calculateRepairCost(repairThreshold);
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
@@ -355,20 +423,38 @@ public class ConnectionController {
             currentPlayer.spendMoney(repairCost);
             System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
         }
+
+        clearSelected();
     }
 
     public void upgradeConnection(Connection connection, Connection.Material material) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL, new ArrayList<>(
+                Arrays.asList(connection, material)
+        )));
+
         Player currentPlayer = PlayerManager.getCurrentPlayer();
-        connection.upgrade(material);
-        int upgradeCost = connection.calculateCost();
+        int upgradeCost = connection.calculateUpgradeCost(material);
         if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
                 currentPlayer.getMoney() <= upgradeCost) {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to upgrade connection", Color.BLACK, 1000);
         } else {
-            context.getGameLogic().getMap().addConnection(connection);
-            currentPlayer.spendMoney(connection.calculateCost());
+            connection.upgrade(material);
+            currentPlayer.spendMoney(upgradeCost);
             System.out.println("Upgraded a connection to " + material);
         }
+
+        clearSelected();
+    }
+
+    public void removeConnection(Connection connection) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION, connection));
+
+        // Added twice for some reason on replay
+        while (map.getConnections().contains(connection)) {
+            map.removeConnection(connection);
+        }
+
+        clearSelected();
     }
 }

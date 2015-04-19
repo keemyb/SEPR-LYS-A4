@@ -38,6 +38,10 @@ public class Goal {
         updateGoal();
     }
 
+    public void resetComplete() {
+        complete = false;
+    }
+
     public boolean isComplete(Train train) {
         if (!train.historyContains(origin, turnIssued)) return false;
         if (!train.historyContains(destination, turnIssued)) return false;

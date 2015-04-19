@@ -1,14 +1,15 @@
 package fvs.taxe.dialog;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.controller.Context;
 import gamelogic.game.Game;
+import gamelogic.game.GameEvent;
 import gamelogic.map.Connection;
-import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
+import gamelogic.replay.EventReplayer;
+import gamelogic.replay.ReplayEvent;
+import gamelogic.replay.ReplayListener;
 
 public class DialogRepairConnection extends Dialog {
 
@@ -36,6 +37,16 @@ public class DialogRepairConnection extends Dialog {
         }
 
         button("Cancel", "CANCEL");
+
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
+            @Override
+            public void replay(GameEvent event, Object object) {
+                if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT ||
+                        event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT_CANCEL) {
+                    result("CANCEL");
+                }
+            }
+        });
     }
 
     @Override
@@ -51,9 +62,12 @@ public class DialogRepairConnection extends Dialog {
     }
 
     @Override
-    protected void result(Object obj) {
-        if (!(obj instanceof Float)) return;
-
-        context.getConnectionController().repairConnection(connection, (float) obj);
+    protected void result(Object object) {
+        if (object == "CANCEL") {
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT_CANCEL));
+            this.remove();
+        } else {
+            context.getConnectionController().repairConnection(connection, (float) object);
+        }
     }
 }

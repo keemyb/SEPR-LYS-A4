@@ -54,7 +54,7 @@ public class DialogStartReplay extends Dialog {
         @Override
         protected void result(Object obj) {
             if (obj == "REPLAY") {
-                context.getReplayController().startReplay();
+                context.getEventReplayer().start();
             } else {
                 Gdx.app.exit();
             }

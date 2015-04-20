@@ -51,7 +51,7 @@ public class TopBarController {
             }
         });
 
-        context.getEventReplayer().subscribeReplayEvent(new ReplayListener() {
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_END_TURN) {
@@ -59,6 +59,20 @@ public class TopBarController {
                 }
             }
         });
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                refreshButtons(isReplaying);
+            }
+        });
+
+        addPauseReplayButton();
+        addPlayReplayButton();
+        addReplaySlider();
+        addEndTurnButton();
+        addCreateConnectionButton();
+        refreshButtons(EventReplayer.isReplaying());
 
         createFlashActor();
     }
@@ -104,12 +118,12 @@ public class TopBarController {
         game.shapeRenderer.end();
     }
 
-    public void showButtons() {
-        addPauseReplayButton();
-        addPlayReplayButton();
-        addReplaySlider();
-        addEndTurnButton();
-        addCreateConnectionButton();
+    public void refreshButtons(boolean isReplaying) {
+        pauseReplayButton.setVisible(isReplaying);
+        playReplayButton.setVisible(isReplaying);
+        replaySpeedSlider.setVisible(isReplaying);
+        createConnectionButton.setVisible(!isReplaying);
+        endTurnButton.setVisible(!isReplaying);
     }
 
     private void addEndTurnButton() {
@@ -118,7 +132,7 @@ public class TopBarController {
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_END_TURN));
+                EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_END_TURN));
                 PlayerManager.turnOver();
             }
         });
@@ -126,6 +140,8 @@ public class TopBarController {
         context.getGameLogic().subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
+                if (EventReplayer.isReplaying()) return;
+
                 if (state == GameState.NORMAL) {
                     endTurnButton.setVisible(true);
                 } else {
@@ -149,13 +165,6 @@ public class TopBarController {
 
         pauseReplayButton.setVisible(EventReplayer.isReplaying());
 
-        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
-            @Override
-            public void changed(boolean isReplaying) {
-                pauseReplayButton.setVisible(isReplaying);
-            }
-        });
-
         context.getStage().addActor(pauseReplayButton);
     }
 
@@ -170,13 +179,6 @@ public class TopBarController {
         });
 
         playReplayButton.setVisible(EventReplayer.isReplaying());
-
-        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
-            @Override
-            public void changed(boolean isReplaying) {
-                playReplayButton.setVisible(isReplaying);
-            }
-        });
 
         context.getStage().addActor(playReplayButton);
     }
@@ -197,13 +199,6 @@ public class TopBarController {
             }
         });
 
-        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
-            @Override
-            public void changed(boolean isReplaying) {
-                replaySpeedSlider.setVisible(isReplaying);
-            }
-        });
-
         context.getStage().addActor(replaySpeedSlider);
     }
 
@@ -220,6 +215,8 @@ public class TopBarController {
         context.getGameLogic().subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
+                if (EventReplayer.isReplaying()) return;
+
                 if (state == GameState.NORMAL) {
                     createConnectionButton.setVisible(true);
                 } else {

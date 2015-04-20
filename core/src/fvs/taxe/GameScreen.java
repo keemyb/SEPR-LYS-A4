@@ -159,7 +159,6 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        topBarController.showButtons();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 

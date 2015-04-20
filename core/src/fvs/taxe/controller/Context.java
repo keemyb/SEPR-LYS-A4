@@ -2,9 +2,19 @@ package fvs.taxe.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import fvs.taxe.MainMenuScreen;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.Game;
+import gamelogic.map.Connection;
+import gamelogic.map.Junction;
+import gamelogic.map.Map;
+import gamelogic.map.Station;
+import gamelogic.player.Player;
+import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
+import gamelogic.resource.Train;
+
+import java.util.ArrayList;
 
 public class Context {
     private TaxeGame taxeGame;
@@ -25,6 +35,44 @@ public class Context {
         this.taxeGame = taxeGame;
         this.gameLogic = gameLogic;
         eventReplayer = new EventReplayer(this);
+    }
+
+    public void resetGame() {
+        PlayerManager.reset();
+        clearTrainActors();
+        resetMapAttributes();
+        resetPlayerAttributes();
+    }
+
+    private void clearTrainActors() {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            for (Train train : player.getTrains()) {
+                train.reset();
+            }
+        }
+    }
+
+    private void resetMapAttributes() {
+        Map map = getGameLogic().getMap();
+
+        for (Connection connection : new ArrayList<>(map.getConnections())) {
+            if (connection.getOwner() != null) {
+                map.removeConnection(connection);
+            }
+        }
+
+        for (Station station : map.getStations()) {
+            if (!(station instanceof Junction)) continue;
+
+            Junction junction = (Junction) station;
+            junction.reset();
+        }
+    }
+
+    private void resetPlayerAttributes() {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            player.reset();
+        }
     }
 
     public Stage getStage() {
@@ -93,5 +141,12 @@ public class Context {
 
     public void setResourceController(ResourceController resourceController) {
         this.resourceController = resourceController;
+    }
+
+    public void backToMainMenu() {
+        eventReplayer.stop();
+        resetGame();
+        taxeGame.setScreen(new MainMenuScreen(taxeGame));
+        getGameLogic().givePlayersGoalAndTrains();
     }
 }

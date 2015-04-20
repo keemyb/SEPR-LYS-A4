@@ -2,13 +2,6 @@ package gamelogic.replay;
 
 import fvs.taxe.controller.*;
 import gamelogic.game.GameEvent;
-import gamelogic.map.Connection;
-import gamelogic.map.Junction;
-import gamelogic.map.Map;
-import gamelogic.map.Station;
-import gamelogic.player.Player;
-import gamelogic.player.PlayerManager;
-import gamelogic.resource.Train;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +41,6 @@ public class EventReplayer {
 
     public static void saveReplayEvent(ReplayEvent event) {
         if (isReplaying) return;
-        System.out.println(event.gameEvent);
         eventInstances.add(event);
     }
 
@@ -57,47 +49,12 @@ public class EventReplayer {
     }
 
     public void start() {
-        System.out.println("---start---");
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
 
         setReplaying(true);
 
-        PlayerManager.reset();
-        clearTrainActors();
-        resetMapAttributes();
-        resetPlayerAttributes();
-    }
-
-    private void clearTrainActors() {
-        for (Player player : PlayerManager.getAllPlayers()) {
-            for (Train train : player.getTrains()) {
-                train.reset();
-            }
-        }
-    }
-
-    private void resetMapAttributes() {
-        Map map = context.getGameLogic().getMap();
-
-        for (Connection connection : new ArrayList<>(map.getConnections())) {
-            if (connection.getOwner() != null) {
-                map.removeConnection(connection);
-            }
-        }
-
-        for (Station station : map.getStations()) {
-            if (!(station instanceof Junction)) continue;
-
-            Junction junction = (Junction) station;
-            junction.reset();
-        }
-    }
-
-    private void resetPlayerAttributes() {
-        for (Player player : PlayerManager.getAllPlayers()) {
-            player.reset();
-        }
+        context.resetGame();
     }
 
     public void play() {
@@ -125,6 +82,12 @@ public class EventReplayer {
         timer.stop();
     }
 
+    public void stop() {
+        pause();
+        setReplaying(false);
+        eventInstances.clear();
+    }
+
     public boolean anyMoreEventsToPlay() {
         return eventInstanceToPlayNext != null;
     }
@@ -134,7 +97,6 @@ public class EventReplayer {
     }
 
     public void fireReplayEvent(GameEvent gameEvent, Object object) {
-        System.out.println(gameEvent);
         for (ReplayListener listener : new ArrayList<>(replayListeners)) {
             listener.replay(gameEvent, object);
         }

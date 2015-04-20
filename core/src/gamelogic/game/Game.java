@@ -44,7 +44,7 @@ public class Game {
         return instance;
     }
 
-    private void givePlayersGoalAndTrains() {
+    public void givePlayersGoalAndTrains() {
         if (EventReplayer.isReplaying()) return;
 
         for (Player player : PlayerManager.getAllPlayers()) {

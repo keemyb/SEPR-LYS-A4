@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import fvs.taxe.controller.*;
-import fvs.taxe.dialog.DialogStartReplay;
+import fvs.taxe.dialog.DialogGameOver;
 import gamelogic.game.Game;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
@@ -88,8 +88,8 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void changed(GameState state) {
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
-                    DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
-                    dialogStartReplay.show(stage);
+                    DialogGameOver dialogGameOver = new DialogGameOver(context, skin);
+                    dialogGameOver.show(stage);
                 }
                 if (state != GameState.ANIMATING) {
                     topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);

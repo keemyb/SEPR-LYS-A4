@@ -92,8 +92,4 @@ public abstract class PlayerManager {
     public static int getTurnNumber() {
         return turnNumber;
     }
-
-    public static void setTurnNumber(int newTurnNumber) {
-        turnNumber = newTurnNumber;
-    }
 }

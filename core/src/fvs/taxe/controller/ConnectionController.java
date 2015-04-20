@@ -32,36 +32,34 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectionController {
-    public final static int CONNECTION_LINE_WIDTH = 5;
-
+    public static final int CONNECTION_LINE_WIDTH = 5;
+    private static final float RELATIVE_STATION_HIGHLIGHT_SIZE = 1.7f;
     private static final int MAX_NEW_CONNECTIONS_PER_TURN = 1;
-    private int numberOfNewConnectionsThisTurn = 0;
 
-    Context context;
-    Map map;
-    TaxeGame game;
+    private static final Color SELECTED_STATION_COLOUR = new Color(255/255.0f, 137/255.0f, 0f, 0.70f);
+    private static final Color HOVERED_CONNECTION_COLOUR = new Color(255/255.0f, 200/255.0f, 20/255.0f, 0.6f);
+    private static final Color VALID_TEMPORARY_CONNECTION_COLOUR = new Color(0.2f, 1f, 0.2f, 1f);
+    private static final Color INVALID_TEMPORARY_CONNECTION_COLOUR = new Color(1f, 0f, 0f, 1f);
+    private static final Color EXISTING_CONNECTION_COLOUR = new Color(0f, 0f, 1f, 1f);
 
-    Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
-    Connection selectedConnection;
-    Connection hoveredConnection;
+    private Context context;
+    private Map map;
+    private TaxeGame game;
 
-    private TextButton createConnection;
-    private TextButton done;
     private Group connectionButtons = new Group();
+    private TextButton createConnectionButton;
+    private TextButton doneButton;
 
-    private float relativeStationHighlightSize = 1.7f;
-
-    private Color selectedStationColour = new Color(255/255.0f, 137/255.0f, 0f, 0.70f);
-    private Color hoveredConnectionColour = new Color(255/255.0f, 200/255.0f, 20/255.0f, 0.6f);
-    private Color validTemporaryConnectionColour = new Color(0.2f, 1f, 0.2f, 1f);
-    private Color invalidTemporaryConnectionColour = new Color(1f, 0f, 0f, 1f);
-    private Color existingConnectionColour = new Color(0f, 0f, 1f, 1f);
+    private int numberOfNewConnectionsThisTurn = 0;
+    private Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
+    private Connection selectedConnection;
+    private Connection hoveredConnection;
 
     public ConnectionController(Context context) {
         this.context = context;
         game = context.getTaxeGame();
-        createConnection = new TextButton("Create Connection", context.getSkin());
-        done = new TextButton("Done", context.getSkin());
+        createConnectionButton = new TextButton("Create Connection", context.getSkin());
+        doneButton = new TextButton("Done", context.getSkin());
 
         map = context.getGameLogic().getMap();
 
@@ -72,14 +70,14 @@ public class ConnectionController {
             }
         });
 
-        createConnection.addListener(new ClickListener() {
+        createConnectionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 createConnection();
             }
         });
 
-        done.addListener(new ClickListener() {
+        doneButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 endConnectionModifications();
@@ -137,12 +135,12 @@ public class ConnectionController {
         });
     }
 
-    public static void payRent(Train train, Connection connection) {
+    private static void payRent(Train train, Connection connection) {
         Player payer = train.getPlayer();
         payer.payConnectionRent(connection);
     }
 
-    public static void damageConnection(Train train, Connection connection) {
+    private static void damageConnection(Train train, Connection connection) {
         connection.inflictDamage(train);
     }
 
@@ -155,13 +153,13 @@ public class ConnectionController {
         GameState state = context.getGameLogic().getState();
 
         connectionButtons.clearChildren();
-        done.setPosition(TaxeGame.WORLD_WIDTH - 70, TaxeGame.WORLD_HEIGHT - 33);
-        connectionButtons.addActor(done);
+        doneButton.setPosition(TaxeGame.WORLD_WIDTH - 70, TaxeGame.WORLD_HEIGHT - 33);
+        connectionButtons.addActor(doneButton);
 
         if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
             if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
-                connectionButtons.addActor(createConnection);
+                createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
+                connectionButtons.addActor(createConnectionButton);
             }
         }
 
@@ -253,15 +251,15 @@ public class ConnectionController {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.setColor(selectedStationColour);
+        game.shapeRenderer.setColor(SELECTED_STATION_COLOUR);
 
         int width;
 
         for (Station station : selectedStations) {
             if (station instanceof Junction) {
-                width = (int) (JunctionActor.width * relativeStationHighlightSize) / 2;
+                width = (int) (JunctionActor.width * RELATIVE_STATION_HIGHLIGHT_SIZE) / 2;
             } else {
-                width = (int) (StationActor.width * relativeStationHighlightSize) / 2;
+                width = (int) (StationActor.width * RELATIVE_STATION_HIGHLIGHT_SIZE) / 2;
             }
             game.shapeRenderer.circle(station.getLocation().getX(),
                     station.getLocation().getY(), width);
@@ -280,12 +278,12 @@ public class ConnectionController {
 
         if (context.getGameLogic().getState().equals(GameState.CONNECTION_CREATE)) {
             if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                game.shapeRenderer.setColor(validTemporaryConnectionColour);
+                game.shapeRenderer.setColor(VALID_TEMPORARY_CONNECTION_COLOUR);
             } else {
-                game.shapeRenderer.setColor(invalidTemporaryConnectionColour);
+                game.shapeRenderer.setColor(INVALID_TEMPORARY_CONNECTION_COLOUR);
             }
         } else {
-            game.shapeRenderer.setColor(existingConnectionColour);
+            game.shapeRenderer.setColor(EXISTING_CONNECTION_COLOUR);
         }
 
         game.shapeRenderer.rectLine(selectedConnection.getStation1().getLocation().getX(),
@@ -334,14 +332,14 @@ public class ConnectionController {
         selectConnection();
     }
 
-    public void drawHoveredConnection() {
+    private void drawHoveredConnection() {
         if (hoveredConnection == null) return;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        game.shapeRenderer.setColor(hoveredConnectionColour);
+        game.shapeRenderer.setColor(HOVERED_CONNECTION_COLOUR);
 
         game.shapeRenderer.rectLine(hoveredConnection.getStation1().getLocation().getX(),
                 hoveredConnection.getStation1().getLocation().getY(),
@@ -372,8 +370,7 @@ public class ConnectionController {
             numberOfNewConnectionsThisTurn++;
             context.getGameLogic().getMap().addConnection(connection);
             currentPlayer.addOwnedConnection(connection);
-            currentPlayer.spendMoney(connection.calculateCost());
-            System.out.println("Purchased a " + material + " connection");
+            currentPlayer.spendMoney(connectionCost);
         }
 
         endConnectionModifications();
@@ -393,7 +390,6 @@ public class ConnectionController {
         } else {
             connection.repair(repairThreshold);
             currentPlayer.spendMoney(repairCost);
-            System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
         }
 
         endConnectionModifications();
@@ -413,7 +409,6 @@ public class ConnectionController {
         } else {
             connection.upgrade(material);
             currentPlayer.spendMoney(upgradeCost);
-            System.out.println("Upgraded a connection to " + material);
         }
 
         endConnectionModifications();
@@ -430,7 +425,7 @@ public class ConnectionController {
         endConnectionModifications();
     }
 
-    public boolean canBeRemoved(Connection connection) {
+    private boolean canBeRemoved(Connection connection) {
         for (Player player : PlayerManager.getAllPlayers()) {
             for (Train train : player.getTrains()) {
                 List<Station> route = train.getRoute();

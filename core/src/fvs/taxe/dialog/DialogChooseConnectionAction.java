@@ -14,7 +14,7 @@ public class DialogChooseConnectionAction extends Dialog {
     private Context context;
 
     public DialogChooseConnectionAction(Connection connection, Context context) {
-        super(connection.toString(), context.getSkin());
+        super(context.getConnectionController().getConnectionHealthString(connection), context.getSkin());
 
         this.context = context;
 

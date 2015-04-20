@@ -142,9 +142,7 @@ public class ResourceController {
         for (Connection connection : player.getConnectionsOwned()) {
             ConnectionClicked listener = new ConnectionClicked(context, connection);
 
-            String connectionString = connection.getStation1().getName() + " to " + connection.getStation2().getName();
-
-            TextButton button = new TextButton(connectionString, context.getSkin());
+            TextButton button = new TextButton(context.getConnectionController().getConnectionHealthString(connection), context.getSkin());
             button.setPosition(x, y);
             button.addListener(listener);
 

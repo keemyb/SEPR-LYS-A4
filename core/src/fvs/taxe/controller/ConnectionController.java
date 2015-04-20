@@ -407,4 +407,11 @@ public class ConnectionController {
 
         endConnectionModifications();
     }
+
+    public String getConnectionHealthString(Connection connection) {
+        String connectionString = connection.getStation1().getName() + " to " + connection.getStation2().getName();
+        String currentHealth = String.valueOf((int) (connection.getHealth() * 100)) + '%';
+        connectionString += " ( Health: " + currentHealth + " ) ";
+        return connectionString;
+    }
 }

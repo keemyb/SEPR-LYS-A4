@@ -5,8 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
+import fvs.taxe.dialog.DialogStartReplay;
 import fvs.taxe.dialog.TrainClicked;
+import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
+import gamelogic.game.GameState;
+import gamelogic.game.GameStateListener;
 import gamelogic.goal.Goal;
 import gamelogic.map.Connection;
 import gamelogic.player.Player;
@@ -30,10 +34,17 @@ public class ResourceController {
     public ResourceController(final Context context) {
         this.context = context;
 
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                refresh();
+            }
+        });
+
         PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                drawPlayerResources(PlayerManager.getCurrentPlayer());
+                refresh();
             }
         });
 
@@ -87,6 +98,11 @@ public class ResourceController {
         player.getConnectionsOwned().add(connection);
     }
 
+    public void refresh() {
+        drawHeaderText();
+        drawPlayerResources();
+    }
+
     public void drawHeaderText() {
         TaxeGame game = context.getTaxeGame();
 
@@ -113,9 +129,11 @@ public class ResourceController {
         game.batch.end();
     }
 
-    public void drawPlayerResources(Player player) {
+    public void drawPlayerResources() {
         float x = SPACE_BETWEEN_RESOURCES_X;
         float y;
+
+        Player player = PlayerManager.getCurrentPlayer();
 
         resourceButtons.remove();
         resourceButtons.clear();

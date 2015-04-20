@@ -86,4 +86,12 @@ public class Context {
     public void setTrainController(TrainController trainController) {
         this.trainController = trainController;
     }
+
+    public ResourceController getResourceController() {
+        return resourceController;
+    }
+
+    public void setResourceController(ResourceController resourceController) {
+        this.resourceController = resourceController;
+    }
 }

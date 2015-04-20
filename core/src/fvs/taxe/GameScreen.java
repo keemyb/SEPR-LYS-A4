@@ -67,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
 
         context.setConnectionController(connectionController);
         context.setGoalController(goalController);
+        context.setResourceController(resourceController);
         context.setRouteController(routeController);
         context.setTopBarController(topBarController);
         context.setTrainController(trainController);
@@ -86,7 +87,6 @@ public class GameScreen extends ScreenAdapter {
         gameLogic.subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
-                resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
                 if (PlayerManager.getTurnNumber() == gameLogic.totalTurns && state == GameState.NORMAL) {
                     DialogStartReplay dialogStartReplay = new DialogStartReplay(context, skin);
                     dialogStartReplay.show(stage);
@@ -138,7 +138,7 @@ public class GameScreen extends ScreenAdapter {
             connectionController.drawSelectedConnection();
         }
 
-        resourceController.drawHeaderText();
+        resourceController.refresh();
         goalController.showCurrentPlayerGoals();
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -159,7 +159,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
+        resourceController.refresh();
     }
 
     @Override

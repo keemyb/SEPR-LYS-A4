@@ -139,7 +139,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         resourceController.refresh();
-        goalController.showCurrentPlayerGoals();
+        goalController.refresh();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

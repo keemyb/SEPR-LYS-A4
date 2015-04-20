@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoalController {
+	private static final float MY_GOALS_Y = (float) TaxeGame.WORLD_HEIGHT - TopBarController.CONTROLS_HEIGHT - 10f;
+	private static final float SPACE_BETWEEN_GOALS_X = 10f;
+	private static final float SPACE_BETWEEN_GOALS_Y = 30f;
+	private static final float SPACE_AFTER_HEADER_Y = 50f;
+
     private Context context;
     private Group goalButtons = new Group();
 
@@ -61,16 +66,28 @@ public class GoalController {
 		return goals;
 	}
 
-    public void showCurrentPlayerGoals() {
+	public void refresh() {
+		drawHeaderText();
+		drawPlayerGoals();
+	}
+
+    public void drawHeaderText() {
+		TaxeGame game = context.getTaxeGame();
+
+		game.batch.begin();
+		game.fontSmall.setColor(Color.BLACK);
+
+		game.fontSmall.draw(game.batch, "My Goals: ", SPACE_BETWEEN_GOALS_X, MY_GOALS_Y);
+
+		game.batch.end();
+	}
+
+	public void drawPlayerGoals() {
+		float x = SPACE_BETWEEN_GOALS_X;
+		float y = MY_GOALS_Y - SPACE_AFTER_HEADER_Y;
 
 		goalButtons.remove();
 		goalButtons.clear();
-
-		float top = (float) TaxeGame.WORLD_HEIGHT;
-		float x = 10.0f;
-		float y = top - 10.0f - TopBarController.CONTROLS_HEIGHT;
-
-		y -= 15;
 
 		for (Goal goal : playerGoals()) {
 			TextButton button = new TextButton(goal.toString(), context.getSkin());
@@ -80,28 +97,11 @@ public class GoalController {
 			button.addListener(listener);
 
 			goalButtons.addActor(button);
-			y -= 30;
+			y -= SPACE_BETWEEN_GOALS_Y;
 		}
 
 		context.getStage().addActor(goalButtons);
 	}
-    
-    public void showCurrentPlayerHeader() {
-		TaxeGame game = context.getTaxeGame();
-
-		float top = (float) TaxeGame.WORLD_HEIGHT;
-		float x = 10.0f;
-		float y = top - 10.0f - TopBarController.CONTROLS_HEIGHT;
-
-		game.batch.begin();
-		game.fontSmall.setColor(Color.BLACK);
-		game.fontSmall.draw(game.batch, playerGoalHeader(), x, y);
-		game.batch.end();
-	}
-
-    private String playerGoalHeader() {
-        return "Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + " Goals:";
-    }
 
     public void discardGoal(Goal goal) {
         for (Player player : PlayerManager.getAllPlayers()) {

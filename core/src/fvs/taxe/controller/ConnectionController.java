@@ -24,6 +24,7 @@ import gamelogic.map.Junction;
 import gamelogic.map.Map;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
+import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
@@ -61,6 +62,9 @@ public class ConnectionController {
     // Workaround for the fact that the buttons take up lots of space
     private String dirtyPaddingHack = "                                                           " +
                                       "                                                           ";
+
+    private static final int MAX_NEW_CONNECTIONS_PER_TURN = 1;
+    private int numberOfNewConnectionsThisTurn = 0;
 
     public ConnectionController(Context context) {
         this.context = context;
@@ -157,6 +161,13 @@ public class ConnectionController {
                     Connection connection = (Connection) object;
                     removeConnection(connection);
                 }
+            }
+        });
+
+        PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
+            @Override
+            public void changed() {
+                numberOfNewConnectionsThisTurn = 0;
             }
         });
     }
@@ -342,9 +353,18 @@ public class ConnectionController {
 
     public void enterCreateConnectionMode() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE));
-        clearSelected();
-        context.getGameLogic().setState(GameState.CONNECTION_CREATE);
-        showOptionButtons();
+        if (numberOfNewConnectionsThisTurn == MAX_NEW_CONNECTIONS_PER_TURN) {
+            String message = "You can only make " + MAX_NEW_CONNECTIONS_PER_TURN + " connection";
+            if (MAX_NEW_CONNECTIONS_PER_TURN > 1) {
+                message += "s";
+            }
+            message += " per turn";
+            context.getTopBarController().displayFlashMessage(message, Color.BLACK, 1000);
+        } else {
+            clearSelected();
+            context.getGameLogic().setState(GameState.CONNECTION_CREATE);
+            showOptionButtons();
+        }
     }
 
     public void enterEditConnectionMode() {
@@ -398,6 +418,7 @@ public class ConnectionController {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to create connection", Color.BLACK, 1000);
         } else {
+            numberOfNewConnectionsThisTurn++;
             context.getGameLogic().getMap().addConnection(connection);
             currentPlayer.addOwnedConnection(connection);
             currentPlayer.spendMoney(connection.calculateCost());

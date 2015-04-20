@@ -3,7 +3,9 @@ package gamelogic.replay;
 import fvs.taxe.controller.*;
 import gamelogic.game.GameEvent;
 import gamelogic.map.Connection;
+import gamelogic.map.Junction;
 import gamelogic.map.Map;
+import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.resource.Train;
@@ -80,6 +82,13 @@ public class EventReplayer {
             if (connection.getOwner() != null) {
                 map.removeConnection(connection);
             }
+        }
+
+        for (Station station : map.getStations()) {
+            if (!(station instanceof Junction)) continue;
+
+            Junction junction = (Junction) station;
+            junction.reset();
         }
     }
 

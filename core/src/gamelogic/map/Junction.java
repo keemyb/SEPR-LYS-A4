@@ -32,4 +32,10 @@ public class Junction extends Station {
             ((JunctionActor) this.getActor()).setBroken();
     }
 
+    public void reset() {
+        failureDuration = 0;
+        JunctionActor junctionActor = (JunctionActor) getActor();
+        junctionActor.setDefault();
+    }
+
 }

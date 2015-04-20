@@ -32,7 +32,6 @@ public class TopBarController {
     private TextButton pauseReplayButton;
     private Slider replaySpeedSlider;
     private TextButton createConnectionButton;
-    private TextButton editConnectionButton;
     private Label flashMessage;
 
     public TopBarController(Context context) {
@@ -81,10 +80,10 @@ public class TopBarController {
         flashMessage.setColor(color);
         flashMessage.setPosition(TaxeGame.WORLD_WIDTH / 2 - flashMessage.getTextBounds().width / 2, TaxeGame.WORLD_HEIGHT - 24);
         flashMessage.addAction(sequence(delay(time), fadeOut(0.25f), run(new Runnable() {
-                    public void run() {
-                        displayMessage(saveText, Color.BLACK);
-                    }
-                })));
+            public void run() {
+                displayMessage(saveText, Color.BLACK);
+            }
+        })));
     }
 
     public void displayMessage(String message, Color color) {
@@ -105,7 +104,15 @@ public class TopBarController {
         game.shapeRenderer.end();
     }
 
-    public void addEndTurnButton() {
+    public void showButtons() {
+        addPauseReplayButton();
+        addPlayReplayButton();
+        addReplaySlider();
+        addEndTurnButton();
+        addCreateConnectionButton();
+    }
+
+    private void addEndTurnButton() {
         endTurnButton = new TextButton("End Turn", context.getSkin());
         endTurnButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
         endTurnButton.addListener(new ClickListener() {
@@ -130,7 +137,7 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
-    public void addPauseReplayButton() {
+    private void addPauseReplayButton() {
         pauseReplayButton = new TextButton("Pause", context.getSkin());
         pauseReplayButton.setPosition(50f, TaxeGame.WORLD_HEIGHT - 33.0f);
         pauseReplayButton.addListener(new ClickListener() {
@@ -152,7 +159,7 @@ public class TopBarController {
         context.getStage().addActor(pauseReplayButton);
     }
 
-    public void addPlayReplayButton() {
+    private void addPlayReplayButton() {
         playReplayButton = new TextButton("Play", context.getSkin());
         playReplayButton.setPosition(0f, TaxeGame.WORLD_HEIGHT - 33.0f);
         playReplayButton.addListener(new ClickListener() {
@@ -174,7 +181,7 @@ public class TopBarController {
         context.getStage().addActor(playReplayButton);
     }
 
-    public void addReplaySlider() {
+    private void addReplaySlider() {
         replaySpeedSlider = new Slider(EventReplayer.MIN_PLAYBACK_SPEED,
                 EventReplayer.MAX_PLAYBACK_SPEED,
                 (EventReplayer.MAX_PLAYBACK_SPEED - EventReplayer.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
@@ -200,7 +207,7 @@ public class TopBarController {
         context.getStage().addActor(replaySpeedSlider);
     }
 
-    public void addCreateConnectionButton() {
+    private void addCreateConnectionButton() {
         createConnectionButton = new TextButton("Add Track", context.getSkin());
         createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 200.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
         createConnectionButton.addListener(new ClickListener() {

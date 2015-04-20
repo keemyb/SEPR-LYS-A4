@@ -82,6 +82,7 @@ public class GameScreen extends ScreenAdapter {
                 }
             }
         });
+
         gameLogic.subscribeStateChanged(new GameStateListener() {
             @Override
             public void changed(GameState state) {
@@ -158,11 +159,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stationController.renderStations();
-        topBarController.addPauseReplayButton();
-        topBarController.addPlayReplayButton();
-        topBarController.addReplaySlider();
-        topBarController.addEndTurnButton();
-        topBarController.addCreateConnectionButton();
+        topBarController.showButtons();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 

@@ -68,6 +68,7 @@ public class TrainMoveController {
                 System.out.println("Added to history: passed " + station.getName() + " on turn "
                         + PlayerManager.getTurnNumber());
                 collisions(station);
+                train.getRoute().remove(station);
             }
         };
     }

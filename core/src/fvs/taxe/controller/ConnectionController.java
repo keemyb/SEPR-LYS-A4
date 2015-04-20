@@ -222,7 +222,11 @@ public class ConnectionController {
 
     public void showRemoveConnectionDialog() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REMOVE_CONNECTION));
-        new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
+        if (canBeRemoved(selectedConnection)) {
+            new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
+        } else {
+            context.getTopBarController().displayFlashMessage("Cannot remove this connection as a train will be using it", Color.BLACK, 1000);
+        }
     }
 
     private void clearSelected() {
@@ -406,6 +410,22 @@ public class ConnectionController {
         }
 
         endConnectionModifications();
+    }
+
+    public boolean canBeRemoved(Connection connection) {
+        for (Player player : PlayerManager.getAllPlayers()) {
+            for (Train train : player.getTrains()) {
+                List<Station> route = train.getRoute();
+                for (int i = 0; i < route.size() - 1; i++) {
+                    Station currentStation = route.get(i);
+                    Station nextStation = route.get(i + 1);
+                    if (connection.equals(map.getConnectionBetween(currentStation, nextStation))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public String getConnectionHealthString(Connection connection) {

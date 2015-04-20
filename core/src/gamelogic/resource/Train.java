@@ -180,6 +180,7 @@ public class Train extends Resource {
     public void setLocation(Station location) {
         this.location = location;
     }
+
     public boolean isAtStation() {
         return isAtStation;
     }

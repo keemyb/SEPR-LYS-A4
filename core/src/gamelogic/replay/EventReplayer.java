@@ -48,6 +48,7 @@ public class EventReplayer {
 
     public static void saveReplayEvent(ReplayEvent event) {
         if (isReplaying) return;
+        System.out.println(event.gameEvent);
         eventInstances.add(event);
     }
 
@@ -56,6 +57,7 @@ public class EventReplayer {
     }
 
     public void start() {
+        System.out.println("---start---");
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
 
@@ -132,6 +134,7 @@ public class EventReplayer {
     }
 
     public void fireReplayEvent(GameEvent gameEvent, Object object) {
+        System.out.println(gameEvent);
         for (ReplayListener listener : new ArrayList<>(replayListeners)) {
             listener.replay(gameEvent, object);
         }

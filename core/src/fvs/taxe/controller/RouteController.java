@@ -175,7 +175,7 @@ public class RouteController {
     }
 
     private void confirmRoute() {
-        if (stations.isEmpty()) {
+        if (stations.isEmpty() || stations.get(0) == train.getLocation()) {
             cancelRouting();
         } else {
             train.setRoute(stations);

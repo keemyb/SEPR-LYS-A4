@@ -1,7 +1,6 @@
 package fvs.taxe.controller;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -10,20 +9,17 @@ import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
-import fvs.taxe.dialog.DialogMultitrain;
-import gamelogic.game.Game;
+import fvs.taxe.actor.TrainActor;
+import fvs.taxe.dialog.DialogMultipleTrain;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
-import gamelogic.map.Connection;
 import gamelogic.map.Junction;
-import gamelogic.map.Position;
 import gamelogic.map.Station;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
-import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
 import java.util.List;
@@ -35,7 +31,7 @@ public class StationController {
     their handler's method, one case unsubscribes from the event removing itself from this list
     and this list implementation supports removing elements whilst iterating through it
     */
-    private static List<StationClickListener> stationClickListeners = new CopyOnWriteArrayList<StationClickListener>();
+    private static List<StationClickListener> stationClickListeners = new CopyOnWriteArrayList<>();
     private Context context;
     private Tooltip tooltip;
 
@@ -48,7 +44,7 @@ public class StationController {
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_STATION) {
                     Station station = (Station) object;
-                    stationClicked(station);
+                    clickedStation(station);
                 }
             }
         });
@@ -72,11 +68,34 @@ public class StationController {
         stationClickListeners.remove(listener);
     }
 
-    private void stationClicked(Station station) {
+    private void clickedStation(Station station) {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_STATION, station));
+
+        // Saving the state in case it is changed by a listener.
+        GameState gameState = context.getGameLogic().getState();
+
         for (StationClickListener listener : stationClickListeners) {
             listener.clicked(station);
         }
+
+        if (gameState == GameState.NORMAL) {
+            Player currentPlayer = PlayerManager.getCurrentPlayer();
+
+            List<Train> trainsAtStation = station.getTrainsAtStation();
+            int numberOfTrains = trainsAtStation.size();
+
+            if (numberOfTrains == 1) {
+                Train onlyTrain = trainsAtStation.get(0);
+                if (onlyTrain.isOwnedBy(currentPlayer)){
+                    context.getRouteController().beginRouting(onlyTrain);
+                } else {
+                    context.getTopBarController().displayFlashMessage("Opponent's " + onlyTrain.getName() + ". Speed: " + onlyTrain.getSpeed(), Color.RED, 2);
+                }
+            } else if (numberOfTrains > 1) {
+                new DialogMultipleTrain(station, context).show(context.getStage());
+            }
+        }
+
     }
 
     private void renderStation(final Station station) {
@@ -85,24 +104,7 @@ public class StationController {
         stationActor.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Game.getInstance().getState() == GameState.NORMAL) {
-                    DialogMultitrain dia = new DialogMultitrain(station, context.getSkin(), context);
-                    if (station.getTrainsAtStation().size() == 1){
-                        Train train = station.getTrainsAtStation().get(0);
-                        if (train.isOwnedBy(PlayerManager.getCurrentPlayer())){
-                            context.getRouteController().beginRouting(train);
-                        }else{
-                            context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
-                        }
-                    }
-                    else if (dia.getIsTrain()) {
-                        dia.show(context.getStage());
-                    }
-                    else {
-                        System.out.println("no trains here");
-                    }
-                }
-                stationClicked(station);
+                clickedStation(station);
             }
 
             @Override
@@ -122,13 +124,13 @@ public class StationController {
         context.getStage().addActor(stationActor);
     }
 
-    private void renderJunction(final Station junction) {
+    private void renderJunction(final Junction junction) {
         final JunctionActor junctionActor = new JunctionActor(junction.getLocation());
 
         junctionActor.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stationClicked(junction);
+                clickedStation(junction);
             }
 
             @Override
@@ -153,7 +155,7 @@ public class StationController {
 
         for (Station station : stations) {
             if (station instanceof Junction) {
-                renderJunction(station);
+                renderJunction((Junction) station);
             } else {
                 renderStation(station);
             }
@@ -167,7 +169,7 @@ public class StationController {
 
         for (Station station : context.getGameLogic().getMap().getStations()) {
             if (trainsAtStation(station) > 0) {
-                game.fontSmall.draw(game.batch, trainsAtStation(station) + "", (float) station.getLocation().getX() - 6, (float) station.getLocation().getY() + 26);
+                game.fontSmall.draw(game.batch, trainsAtStation(station) + "", station.getLocation().getX() - 6, station.getLocation().getY() + 26);
             }
         }
 
@@ -178,19 +180,16 @@ public class StationController {
         int count = 0;
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getTrains()) {
-                if (resource instanceof Train) {
-                    if (((Train) resource).getActor() != null) {
-                        if (((Train) resource).getPosition().equals(station.getLocation())) {
-                            count++;
-                        }//else if (((Train)resource).getActor() != null){
-                           // ((Train)resource).setAtStation(false);
-                            //((Train)resource).setLocation(null);
-                        //}
-                    }
+            for (Train train : player.getTrains()) {
+                TrainActor trainActor = train.getActor();
+                if (trainActor == null) continue;
+
+                if (train.getPosition().equals(station.getLocation())) {
+                    count++;
                 }
             }
         }
+
         return count;
     }
 }

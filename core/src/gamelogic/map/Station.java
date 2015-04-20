@@ -48,14 +48,15 @@ public class Station {
 
     public ArrayList<Train> getTrainsAtStation() {
         trainsAtStation.clear();
+
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getTrains()) {
-                Train train = (Train) resource;
-                if (train.getLocation() == this) {
+            for (Train train : player.getTrains()) {
+                if (this == train.getLocation()) {
                     trainsAtStation.add(train);
                 }
             }
         }
+
         return trainsAtStation;
     }
 

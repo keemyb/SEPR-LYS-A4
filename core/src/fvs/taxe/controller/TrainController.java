@@ -39,8 +39,8 @@ public class TrainController {
         gamelogic.player.PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
             public void changed() {
-                for (Player player : PlayerManager.getAllPlayers()){
-                    for (Train train : player.getTrains()){
+                for (Player player : PlayerManager.getAllPlayers()) {
+                    for (Train train : player.getTrains()) {
                         setTrainLocation(train);
 
                     }
@@ -107,7 +107,6 @@ public class TrainController {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
 
         if (Game.getInstance().getState() != GameState.NORMAL) return;
-        System.out.println("train clicked");
 
         // current player can't be passed in as it changes so find out current player at this instant
         Player currentPlayer = PlayerManager.getCurrentPlayer();

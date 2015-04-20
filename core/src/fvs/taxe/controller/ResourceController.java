@@ -5,9 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
-import fvs.taxe.dialog.DialogStartReplay;
 import fvs.taxe.dialog.TrainClicked;
-import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
@@ -23,13 +21,14 @@ import gamelogic.resource.Train;
 import java.util.List;
 
 public class ResourceController {
-    private Context context;
-    private Group resourceButtons = new Group();
     private static final float MY_TRAINS_Y = (float) TaxeGame.WORLD_HEIGHT - 175.0f;
     private static final float MY_TRACKS_Y = (float) TaxeGame.WORLD_HEIGHT - 475.0f;
     private static final float SPACE_BETWEEN_RESOURCES_X = 10f;
     private static final float SPACE_BETWEEN_RESOURCES_Y = 30f;
     private static final float SPACE_AFTER_HEADER_RESOURCES_Y = 50f;
+
+    private Context context;
+    private Group resourceButtons = new Group();
 
     public ResourceController(final Context context) {
         this.context = context;
@@ -103,7 +102,7 @@ public class ResourceController {
         drawPlayerResources();
     }
 
-    public void drawHeaderText() {
+    private void drawHeaderText() {
         TaxeGame game = context.getTaxeGame();
 
         game.batch.begin();
@@ -129,7 +128,7 @@ public class ResourceController {
         game.batch.end();
     }
 
-    public void drawPlayerResources() {
+    private void drawPlayerResources() {
         float x = SPACE_BETWEEN_RESOURCES_X;
         float y;
 

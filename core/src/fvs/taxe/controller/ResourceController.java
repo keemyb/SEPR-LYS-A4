@@ -6,9 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.TrainClicked;
-import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
-import gamelogic.game.GameState;
 import gamelogic.goal.Goal;
 import gamelogic.map.Connection;
 import gamelogic.player.Player;
@@ -16,7 +14,6 @@ import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayListener;
-import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
 import java.util.List;
@@ -24,6 +21,11 @@ import java.util.List;
 public class ResourceController {
     private Context context;
     private Group resourceButtons = new Group();
+    private static final float MY_TRAINS_Y = (float) TaxeGame.WORLD_HEIGHT - 175.0f;
+    private static final float MY_TRACKS_Y = (float) TaxeGame.WORLD_HEIGHT - 475.0f;
+    private static final float SPACE_BETWEEN_RESOURCES_X = 10f;
+    private static final float SPACE_BETWEEN_RESOURCES_Y = 30f;
+    private static final float SPACE_AFTER_HEADER_RESOURCES_Y = 50f;
 
     public ResourceController(final Context context) {
         this.context = context;
@@ -90,60 +92,64 @@ public class ResourceController {
 
         game.batch.begin();
         game.fontSmall.setColor(Color.BLACK);
-        if (Game.getInstance().getState() == GameState.CONNECTION_EDIT) {
-            game.fontSmall.draw(game.batch, "My Tracks:", 10, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
-        }else {
-            game.fontSmall.draw(game.batch, "Unplaced Resources:", 10.0f, (float) TaxeGame.WORLD_HEIGHT - 250.0f);
+
+        boolean unplacedTrains = false;
+
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        for (Train train : currentPlayer.getTrains()) {
+            if (train.getPosition() == null) {
+                unplacedTrains = true;
+                break;
+            }
         }
+
+        if (unplacedTrains) {
+            game.fontSmall.draw(game.batch, "My Unplaced Trains:", SPACE_BETWEEN_RESOURCES_X, MY_TRAINS_Y);
+        }
+        if (!PlayerManager.getCurrentPlayer().getConnectionsOwned().isEmpty()) {
+            game.fontSmall.draw(game.batch, "My Tracks:", SPACE_BETWEEN_RESOURCES_X, MY_TRACKS_Y);
+        }
+
         game.batch.end();
     }
 
     public void drawPlayerResources(Player player) {
-        float top = (float) TaxeGame.WORLD_HEIGHT;
-        float x = 10.0f;
-        float y = top - 250.0f;
-        y -= 50;
+        float x = SPACE_BETWEEN_RESOURCES_X;
+        float y;
 
         resourceButtons.remove();
         resourceButtons.clear();
-        if (Game.getInstance().getState() != GameState.CONNECTION_EDIT) {
-            for (final Resource resource : player.getTrains()) {
 
-                if (resource instanceof Train) {
-                    Train train = (Train) resource;
-
-                    // don't show a button for trains that have been placed
-                    if (train.getPosition() != null) {
-                        continue;
-                    }
-
-                    TrainClicked listener = new TrainClicked(context, train);
-
-                    TextButton button = new TextButton(resource.toString(), context.getSkin());
-                    button.setPosition(x, y);
-                    button.addListener(listener);
-
-                    resourceButtons.addActor(button);
-
-                    y -= 30;
-                }
+        y = MY_TRAINS_Y - SPACE_AFTER_HEADER_RESOURCES_Y;
+        for (Train train : player.getTrains()) {
+            // don't show a button for trains that have been placed
+            if (train.getPosition() != null) {
+                continue;
             }
+
+            TrainClicked listener = new TrainClicked(context, train);
+
+            TextButton button = new TextButton(train.toString(), context.getSkin());
+            button.setPosition(x, y);
+            button.addListener(listener);
+
+            resourceButtons.addActor(button);
+
+            y -= SPACE_BETWEEN_RESOURCES_Y;
         }
-        if (Game.getInstance().getState() == GameState.CONNECTION_EDIT){
-            resourceButtons.clear();
-            if (player.getConnectionsOwned() != null) {
-                for (Connection connection : player.getConnectionsOwned()) {
-                    TextButton button = new TextButton(connection.toString(), context.getSkin());
-                    button.setPosition(x, y);
 
-                    ConnectionClicked listener = new ConnectionClicked(context, connection);
-                    button.addListener(listener);
+        y = MY_TRACKS_Y - SPACE_AFTER_HEADER_RESOURCES_Y;
+        for (Connection connection : player.getConnectionsOwned()) {
+            ConnectionClicked listener = new ConnectionClicked(context, connection);
 
-                    resourceButtons.addActor(button);
-                    y -= 30;
-                }
-            }
+            String connectionString = connection.getStation1().getName() + " to " + connection.getStation2().getName();
 
+            TextButton button = new TextButton(connectionString, context.getSkin());
+            button.setPosition(x, y);
+            button.addListener(listener);
+
+            resourceButtons.addActor(button);
+            y -= SPACE_BETWEEN_RESOURCES_Y;
         }
 
         context.getStage().addActor(resourceButtons);

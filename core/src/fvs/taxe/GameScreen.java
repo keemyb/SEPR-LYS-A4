@@ -132,8 +132,7 @@ public class GameScreen extends ScreenAdapter {
             stationController.displayNumberOfTrainsAtStations();
         }
 
-        if (gameLogic.getState() == GameState.CONNECTION_CREATE ||
-                gameLogic.getState() == GameState.CONNECTION_EDIT) {
+        if (gameLogic.getState() == GameState.CONNECTION_CREATE) {
             connectionController.drawSelectedStations();
             connectionController.drawSelectedConnection();
         }
@@ -164,7 +163,6 @@ public class GameScreen extends ScreenAdapter {
         topBarController.addReplaySlider();
         topBarController.addEndTurnButton();
         topBarController.addCreateConnectionButton();
-        topBarController.addEditConnectionButton();
         resourceController.drawPlayerResources(PlayerManager.getCurrentPlayer());
     }
 

@@ -17,7 +17,7 @@ public class ConnectionClicked extends ClickListener {
 
     @Override
     public void clicked(InputEvent event, float x, float y) {
-        context.getConnectionController().setSelectedStations(connection);
+        context.getConnectionController().setSelectedConnection(connection);
     }
     @Override
     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {

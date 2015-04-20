@@ -6,5 +6,4 @@ public enum GameState {
     ROUTING,
     ANIMATING,
     CONNECTION_CREATE,
-    CONNECTION_EDIT,
 }

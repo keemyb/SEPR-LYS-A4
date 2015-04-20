@@ -12,10 +12,7 @@ import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.actor.JunctionActor;
 import fvs.taxe.actor.StationActor;
-import fvs.taxe.dialog.DialogCreateConnection;
-import fvs.taxe.dialog.DialogRemoveConnection;
-import fvs.taxe.dialog.DialogRepairConnection;
-import fvs.taxe.dialog.DialogUpgradeConnection;
+import fvs.taxe.dialog.*;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
@@ -46,9 +43,6 @@ public class ConnectionController {
     Connection selectedConnection;
 
     private TextButton createConnection;
-    private TextButton repairConnection;
-    private TextButton upgradeConnection;
-    private TextButton removeConnection;
     private TextButton done;
     private Group connectionButtons = new Group();
 
@@ -59,10 +53,6 @@ public class ConnectionController {
     private Color invalidTemporaryConnectionColour = new Color(1f, 0f, 0f, 1f);
     private Color existingConnectionColour = new Color(0f, 0f, 1f, 1f);
 
-    // Workaround for the fact that the buttons take up lots of space
-    private String dirtyPaddingHack = "                                                           " +
-                                      "                                                           ";
-
     private static final int MAX_NEW_CONNECTIONS_PER_TURN = 1;
     private int numberOfNewConnectionsThisTurn = 0;
 
@@ -70,9 +60,6 @@ public class ConnectionController {
         this.context = context;
         game = context.getTaxeGame();
         createConnection = new TextButton("Create Connection", context.getSkin());
-        repairConnection = new TextButton("Repair Connection", context.getSkin());
-        upgradeConnection = new TextButton("Upgrade Connection", context.getSkin());
-        removeConnection = new TextButton("Remove Connection", context.getSkin());
         done = new TextButton("Done", context.getSkin());
 
         map = context.getGameLogic().getMap();
@@ -91,27 +78,6 @@ public class ConnectionController {
             }
         });
 
-        repairConnection.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                repairConnection();
-            }
-        });
-
-        upgradeConnection.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                upgradeConnection();
-            }
-        });
-
-        removeConnection.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                removeConnection();
-            }
-        });
-
         done.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -124,13 +90,11 @@ public class ConnectionController {
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE) {
                     enterCreateConnectionMode();
-                } else if (event == GameEvent.CLICKED_EDIT_CONNECTION_MODE) {
-                    enterEditConnectionMode();
-                } else if (event == GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE) {
+                } else if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE_DONE) {
                     endConnectionModifications();
                 } else if (event == GameEvent.CLICKED_CONNECTION_BUTTON) {
                     Connection connection = (Connection) object;
-                    setSelectedStations(connection);
+                    setSelectedConnection(connection);
                 } else if (event == GameEvent.CLICKED_STATION) {
                     Station station = (Station) object;
                     selectStation(station);
@@ -142,21 +106,21 @@ public class ConnectionController {
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     createConnection(connection, material);
                 } else if (event == GameEvent.CLICKED_UPGRADE_CONNECTION) {
-                    upgradeConnection();
+                    showUpgradeConnectionDialog();
                 } else if (event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL) {
                     List<Object> connectionAndMaterial = (List) object;
                     Connection connection = (Connection) connectionAndMaterial.get(0);
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     upgradeConnection(connection, material);
                 } else if (event == GameEvent.CLICKED_REPAIR_CONNECTION) {
-                    repairConnection();
+                    showRepairConnectionDialog();
                 } else if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT) {
                     List<Object> connectionAndRepairAmount = (List) object;
                     Connection connection = (Connection) connectionAndRepairAmount.get(0);
                     float repairAmount = (float) connectionAndRepairAmount.get(1);
                     repairConnection(connection, repairAmount);
                 } else if (event == GameEvent.CLICKED_REMOVE_CONNECTION) {
-                    removeConnection();
+                    showRemoveConnectionDialog();
                 } else if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION) {
                     Connection connection = (Connection) object;
                     removeConnection(connection);
@@ -194,18 +158,10 @@ public class ConnectionController {
         connectionButtons.addActor(done);
 
         if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
-                if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                    createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
-                    connectionButtons.addActor(createConnection);
-                }
-
-        } else if (state.equals(GameState.CONNECTION_EDIT)) {
-            upgradeConnection.setPosition(TaxeGame.WORLD_WIDTH - 245, TaxeGame.WORLD_HEIGHT - 33);
-            repairConnection.setPosition(TaxeGame.WORLD_WIDTH - 405, TaxeGame.WORLD_HEIGHT - 33);
-            removeConnection.setPosition(TaxeGame.WORLD_WIDTH - 577, TaxeGame.WORLD_HEIGHT - 33);
-            connectionButtons.addActor(upgradeConnection);
-            connectionButtons.addActor(repairConnection);
-            connectionButtons.addActor(removeConnection);
+            if (map.prospectiveConnectionIsValid(selectedConnection)) {
+                createConnection.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
+                connectionButtons.addActor(createConnection);
+            }
         }
 
         context.getStage().addActor(connectionButtons);
@@ -234,9 +190,11 @@ public class ConnectionController {
 
         if (state.equals(GameState.CONNECTION_CREATE)) {
             selectedConnection = new Connection(selectedStations.poll(), selectedStations.poll(), Connection.Material.BRONZE);
+            showOptionButtons();
         } else {
             selectedConnection = map.getConnectionBetween(selectedStations.poll(), selectedStations.poll());
-        } showOptionButtons();
+            new DialogChooseConnectionAction(selectedConnection, context).show(context.getStage());
+        }
     }
 
     private void createConnection() {
@@ -252,42 +210,19 @@ public class ConnectionController {
         }
     }
 
-    private void upgradeConnection() {
+    public void showUpgradeConnectionDialog() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_UPGRADE_CONNECTION));
-        if (checkConnectionStatus("upgrade")) {
-            new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
-        }
+        new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
     }
 
-    private void repairConnection() {
+    public void showRepairConnectionDialog() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REPAIR_CONNECTION));
-        if (checkConnectionStatus("repair")) {
-            new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
-        }
+        new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
     }
 
-    private void removeConnection() {
+    public void showRemoveConnectionDialog() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REMOVE_CONNECTION));
-        if (checkConnectionStatus("remove")) {
-            new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
-        }
-    }
-
-    private boolean checkConnectionStatus(String action) {
-        if (selectedConnection == null) {
-            context.getTopBarController().displayFlashMessage(
-                    "No connection selected" + dirtyPaddingHack, Color.BLACK, 1000);
-            return false;
-        } else if (selectedConnection.getOwner() == null) {
-            context.getTopBarController().displayFlashMessage(
-                    "Cannot " + action + " selected connection" + dirtyPaddingHack, Color.BLACK, 1000);
-            return false;
-        } else if (selectedConnection.getOwner() != PlayerManager.getCurrentPlayer()) {
-            context.getTopBarController().displayFlashMessage(
-                    "You do not own this connection" + dirtyPaddingHack, Color.BLACK, 1000);
-            return false;
-        }
-        return true;
+        new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
     }
 
     private void clearSelected() {
@@ -345,7 +280,7 @@ public class ConnectionController {
     }
 
     private void endConnectionModifications() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE_DONE));
         clearSelected();
         context.getGameLogic().setState(GameState.NORMAL);
         connectionButtons.remove();
@@ -368,14 +303,7 @@ public class ConnectionController {
         }
     }
 
-    public void enterEditConnectionMode() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_EDIT_CONNECTION_MODE));
-        clearSelected();
-        context.getGameLogic().setState(GameState.CONNECTION_EDIT);
-        showOptionButtons();
-    }
-
-    public void setSelectedStations(gamelogic.map.Connection connection){
+    public void setSelectedConnection(gamelogic.map.Connection connection){
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON, connection));
         Station station1 = connection.getStation1();
         Station station2 = connection.getStation2();

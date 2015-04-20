@@ -224,30 +224,6 @@ public class TopBarController {
         context.getStage().addActor(createConnectionButton);
     }
 
-    public void addEditConnectionButton() {
-        editConnectionButton = new TextButton("Edit Track", context.getSkin());
-        editConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 300.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
-        editConnectionButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                context.getConnectionController().enterEditConnectionMode();
-            }
-        });
-
-        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
-            @Override
-            public void changed(GameState state) {
-                if (state == GameState.NORMAL) {
-                    editConnectionButton.setVisible(true);
-                } else {
-                    editConnectionButton.setVisible(false);
-                }
-            }
-        });
-
-        context.getStage().addActor(editConnectionButton);
-    }
-
     public void clearFlashMessage() {
         displayFlashMessage("", Color.BLACK);
     }

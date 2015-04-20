@@ -16,10 +16,7 @@ import fvs.taxe.dialog.*;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
-import gamelogic.map.Connection;
-import gamelogic.map.Junction;
-import gamelogic.map.Map;
-import gamelogic.map.Station;
+import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
@@ -35,12 +32,18 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectionController {
+    public final static int CONNECTION_LINE_WIDTH = 5;
+
+    private static final int MAX_NEW_CONNECTIONS_PER_TURN = 1;
+    private int numberOfNewConnectionsThisTurn = 0;
+
     Context context;
     Map map;
     TaxeGame game;
 
     Queue<Station> selectedStations = new ConcurrentLinkedQueue<>();
     Connection selectedConnection;
+    Connection hoveredConnection;
 
     private TextButton createConnection;
     private TextButton done;
@@ -49,12 +52,10 @@ public class ConnectionController {
     private float relativeStationHighlightSize = 1.7f;
 
     private Color selectedStationColour = new Color(255/255.0f, 137/255.0f, 0f, 0.70f);
+    private Color hoveredConnectionColour = new Color(255/255.0f, 200/255.0f, 20/255.0f, 0.6f);
     private Color validTemporaryConnectionColour = new Color(0.2f, 1f, 0.2f, 1f);
     private Color invalidTemporaryConnectionColour = new Color(1f, 0f, 0f, 1f);
     private Color existingConnectionColour = new Color(0f, 0f, 1f, 1f);
-
-    private static final int MAX_NEW_CONNECTIONS_PER_TURN = 1;
-    private int numberOfNewConnectionsThisTurn = 0;
 
     public ConnectionController(Context context) {
         this.context = context;
@@ -234,6 +235,20 @@ public class ConnectionController {
         selectedConnection = null;
     }
 
+    public void renderConnections() {
+        drawHoveredConnection();
+
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Connection connection : map.getConnections()) {
+            game.shapeRenderer.setColor(connection.getColour()  );
+            Position start = connection.getStation1().getLocation();
+            Position end = connection.getStation2().getLocation();
+            game.shapeRenderer.rectLine(start.getX(), start.getY(), end.getX(), end.getY(), CONNECTION_LINE_WIDTH);
+        }
+        game.shapeRenderer.end();
+    }
+
     public void drawSelectedStations() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -277,7 +292,7 @@ public class ConnectionController {
                 selectedConnection.getStation1().getLocation().getY(),
                 selectedConnection.getStation2().getLocation().getX(),
                 selectedConnection.getStation2().getLocation().getY(),
-                StationController.CONNECTION_LINE_WIDTH);
+                ConnectionController.CONNECTION_LINE_WIDTH);
 
         game.shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -318,18 +333,21 @@ public class ConnectionController {
         selectedStations.add(station2);
         selectConnection();
     }
-    public void highlightConnection(Connection connection) {
+
+    public void drawHoveredConnection() {
+        if (hoveredConnection == null) return;
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        game.shapeRenderer.setColor(validTemporaryConnectionColour);
+        game.shapeRenderer.setColor(hoveredConnectionColour);
 
-        game.shapeRenderer.rectLine(connection.getStation1().getLocation().getX(),
-                connection.getStation1().getLocation().getY(),
-                connection.getStation2().getLocation().getX(),
-                connection.getStation2().getLocation().getY(),
-                StationController.CONNECTION_LINE_WIDTH);
+        game.shapeRenderer.rectLine(hoveredConnection.getStation1().getLocation().getX(),
+                hoveredConnection.getStation1().getLocation().getY(),
+                hoveredConnection.getStation2().getLocation().getX(),
+                hoveredConnection.getStation2().getLocation().getY(),
+                ConnectionController.CONNECTION_LINE_WIDTH * 3);
 
         game.shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -433,5 +451,9 @@ public class ConnectionController {
         String currentHealth = String.valueOf((int) (connection.getHealth() * 100)) + '%';
         connectionString += " ( Health: " + currentHealth + " ) ";
         return connectionString;
+    }
+
+    public void setHoveredConnection(Connection hoveredConnection) {
+        this.hoveredConnection = hoveredConnection;
     }
 }

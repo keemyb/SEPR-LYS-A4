@@ -19,8 +19,14 @@ public class ConnectionClicked extends ClickListener {
     public void clicked(InputEvent event, float x, float y) {
         context.getConnectionController().setSelectedConnection(connection);
     }
+
     @Override
     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        context.getConnectionController().highlightConnection(connection);
+        context.getConnectionController().setHoveredConnection(connection);
+    }
+
+    @Override
+    public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        context.getConnectionController().setHoveredConnection(null);
     }
 }

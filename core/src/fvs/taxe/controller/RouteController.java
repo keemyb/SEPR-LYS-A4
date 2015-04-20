@@ -206,11 +206,11 @@ public class RouteController {
             if (previousStation != null) {
                 game.shapeRenderer.rectLine(previousStation.getLocation().getX(), previousStation.getLocation().getY(),
                         station.getLocation().getX(), station.getLocation().getY(),
-                        StationController.CONNECTION_LINE_WIDTH);
+                        ConnectionController.CONNECTION_LINE_WIDTH);
             } else {
                 game.shapeRenderer.rectLine(train.getPosition().getX(), train.getPosition().getY(),
                         station.getLocation().getX(), station.getLocation().getY(),
-                        StationController.CONNECTION_LINE_WIDTH);
+                        ConnectionController.CONNECTION_LINE_WIDTH);
             }
             previousStation = station;
         }

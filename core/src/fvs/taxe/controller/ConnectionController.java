@@ -346,6 +346,7 @@ public class ConnectionController {
 
     private void endConnectionModifications() {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_EDIT_CONNECTION_MODE_DONE));
+        clearSelected();
         context.getGameLogic().setState(GameState.NORMAL);
         connectionButtons.remove();
         context.getTopBarController().clearFlashMessage();
@@ -425,7 +426,7 @@ public class ConnectionController {
             System.out.println("Purchased a " + material + " connection");
         }
 
-        clearSelected();
+        endConnectionModifications();
     }
 
     public void repairConnection(Connection connection, float repairThreshold) {
@@ -445,7 +446,7 @@ public class ConnectionController {
             System.out.println("Repaired a connection to " + String.valueOf(repairThreshold * 100) + "%");
         }
 
-        clearSelected();
+        endConnectionModifications();
     }
 
     public void upgradeConnection(Connection connection, Connection.Material material) {
@@ -465,7 +466,7 @@ public class ConnectionController {
             System.out.println("Upgraded a connection to " + material);
         }
 
-        clearSelected();
+        endConnectionModifications();
     }
 
     public void removeConnection(Connection connection) {
@@ -476,6 +477,6 @@ public class ConnectionController {
             map.removeConnection(connection);
         }
 
-        clearSelected();
+        endConnectionModifications();
     }
 }

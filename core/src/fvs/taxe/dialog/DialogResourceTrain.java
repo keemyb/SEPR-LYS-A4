@@ -2,7 +2,6 @@ package fvs.taxe.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fvs.taxe.Button;
 import fvs.taxe.controller.Context;
 import gamelogic.game.GameEvent;
@@ -38,9 +37,9 @@ public class DialogResourceTrain extends Dialog {
         eventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_PLACE_TRAIN ||
-                        event == GameEvent.CLICKED_PLACE_TRAIN_DISCARD ||
-                        event == GameEvent.CLICKED_PLACE_TRAIN_CANCEL) {
+                if (event == GameEvent.CLICKED_CHOOSE_PLACE_TRAIN ||
+                        event == GameEvent.CLICKED_CHOOSE_PLACE_TRAIN_DISCARD ||
+                        event == GameEvent.CLICKED_CHOOSE_PLACE_TRAIN_CANCEL) {
                     result("CLOSE");
                 }
             }
@@ -72,7 +71,7 @@ public class DialogResourceTrain extends Dialog {
     @Override
     protected void result(Object obj) {
         if (obj == "CLOSE") {
-            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_CANCEL));
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_PLACE_TRAIN_CANCEL));
             this.remove();
         } else if (obj == "DISCARD") {
             clicked(Button.TRAIN_DISCARD);

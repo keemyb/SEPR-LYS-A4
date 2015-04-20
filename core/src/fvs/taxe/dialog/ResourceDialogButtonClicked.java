@@ -22,7 +22,7 @@ public class ResourceDialogButtonClicked implements ResourceDialogClickListener 
     public void clicked(Button button) {
         switch (button) {
             case TRAIN_DISCARD:
-                context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_DISCARD));
+                context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_PLACE_TRAIN_DISCARD));
                 currentPlayer.removeTrain(train);
                 break;
             case TRAIN_PLACE:

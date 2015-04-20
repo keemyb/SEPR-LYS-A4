@@ -32,6 +32,7 @@ public class TopBarController {
     private TextButton pauseReplayButton;
     private Slider replaySpeedSlider;
     private TextButton createConnectionButton;
+    private TextButton cancelPlaceTrainButton;
     private Label flashMessage;
 
     public TopBarController(Context context) {
@@ -72,6 +73,7 @@ public class TopBarController {
         addReplaySlider();
         addEndTurnButton();
         addCreateConnectionButton();
+        addCancelPlaceTrainButton();
         refreshButtons(EventReplayer.isReplaying());
 
         createFlashActor();
@@ -124,6 +126,7 @@ public class TopBarController {
         replaySpeedSlider.setVisible(isReplaying);
         createConnectionButton.setVisible(!isReplaying);
         endTurnButton.setVisible(!isReplaying);
+        cancelPlaceTrainButton.setVisible(!isReplaying && context.getGameLogic().getState() == GameState.PLACING);
     }
 
     private void addEndTurnButton() {
@@ -226,6 +229,35 @@ public class TopBarController {
         });
 
         context.getStage().addActor(createConnectionButton);
+    }
+
+    private void addCancelPlaceTrainButton() {
+        cancelPlaceTrainButton = new TextButton("Cancel", context.getSkin());
+        cancelPlaceTrainButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        cancelPlaceTrainButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getTrainController().cancelPlaceTrain();
+            }
+        });
+
+        cancelPlaceTrainButton.setVisible(!EventReplayer.isReplaying() &&
+                context.getGameLogic().getState() == GameState.PLACING);
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (EventReplayer.isReplaying()) return;
+
+                if (state == GameState.PLACING) {
+                    cancelPlaceTrainButton.setVisible(true);
+                } else {
+                    cancelPlaceTrainButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(cancelPlaceTrainButton);
     }
 
     public void clearFlashMessage() {

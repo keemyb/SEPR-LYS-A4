@@ -43,7 +43,7 @@ public class StationController {
         this.context = context;
         this.tooltip = tooltip;
 
-        context.getEventReplayer().subscribeReplayEvent(new ReplayListener() {
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_STATION) {
@@ -73,7 +73,7 @@ public class StationController {
     }
 
     private void stationClicked(Station station) {
-        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_STATION, station));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_STATION, station));
         for (StationClickListener listener : stationClickListeners) {
             listener.clicked(station);
         }

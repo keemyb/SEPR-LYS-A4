@@ -24,11 +24,17 @@ import gamelogic.resource.TrainManager;
 
 public class TrainController {
     private Context context;
-    private EventReplayer eventReplayer;
+    private Train placedTrain;
+
+    private StationClickListener stationClickListener = new StationClickListener() {
+        @Override
+        public void clicked(Station station) {
+            selectStationToPlace(station);
+        }
+    };
 
     public TrainController(Context context) {
         this.context = context;
-        this.eventReplayer = context.getEventReplayer();
 
         gamelogic.player.PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
             @Override
@@ -42,15 +48,17 @@ public class TrainController {
             }
         });
 
-        eventReplayer.subscribeReplayEvent(new ReplayListener() {
+        EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
                 if (event == GameEvent.CLICKED_TRAIN) {
                     Train train = (Train) object;
                     selected(train);
-                } else if (event == GameEvent.CLICKED_PLACE_TRAIN) {
+                } else if (event == GameEvent.CLICKED_CHOOSE_PLACE_TRAIN) {
                     Train train = (Train) object;
                     placeTrain(train);
+                } else if (event == GameEvent.CLICKED_PLACE_TRAIN_CANCEL) {
+                    cancelPlaceTrain();
                 }
             }
         });
@@ -96,7 +104,7 @@ public class TrainController {
     }
 
     public void selected(Train train) {
-        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
 
         if (Game.getInstance().getState() != GameState.NORMAL) return;
         System.out.println("train clicked");
@@ -125,8 +133,10 @@ public class TrainController {
         }
     }
 
-    public void placeTrain(final Train train) {
-        context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN, train));
+    public void placeTrain(Train train) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_PLACE_TRAIN, train));
+
+        placedTrain = train;
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
         Gdx.input.setCursorImage(pixmap, 8, 10);
@@ -135,29 +145,39 @@ public class TrainController {
         Game.getInstance().setState(GameState.PLACING);
         setTrainsVisible(null, false);
 
-        StationController.subscribeStationClick(new StationClickListener() {
-            @Override
-            public void clicked(Station station) {
-                if (station instanceof Junction) {
-                    context.getTopBarController().displayFlashMessage("Trains cannot be placed at junctions.", Color.RED);
-                    return;
-                }
+        StationController.subscribeStationClick(stationClickListener);
+    }
 
-                train.setPosition(station.getLocation());
-                train.addToHistory(station, PlayerManager.getTurnNumber());
-                train.setAtStation(true);
-                train.setLocation(station);
+    private void selectStationToPlace(Station station) {
+        if (station instanceof Junction) {
+            context.getTopBarController().displayFlashMessage("Trains cannot be placed at junctions.", Color.RED);
+            return;
+        }
 
-                Gdx.input.setCursorImage(null, 0, 0);
+        placedTrain.setPosition(station.getLocation());
+        placedTrain.addToHistory(station, PlayerManager.getTurnNumber());
+        placedTrain.setAtStation(true);
+        placedTrain.setLocation(station);
 
-                TrainActor trainActor = renderTrain(train);
-                System.out.println("actor");
-                setTrainsVisible(null, true);
-                train.setActor(trainActor);
+        finishPlaceTrain(true);
+    }
 
-                StationController.unsubscribeStationClick(this);
-                Game.getInstance().setState(GameState.NORMAL);
-            }
-        });
+    private void finishPlaceTrain(boolean placed) {
+        Gdx.input.setCursorImage(null, 0, 0);
+
+        if (placed) {
+            TrainActor trainActor = renderTrain(placedTrain);
+            placedTrain.setActor(trainActor);
+        }
+        setTrainsVisible(null, true);
+        placedTrain = null;
+
+        StationController.unsubscribeStationClick(stationClickListener);
+        Game.getInstance().setState(GameState.NORMAL);
+    }
+
+    public void cancelPlaceTrain() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_CANCEL));
+        finishPlaceTrain(false);
     }
 }

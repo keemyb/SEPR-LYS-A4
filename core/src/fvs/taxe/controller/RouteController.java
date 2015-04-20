@@ -175,9 +175,13 @@ public class RouteController {
     }
 
     private void confirmRoute() {
-        train.setRoute(stations);
+        if (stations.isEmpty()) {
+            cancelRouting();
+        } else {
+            train.setRoute(stations);
 
-        new TrainMoveController(context, train).addMoveActionsForRoute();
+            new TrainMoveController(context, train).addMoveActionsForRoute();
+        }
     }
 
     private void endRouting() {

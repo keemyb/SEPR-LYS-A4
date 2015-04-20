@@ -11,7 +11,6 @@ import gamelogic.map.*;
 import gamelogic.player.Player;
 import gamelogic.goal.GoalManager;
 import gamelogic.player.PlayerManager;
-import gamelogic.resource.Resource;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;

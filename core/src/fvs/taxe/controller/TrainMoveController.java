@@ -28,8 +28,6 @@ public class TrainMoveController {
         this.context = context;
         map = context.getGameLogic().getMap();
         this.train = train;
-
-        addMoveActions();
     }
 
     /**
@@ -64,10 +62,7 @@ public class TrainMoveController {
                         ConnectionController.visitedConnection(train, visited);
                     }
                 }
-
-                System.out.println("Added to history: passed " + station.getName() + " on turn "
-                        + PlayerManager.getTurnNumber());
-                collisions(station);
+                checkCollisions(station);
                 train.getRoute().remove(station);
             }
         };
@@ -93,7 +88,6 @@ public class TrainMoveController {
                 for (String message : completedGoals) {
                     context.getTopBarController().displayFlashMessage(message, Color.WHITE, 2);
                 }
-                System.out.println(train.getFinalStation().getLocation().getX() + "," + train.getFinalStation().getLocation().getY());
                 train.setPosition(train.getFinalStation().getLocation());
                 train.getActor().setVisible(false);
                 train.arrivedAtDestination();
@@ -101,7 +95,7 @@ public class TrainMoveController {
         };
     }
 
-    public void addMoveActions() {
+    public void addMoveActionsForRoute() {
         SequenceAction action = Actions.sequence();
         Position current = train.getPosition();
         action.addAction(beforeAction());
@@ -126,7 +120,7 @@ public class TrainMoveController {
         train.getActor().addAction(action);
     }
 
-    private void collisions(Station station) {
+    private void checkCollisions(Station station) {
         //test for train collisions at Junction point
         if (!(station instanceof Junction)) {
             return;
@@ -147,18 +141,13 @@ public class TrainMoveController {
         List<Train> trainsToDestroy = new ArrayList<>();
 
         for (Player player : PlayerManager.getAllPlayers()) {
-            for (Resource resource : player.getTrains()) {
-                if (resource instanceof Train) {
-                    Train otherTrain = (Train) resource;
-                    if (otherTrain.getActor() == null) continue;
-                    if (otherTrain == train) continue;
+            for (Train otherTrain : player.getTrains()) {
+                if (otherTrain == train) continue;
+                if (otherTrain.getActor() == null) continue;
 
-                    if (train.getActor().getBounds().overlaps(otherTrain.getActor().getBounds())) {
-                        //destroy trains that have crashed and burned
-                        trainsToDestroy.add(train);
-                        trainsToDestroy.add(otherTrain);
-                    }
-
+                if (train.getActor().getBounds().overlaps(otherTrain.getActor().getBounds())) {
+                    trainsToDestroy.add(train);
+                    trainsToDestroy.add(otherTrain);
                 }
             }
         }

@@ -102,18 +102,14 @@ public class RouteController {
                 totalRouteDistance += Station.getDistance(stations.get(stations.size() - 1), stations.get(stations.size() - 2));
             }
 
-            System.out.println("totalRouteDistance =" + totalRouteDistance);
-            System.out.println("total turns = " + totalTurns());
-
             context.getTopBarController().displayFlashMessage(
-                    "This route will take approximately " + totalTurns() + " turns to complete.", Color.BLACK, 1000);
+                    "This route will take approximately " + turnsToCompleteChosenRoute() + " turns to complete.", Color.BLACK, 1000);
 
             canEndRouting = !(station instanceof Junction);
         }
     }
 
-    private int totalTurns() {
-        //calculates how many turns it will take to complete the chosen route
+    private int turnsToCompleteChosenRoute() {
         float distance = totalRouteDistance;
         float trainSpeed = train.getSpeed();
         float turns = distance / trainSpeed;
@@ -121,7 +117,7 @@ public class RouteController {
     }
 
     private void addRoutingButtons() {
-        final TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
+        TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
         TextButton discard = new TextButton("Discard", context.getSkin());
         TextButton cancel = new TextButton("Cancel", context.getSkin());
 
@@ -163,7 +159,7 @@ public class RouteController {
             context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
             return;
         }
-        confirmed();
+        confirmRoute();
         endRouting();
     }
 
@@ -178,10 +174,10 @@ public class RouteController {
         endRouting();
     }
 
-    private void confirmed() {
+    private void confirmRoute() {
         train.setRoute(stations);
 
-        TrainMoveController move = new TrainMoveController(context, train);
+        new TrainMoveController(context, train).addMoveActionsForRoute();
     }
 
     private void endRouting() {

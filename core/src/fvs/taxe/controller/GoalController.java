@@ -3,6 +3,7 @@ package fvs.taxe.controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.Tooltip;
 import fvs.taxe.dialog.DialogGoal;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class GoalController {
 	private static final float MY_GOALS_Y = (float) TaxeGame.WORLD_HEIGHT - TopBarController.CONTROLS_HEIGHT - 10f;
-	private static final float SPACE_BETWEEN_GOALS_X = 10f;
+	private static final float SPACE_BETWEEN_GOALS_X = GameScreen.BUTTON_PADDING_X;
 	private static final float SPACE_BETWEEN_GOALS_Y = 30f;
 	private static final float SPACE_AFTER_HEADER_Y = 50f;
 

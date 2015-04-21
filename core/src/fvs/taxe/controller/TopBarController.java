@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
@@ -27,13 +28,15 @@ public class TopBarController {
 
     private Context context;
     private Color controlsColor = Color.LIGHT_GRAY;
+    private Label flashMessage;
     private TextButton endTurnButton;
+    private TextButton createConnectionButton;
+
+    private TextButton cancelPlaceTrainButton;
     private TextButton playReplayButton;
     private TextButton pauseReplayButton;
     private Slider replaySpeedSlider;
-    private TextButton createConnectionButton;
-    private TextButton cancelPlaceTrainButton;
-    private Label flashMessage;
+    private Label replaySpeedLabel;
 
     public TopBarController(Context context) {
         this.context = context;
@@ -68,12 +71,12 @@ public class TopBarController {
             }
         });
 
-        addPauseReplayButton();
-        addPlayReplayButton();
-        addReplaySlider();
         addEndTurnButton();
         addCreateConnectionButton();
         addCancelPlaceTrainButton();
+        addPlayReplayButton();
+        addPauseReplayButton();
+        addReplaySlider();
         refreshButtons(EventReplayer.isReplaying());
 
         createFlashActor();
@@ -121,17 +124,18 @@ public class TopBarController {
     }
 
     public void refreshButtons(boolean isReplaying) {
-        pauseReplayButton.setVisible(isReplaying);
-        playReplayButton.setVisible(isReplaying);
-        replaySpeedSlider.setVisible(isReplaying);
-        createConnectionButton.setVisible(!isReplaying);
         endTurnButton.setVisible(!isReplaying);
+        createConnectionButton.setVisible(!isReplaying);
         cancelPlaceTrainButton.setVisible(!isReplaying && context.getGameLogic().getState() == GameState.PLACING);
+        playReplayButton.setVisible(isReplaying);
+        pauseReplayButton.setVisible(isReplaying);
+        replaySpeedSlider.setVisible(isReplaying);
+        replaySpeedLabel.setVisible(isReplaying);
     }
 
     private void addEndTurnButton() {
         endTurnButton = new TextButton("End Turn", context.getSkin());
-        endTurnButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        endTurnButton.setPosition(TaxeGame.WORLD_WIDTH - endTurnButton.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -156,58 +160,9 @@ public class TopBarController {
         context.getStage().addActor(endTurnButton);
     }
 
-    private void addPauseReplayButton() {
-        pauseReplayButton = new TextButton("Pause", context.getSkin());
-        pauseReplayButton.setPosition(50f, TaxeGame.WORLD_HEIGHT - 33.0f);
-        pauseReplayButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                context.getEventReplayer().pause();
-            }
-        });
-
-        pauseReplayButton.setVisible(EventReplayer.isReplaying());
-
-        context.getStage().addActor(pauseReplayButton);
-    }
-
-    private void addPlayReplayButton() {
-        playReplayButton = new TextButton("Play", context.getSkin());
-        playReplayButton.setPosition(0f, TaxeGame.WORLD_HEIGHT - 33.0f);
-        playReplayButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                context.getEventReplayer().play();
-            }
-        });
-
-        playReplayButton.setVisible(EventReplayer.isReplaying());
-
-        context.getStage().addActor(playReplayButton);
-    }
-
-    private void addReplaySlider() {
-        replaySpeedSlider = new Slider(EventReplayer.MIN_PLAYBACK_SPEED,
-                EventReplayer.MAX_PLAYBACK_SPEED,
-                (EventReplayer.MAX_PLAYBACK_SPEED - EventReplayer.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
-                false, context.getSkin());
-        replaySpeedSlider.setPosition(110, TaxeGame.WORLD_HEIGHT - 33.0f);
-
-        replaySpeedSlider.setVisible(EventReplayer.isReplaying());
-
-        replaySpeedSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                EventReplayer.setPlayBackSpeed(replaySpeedSlider.getValue());
-            }
-        });
-
-        context.getStage().addActor(replaySpeedSlider);
-    }
-
     private void addCreateConnectionButton() {
         createConnectionButton = new TextButton("Add Track", context.getSkin());
-        createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 200.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        createConnectionButton.setPosition(endTurnButton.getX() - createConnectionButton.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
         createConnectionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -232,8 +187,8 @@ public class TopBarController {
     }
 
     private void addCancelPlaceTrainButton() {
-        cancelPlaceTrainButton = new TextButton("Cancel", context.getSkin());
-        cancelPlaceTrainButton.setPosition(TaxeGame.WORLD_WIDTH - 100.0f, TaxeGame.WORLD_HEIGHT - 33.0f);
+        cancelPlaceTrainButton = new TextButton("Cancel Placement", context.getSkin());
+        cancelPlaceTrainButton.setPosition(TaxeGame.WORLD_WIDTH - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
         cancelPlaceTrainButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -258,6 +213,70 @@ public class TopBarController {
         });
 
         context.getStage().addActor(cancelPlaceTrainButton);
+    }
+
+    private void addPlayReplayButton() {
+        playReplayButton = new TextButton("Play", context.getSkin());
+        playReplayButton.setPosition(GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
+        playReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getEventReplayer().play();
+            }
+        });
+
+        playReplayButton.setVisible(EventReplayer.isReplaying());
+
+        context.getStage().addActor(playReplayButton);
+    }
+
+    private void addPauseReplayButton() {
+        pauseReplayButton = new TextButton("Pause", context.getSkin());
+        pauseReplayButton.setPosition(playReplayButton.getX() + playReplayButton.getWidth() + GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
+        pauseReplayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                context.getEventReplayer().pause();
+            }
+        });
+
+        pauseReplayButton.setVisible(EventReplayer.isReplaying());
+
+        context.getStage().addActor(pauseReplayButton);
+    }
+
+    private void addReplaySlider() {
+        replaySpeedSlider = new Slider(EventReplayer.MIN_PLAYBACK_SPEED,
+                EventReplayer.MAX_PLAYBACK_SPEED,
+                (EventReplayer.MAX_PLAYBACK_SPEED - EventReplayer.MIN_PLAYBACK_SPEED) / SPEED_SLIDER_SEGMENTS,
+                false, context.getSkin());
+        replaySpeedSlider.setPosition(pauseReplayButton.getX() + pauseReplayButton.getWidth() + GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 27.0f);
+
+        replaySpeedSlider.setVisible(EventReplayer.isReplaying());
+
+        replaySpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                EventReplayer.setPlayBackSpeed(replaySpeedSlider.getValue());
+                if (replaySpeedLabel != null) {
+                    updateSpeedText();
+                }
+            }
+        });
+
+        replaySpeedLabel = new Label(null, context.getSkin());
+        replaySpeedLabel.setColor(Color.BLACK);
+        replaySpeedLabel.setPosition(replaySpeedSlider.getX() + replaySpeedSlider.getWidth() + GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 23.0f);
+        updateSpeedText();
+
+        replaySpeedLabel.setVisible(EventReplayer.isReplaying());
+
+        context.getStage().addActor(replaySpeedSlider);
+        context.getStage().addActor(replaySpeedLabel);
+    }
+
+    private void updateSpeedText() {
+        replaySpeedLabel.setText(String.format("%.1f", replaySpeedSlider.getValue()) + "x");
     }
 
     public void clearFlashMessage() {

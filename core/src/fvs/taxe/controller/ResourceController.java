@@ -3,6 +3,7 @@ package fvs.taxe.controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.TrainClicked;
@@ -23,7 +24,7 @@ import java.util.List;
 public class ResourceController {
     private static final float MY_TRAINS_Y = (float) TaxeGame.WORLD_HEIGHT - 175.0f;
     private static final float MY_TRACKS_Y = (float) TaxeGame.WORLD_HEIGHT - 475.0f;
-    private static final float SPACE_BETWEEN_RESOURCES_X = 10f;
+    private static final float SPACE_BETWEEN_RESOURCES_X = GameScreen.BUTTON_PADDING_X;
     private static final float SPACE_BETWEEN_RESOURCES_Y = 30f;
     private static final float SPACE_AFTER_HEADER_RESOURCES_Y = 50f;
 

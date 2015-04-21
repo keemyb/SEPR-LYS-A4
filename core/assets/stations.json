@@ -181,18 +181,6 @@
       "station2": "Lisbon"
     },
     {
-      "station1": "Paris",
-      "station2": "Luxembourg"
-    },
-    {
-      "station1": "Paris",
-      "station2": "Hamburg"
-    },
-    {
-      "station1": "Luxembourg",
-      "station2": "Hamburg"
-    },
-    {
       "station1": "Luxembourg",
       "station2": "Zurich"
     },
@@ -209,15 +197,7 @@
       "station2": "Prague"
     },
     {
-      "station1": "Luxembourg",
-      "station2": "Berlin"
-    },
-    {
-      "station1": "Prague",
-      "station2": "Luxembourg"
-    },
-    {
-      "station1": "Prague",
+      "station1": "Zurich",
       "station2": "Berlin"
     },
     {
@@ -237,36 +217,16 @@
       "station2": "Oslo"
     },
     {
-      "station1": "Oslo",
-      "station2": "Stockholm"
-    },
-    {
       "station1": "Stockholm",
       "station2": "Gothenburg"
     },
     {
-      "station1": "Berlin",
-      "station2": "Warsaw"
-    },
-    {
       "station1": "Prague",
       "station2": "Krakow"
     },
     {
-      "station1": "Prague",
-      "station2": "Kosovo"
-    },
-    {
-      "station1": "Warsaw",
+      "station1": "Krakow",
       "station2": "Minsk"
-    },
-    {
-      "station1": "Minsk",
-      "station2": "Kiev"
-    },
-    {
-      "station1": "Kiev",
-      "station2": "Krakow"
     },
     {
       "station1": "Warsaw",
@@ -285,22 +245,6 @@
       "station2": "Kosovo"
     },
     {
-      "station1": "Bucharest",
-      "station2": "Prague"
-    },
-    {
-      "station1": "Warsaw",
-      "station2": "Kiev"
-    },
-    {
-      "station1": "Prague",
-      "station2": "Warsaw"
-    },
-    {
-      "station1": "Minsk",
-      "station2": "Hamburg"
-    },
-    {
       "station1": "Helsinki",
       "station2": "Minsk"
     },
@@ -309,16 +253,8 @@
       "station2": "Boden"
     },
     {
-      "station1": "Boden",
-      "station2": "Moscow"
-    },
-    {
       "station1": "Moscow",
       "station2": "Minsk"
-    },
-    {
-      "station1": "Moscow",
-      "station2": "Kiev"
     },
     {
       "station1": "Bucharest",

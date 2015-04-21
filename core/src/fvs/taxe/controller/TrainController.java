@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.actor.TrainActor;
-import fvs.taxe.dialog.ResourceDialogButtonClicked;
-import fvs.taxe.dialog.DialogResourceTrain;
+import fvs.taxe.dialog.DialogClickedTrain;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
@@ -51,14 +50,17 @@ public class TrainController {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_TRAIN) {
+                if (event == GameEvent.SELECTED_TRAIN) {
                     Train train = (Train) object;
                     selected(train);
-                } else if (event == GameEvent.CLICKED_CHOOSE_PLACE_TRAIN) {
+                } else if (event == GameEvent.SELECTED_TRAIN_PLACE_TRAIN) {
                     Train train = (Train) object;
                     placeTrain(train);
-                } else if (event == GameEvent.CLICKED_PLACE_TRAIN_CANCEL) {
+                } else if (event == GameEvent.CANCEL_PLACE_TRAIN) {
                     cancelPlaceTrain();
+                } else if (event == GameEvent.SELECTED_TRAIN_DISCARD_TRAIN) {
+                    Train train = (Train) object;
+                    discardTrain(train);
                 }
             }
         });
@@ -104,7 +106,7 @@ public class TrainController {
     }
 
     public void selected(Train train) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_TRAIN, train));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN, train));
 
         if (Game.getInstance().getState() != GameState.NORMAL) return;
 
@@ -123,17 +125,15 @@ public class TrainController {
         }
 
         if (train.getPosition() == null){
-            ResourceDialogButtonClicked listener = new ResourceDialogButtonClicked(context, currentPlayer, train);
-            DialogResourceTrain dia = new DialogResourceTrain(train, context, train.getPosition() != null);
-            dia.show(context.getStage());
-            dia.subscribeClick(listener);
+            DialogClickedTrain dialogClickedTrain = new DialogClickedTrain(train, context);
+            dialogClickedTrain.show(context.getStage());
         } else {
             context.getRouteController().beginRouting(train);
         }
     }
 
     public void placeTrain(Train train) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_PLACE_TRAIN, train));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN_PLACE_TRAIN, train));
 
         placedTrain = train;
 
@@ -176,7 +176,12 @@ public class TrainController {
     }
 
     public void cancelPlaceTrain() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_PLACE_TRAIN_CANCEL));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CANCEL_PLACE_TRAIN));
         finishPlaceTrain(false);
+    }
+
+    public void discardTrain(Train train) {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN_DISCARD_TRAIN, train));
+        train.getPlayer().removeTrain(train);
     }
 }

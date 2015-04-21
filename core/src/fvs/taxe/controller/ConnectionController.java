@@ -87,40 +87,40 @@ public class ConnectionController {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE) {
+                if (event == GameEvent.NEW_CONNECTION_MODE_BEGIN) {
                     enterCreateConnectionMode();
-                } else if (event == GameEvent.CLICKED_ADD_CONNECTION_MODE_DONE) {
+                } else if (event == GameEvent.NEW_CONNECTION_MODE_EXIT) {
                     endConnectionModifications();
-                } else if (event == GameEvent.CLICKED_CONNECTION_BUTTON) {
+                } else if (event == GameEvent.SELECTED_CONNECTION) {
                     Connection connection = (Connection) object;
                     setSelectedConnection(connection);
-                } else if (event == GameEvent.CLICKED_STATION) {
+                } else if (event == GameEvent.SELECTED_STATION) {
                     Station station = (Station) object;
                     selectStation(station);
-                } else if (event == GameEvent.CLICKED_NEW_CONNECTION) {
+                } else if (event == GameEvent.NEW_CONNECTION_MODE_CONFIRM_NEW) {
                     createConnection();
-                } else if (event == GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL) {
+                } else if (event == GameEvent.NEW_CONNECTION_MODE_SELECT_MATERIAL) {
                     List<Object> connectionAndMaterial = (List) object;
                     Connection connection = (Connection) connectionAndMaterial.get(0);
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     createConnection(connection, material);
-                } else if (event == GameEvent.CLICKED_UPGRADE_CONNECTION) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_UPGRADE) {
                     showUpgradeConnectionDialog();
-                } else if (event == GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_UPGRADE_SELECT_MATERIAL) {
                     List<Object> connectionAndMaterial = (List) object;
                     Connection connection = (Connection) connectionAndMaterial.get(0);
                     Connection.Material material = (Connection.Material) connectionAndMaterial.get(1);
                     upgradeConnection(connection, material);
-                } else if (event == GameEvent.CLICKED_REPAIR_CONNECTION) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_REPAIR) {
                     showRepairConnectionDialog();
-                } else if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_REPAIR_SELECT_AMOUNT) {
                     List<Object> connectionAndRepairAmount = (List) object;
                     Connection connection = (Connection) connectionAndRepairAmount.get(0);
                     float repairAmount = (float) connectionAndRepairAmount.get(1);
                     repairConnection(connection, repairAmount);
-                } else if (event == GameEvent.CLICKED_REMOVE_CONNECTION) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_REMOVE) {
                     showRemoveConnectionDialog();
-                } else if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION) {
+                } else if (event == GameEvent.SELECTED_CONNECTION_REMOVE_CONFIRM) {
                     Connection connection = (Connection) object;
                     removeConnection(connection);
                 }
@@ -197,7 +197,7 @@ public class ConnectionController {
     }
 
     private void createConnection() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_NEW_CONNECTION));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.NEW_CONNECTION_MODE_CONFIRM_NEW));
         if (selectedConnection == null) {
             context.getTopBarController().displayFlashMessage(
                     "You have not selected two stations", Color.BLACK, 1000);
@@ -210,17 +210,17 @@ public class ConnectionController {
     }
 
     public void showUpgradeConnectionDialog() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_UPGRADE_CONNECTION));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_UPGRADE));
         new DialogUpgradeConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
     }
 
     public void showRepairConnectionDialog() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REPAIR_CONNECTION));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REPAIR));
         new DialogRepairConnection(selectedConnection, context.getSkin(), context).show(context.getStage());
     }
 
     public void showRemoveConnectionDialog() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_REMOVE_CONNECTION));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REMOVE));
         if (canBeRemoved(selectedConnection)) {
             new DialogRemoveConnection(context, selectedConnection).show(context.getStage());
         } else {
@@ -297,7 +297,7 @@ public class ConnectionController {
     }
 
     private void endConnectionModifications() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE_DONE));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.NEW_CONNECTION_MODE_EXIT));
         clearSelected();
         context.getGameLogic().setState(GameState.NORMAL);
         connectionButtons.remove();
@@ -305,7 +305,7 @@ public class ConnectionController {
     }
 
     public void enterCreateConnectionMode() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ADD_CONNECTION_MODE));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.NEW_CONNECTION_MODE_BEGIN));
         if (numberOfNewConnectionsThisTurn == MAX_NEW_CONNECTIONS_PER_TURN) {
             String message = "You can only make " + MAX_NEW_CONNECTIONS_PER_TURN + " connection";
             if (MAX_NEW_CONNECTIONS_PER_TURN > 1) {
@@ -321,7 +321,7 @@ public class ConnectionController {
     }
 
     public void setSelectedConnection(gamelogic.map.Connection connection){
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON, connection));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION, connection));
         Station station1 = connection.getStation1();
         Station station2 = connection.getStation2();
         if (selectedStations.size() == 2) {
@@ -356,7 +356,7 @@ public class ConnectionController {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ADD_CONNECTION, new ArrayList<>(
                 Arrays.asList(currentPlayer, connection, material)
         )));
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL, new ArrayList<>(
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.NEW_CONNECTION_MODE_SELECT_MATERIAL, new ArrayList<>(
                 Arrays.asList(connection, material)
         )));
 
@@ -377,7 +377,7 @@ public class ConnectionController {
     }
 
     public void repairConnection(Connection connection, float repairThreshold) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT, new ArrayList<>(
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REPAIR_SELECT_AMOUNT, new ArrayList<>(
                 Arrays.asList(connection, repairThreshold)
         )));
 
@@ -396,7 +396,7 @@ public class ConnectionController {
     }
 
     public void upgradeConnection(Connection connection, Connection.Material material) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_UPGRADE_CONNECTION_MATERIAL, new ArrayList<>(
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_UPGRADE_SELECT_MATERIAL, new ArrayList<>(
                 Arrays.asList(connection, material)
         )));
 
@@ -415,7 +415,7 @@ public class ConnectionController {
     }
 
     public void removeConnection(Connection connection) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION, connection));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REMOVE_CONFIRM, connection));
 
         // Added twice for some reason on replay
         while (map.getConnections().contains(connection)) {

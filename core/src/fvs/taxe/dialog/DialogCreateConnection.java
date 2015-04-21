@@ -36,8 +36,8 @@ public class DialogCreateConnection extends Dialog {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL ||
-                        event == GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL_CANCEL) {
+                if (event == GameEvent.NEW_CONNECTION_MODE_SELECT_MATERIAL ||
+                        event == GameEvent.NEW_CONNECTION_MODE_SELECT_MATERIAL_CANCEL) {
                     result("CANCEL");
                 }
             }
@@ -59,7 +59,7 @@ public class DialogCreateConnection extends Dialog {
     @Override
     protected void result(Object object) {
         if (object == "CANCEL") {
-            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_NEW_CONNECTION_MATERIAL_CANCEL));
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.NEW_CONNECTION_MODE_SELECT_MATERIAL_CANCEL));
             this.remove();
         } else {
             context.getConnectionController().createConnection(connection, (Connection.Material) object);

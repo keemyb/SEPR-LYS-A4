@@ -42,7 +42,7 @@ public class StationController {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_STATION) {
+                if (event == GameEvent.SELECTED_STATION) {
                     Station station = (Station) object;
                     clickedStation(station);
                 }
@@ -69,7 +69,7 @@ public class StationController {
     }
 
     private void clickedStation(Station station) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_STATION, station));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_STATION, station));
 
         // Saving the state in case it is changed by a listener.
         GameState gameState = context.getGameLogic().getState();

@@ -40,10 +40,10 @@ public class GoalController {
 		EventReplayer.subscribeReplayEvent(new ReplayListener() {
 			@Override
 			public void replay(GameEvent event, Object object) {
-				if (event == GameEvent.CLICKED_GOAL_BUTTON) {
+				if (event == GameEvent.SELECTED_GOAL) {
 					Goal goal = (Goal) object;
 					selectedGoal(goal);
-				} else if (event == GameEvent.CLICKED_DISCARD_GOAL) {
+				} else if (event == GameEvent.SELECTED_GOAL_DISCARD) {
 					Goal goal = (Goal) object;
 					discardGoal(goal);
 				}
@@ -106,14 +106,14 @@ public class GoalController {
     public void discardGoal(Goal goal) {
         for (Player player : PlayerManager.getAllPlayers()) {
             if (player.getGoals().contains(goal)) {
-				EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_DISCARD_GOAL, goal));
+				EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_GOAL_DISCARD, goal));
                 player.discardGoal(goal);
             }
         }
     }
 
 	public void selectedGoal(Goal goal) {
-		EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_GOAL_BUTTON, goal));
+		EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_GOAL, goal));
 		new DialogGoal(context, goal).show(context.getStage());
 	}
 

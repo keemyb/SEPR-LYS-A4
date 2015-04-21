@@ -55,7 +55,7 @@ public class TopBarController {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_END_TURN) {
+                if (event == GameEvent.END_TURN) {
                     PlayerManager.turnOver();
                 }
             }
@@ -135,7 +135,7 @@ public class TopBarController {
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_END_TURN));
+                EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.END_TURN));
                 PlayerManager.turnOver();
             }
         });

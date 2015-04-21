@@ -28,8 +28,8 @@ public class DialogGoal extends Dialog {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_DISCARD_GOAL ||
-                        event == GameEvent.CLICKED_DISCARD_GOAL_CANCEL) {
+                if (event == GameEvent.SELECTED_GOAL_DISCARD ||
+                        event == GameEvent.SELECTED_GOAL_CANCEL) {
                     result("NO");
                 }
             }
@@ -53,7 +53,7 @@ public class DialogGoal extends Dialog {
         if (obj == "YES") {
             context.getGoalController().discardGoal(goal);
         } else {
-            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_DISCARD_GOAL_CANCEL));
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_GOAL_CANCEL));
             this.remove();
         }
     }

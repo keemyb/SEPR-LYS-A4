@@ -24,6 +24,7 @@ import gamelogic.player.PlayerManager;
  */
 public class GameScreen extends ScreenAdapter {
     public static final float ANIMATION_TIME = 1.05f;
+    public static final int BUTTON_PADDING_X = 10;
     final private TaxeGame game;
     private Stage stage;
     private Texture mapTexture;

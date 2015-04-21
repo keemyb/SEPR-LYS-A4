@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import fvs.taxe.GameScreen;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
+import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Junction;
@@ -47,13 +49,13 @@ public class RouteController {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_BEGIN_ROUTING) {
+                if (event == GameEvent.ROUTING_BEGIN) {
                     beginRouting((Train) object);
-                } else if (event == GameEvent.CLICKED_ROUTING_DISCARD_TRAIN) {
-                    discardRouting();
-                } else if (event == GameEvent.CLICKED_ROUTING_DONE) {
+                } else if (event == GameEvent.ROUTING_DISCARD_TRAIN) {
+                    discardTrain();
+                } else if (event == GameEvent.ROUTING_DONE) {
                     doneRouting();
-                } else if (event == GameEvent.CLICKED_ROUTING_CANCEL) {
+                } else if (event == GameEvent.ROUTING_CANCEL) {
                     cancelRouting();
                 }
             }
@@ -61,7 +63,7 @@ public class RouteController {
     }
 
     public void beginRouting(Train train) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_BEGIN_ROUTING, train));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ROUTING_BEGIN, train));
 
         this.train = train;
         isRouting = true;
@@ -117,25 +119,25 @@ public class RouteController {
     }
 
     private void addRoutingButtons() {
-        TextButton doneRouting = new TextButton("Route Complete", context.getSkin());
-        TextButton discard = new TextButton("Discard", context.getSkin());
-        TextButton cancel = new TextButton("Cancel", context.getSkin());
+        TextButton discardTrain = new TextButton("Discard Train", context.getSkin());
+        TextButton routeComplete = new TextButton("Route Complete", context.getSkin());
+        TextButton cancel = new TextButton("Cancel Route", context.getSkin());
 
-        cancel.setPosition(TaxeGame.WORLD_WIDTH - 70, TaxeGame.WORLD_HEIGHT - 33);
-        discard.setPosition(TaxeGame.WORLD_WIDTH - 140, TaxeGame.WORLD_HEIGHT - 33);
-        doneRouting.setPosition(TaxeGame.WORLD_WIDTH - 270, TaxeGame.WORLD_HEIGHT - 33);
+        cancel.setPosition(TaxeGame.WORLD_WIDTH - cancel.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
+        routeComplete.setPosition(cancel.getX() - routeComplete.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
+        discardTrain.setPosition(GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
 
-        doneRouting.addListener(new ClickListener() {
+        routeComplete.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 doneRouting();
             }
         });
 
-        discard.addListener(new ClickListener() {
+        discardTrain.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                discardRouting();
+                discardTrain();
             }
         });
 
@@ -146,15 +148,15 @@ public class RouteController {
             }
         });
 
-        routingButtons.addActor(discard);
-        routingButtons.addActor(doneRouting);
+        routingButtons.addActor(discardTrain);
+        routingButtons.addActor(routeComplete);
         routingButtons.addActor(cancel);
 
         context.getStage().addActor(routingButtons);
     }
 
     private void doneRouting() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DONE));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ROUTING_DONE));
         if (!canEndRouting) {
             context.getTopBarController().displayFlashMessage("Your route must end at a station", Color.RED);
             return;
@@ -163,14 +165,14 @@ public class RouteController {
         endRouting();
     }
 
-    private void discardRouting() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_DISCARD_TRAIN));
-        PlayerManager.getCurrentPlayer().removeTrain(train);
+    private void discardTrain() {
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ROUTING_DISCARD_TRAIN));
         endRouting();
+        context.getTrainController().discardTrain(train);
     }
 
     private void cancelRouting() {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_ROUTING_CANCEL));
+        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.ROUTING_CANCEL));
         endRouting();
     }
 

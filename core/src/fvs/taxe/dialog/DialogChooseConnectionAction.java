@@ -21,24 +21,24 @@ public class DialogChooseConnectionAction extends Dialog {
         text("What would you like to do with this connection?");
 
         if (connection.getHealth() < 1) {
-            button("Repair", GameEvent.CLICKED_REPAIR_CONNECTION);
+            button("Repair", GameEvent.SELECTED_CONNECTION_REPAIR);
         }
         if (connection.isUpgradable(Connection.Material.SILVER) ||
                 connection.isUpgradable(Connection.Material.GOLD)) {
-            button("Upgrade", GameEvent.CLICKED_UPGRADE_CONNECTION);
+            button("Upgrade", GameEvent.SELECTED_CONNECTION_UPGRADE);
         }
 
-        button("Remove", GameEvent.CLICKED_REMOVE_CONNECTION);
-        button("Cancel", GameEvent.CLICKED_CONNECTION_BUTTON_CANCEL);
+        button("Remove", GameEvent.SELECTED_CONNECTION_REMOVE);
+        button("Cancel", GameEvent.SELECTED_CONNECTION_CANCEL);
 
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_REPAIR_CONNECTION ||
-                        event == GameEvent.CLICKED_UPGRADE_CONNECTION ||
-                        event == GameEvent.CLICKED_REMOVE_CONNECTION ||
-                        event == GameEvent.CLICKED_CONNECTION_BUTTON_CANCEL) {
-                    result(GameEvent.CLICKED_CONNECTION_BUTTON_CANCEL);
+                if (event == GameEvent.SELECTED_CONNECTION_REPAIR ||
+                        event == GameEvent.SELECTED_CONNECTION_UPGRADE ||
+                        event == GameEvent.SELECTED_CONNECTION_REMOVE ||
+                        event == GameEvent.SELECTED_CONNECTION_CANCEL) {
+                    result(GameEvent.SELECTED_CONNECTION_CANCEL);
                 }
             }
         });
@@ -60,17 +60,17 @@ public class DialogChooseConnectionAction extends Dialog {
     protected void result(Object object) {
         GameEvent gameEvent = (GameEvent) object;
         switch (gameEvent) {
-            case CLICKED_CONNECTION_BUTTON_CANCEL:
-                EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CONNECTION_BUTTON_CANCEL));
+            case SELECTED_CONNECTION_CANCEL:
+                EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_CANCEL));
                 this.remove();
                 break;
-            case CLICKED_REPAIR_CONNECTION:
+            case SELECTED_CONNECTION_REPAIR:
                 context.getConnectionController().showRepairConnectionDialog();
                 break;
-            case CLICKED_UPGRADE_CONNECTION:
+            case SELECTED_CONNECTION_UPGRADE:
                 context.getConnectionController().showUpgradeConnectionDialog();
                 break;
-            case CLICKED_REMOVE_CONNECTION:
+            case SELECTED_CONNECTION_REMOVE:
                 context.getConnectionController().showRemoveConnectionDialog();
                 break;
             default:

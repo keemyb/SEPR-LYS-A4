@@ -45,14 +45,14 @@ public class DialogMultipleTrain extends Dialog {
             getButtonTable().row();
         }
 
-        button("Cancel", GameEvent.CLICKED_CANCEL_MULTIPLE_TRAIN);
+        button("Cancel", GameEvent.SELECTED_MULTIPLE_TRAIN_CANCEL);
 
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_TRAIN ||
-                        event == GameEvent.CLICKED_CANCEL_MULTIPLE_TRAIN) {
-                    result(GameEvent.CLICKED_CANCEL_MULTIPLE_TRAIN);
+                if (event == GameEvent.SELECTED_TRAIN ||
+                        event == GameEvent.SELECTED_MULTIPLE_TRAIN_CANCEL) {
+                    result(GameEvent.SELECTED_MULTIPLE_TRAIN_CANCEL);
                 }
             }
         });
@@ -72,8 +72,8 @@ public class DialogMultipleTrain extends Dialog {
 
     @Override
     protected void result(Object object) {
-        if (object == GameEvent.CLICKED_CANCEL_MULTIPLE_TRAIN) {
-            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CANCEL_MULTIPLE_TRAIN));
+        if (object == GameEvent.SELECTED_MULTIPLE_TRAIN_CANCEL) {
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_MULTIPLE_TRAIN_CANCEL));
             this.remove();
         } else {
             Train train = (Train) object;

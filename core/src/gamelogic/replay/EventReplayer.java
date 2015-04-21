@@ -41,14 +41,17 @@ public class EventReplayer {
 
     public static void saveReplayEvent(ReplayEvent event) {
         if (isReplaying) return;
+        System.out.println(event.gameEvent + " " + event.object);
         eventInstances.add(event);
     }
 
     public void playBackReplayEvent(ReplayEvent event) {
+        System.out.println(event.gameEvent + " " + event.object);
         fireReplayEvent(event.gameEvent, event.object);
     }
 
     public void start() {
+        System.out.println("begin");
         if (eventInstances.isEmpty()) return;
         eventInstanceToPlayNext = eventInstances.get(0);
 

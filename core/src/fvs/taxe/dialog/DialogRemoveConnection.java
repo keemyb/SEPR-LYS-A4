@@ -28,8 +28,8 @@ public class DialogRemoveConnection extends Dialog {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION ||
-                        event == GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION_CANCEL) {
+                if (event == GameEvent.SELECTED_CONNECTION_REMOVE_CONFIRM ||
+                        event == GameEvent.SELECTED_CONNECTION_REMOVE_CANCEL) {
                     result("NO");
                 }
             }
@@ -53,7 +53,7 @@ public class DialogRemoveConnection extends Dialog {
         if (obj == "YES") {
             context.getConnectionController().removeConnection(connection);
         } else {
-            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REMOVE_CONNECTION_CANCEL));
+            context.getEventReplayer().saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REMOVE_CANCEL));
             this.remove();
         }
     }

@@ -41,8 +41,8 @@ public class DialogRepairConnection extends Dialog {
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {
-                if (event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT ||
-                        event == GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT_CANCEL) {
+                if (event == GameEvent.SELECTED_CONNECTION_REPAIR_SELECT_AMOUNT ||
+                        event == GameEvent.SELECTED_CONNECTION_REPAIR_SELECT_AMOUNT_CANCEL) {
                     result("CANCEL");
                 }
             }
@@ -64,7 +64,7 @@ public class DialogRepairConnection extends Dialog {
     @Override
     protected void result(Object object) {
         if (object == "CANCEL") {
-            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.CLICKED_CHOOSE_REPAIR_CONNECTION_AMOUNT_CANCEL));
+            EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_CONNECTION_REPAIR_SELECT_AMOUNT_CANCEL));
             this.remove();
         } else {
             context.getConnectionController().repairConnection(connection, (float) object);

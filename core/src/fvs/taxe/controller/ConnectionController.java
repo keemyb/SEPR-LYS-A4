@@ -25,6 +25,7 @@ import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -436,6 +437,10 @@ public class ConnectionController {
                         return false;
                     }
                 }
+                if (train.getPosition() == null || train.getLocation() != null ) continue;
+                double trainFromTrack = Line2D.ptSegDist(connection.getStation1().getLocation().getX(), connection.getStation1().getLocation().getY(),
+                        connection.getStation2().getLocation().getX(), connection.getStation2().getLocation().getY(), train.getPosition().getX(), train.getPosition().getY());
+                if (trainFromTrack < 0.01) return false;
             }
         }
         return true;

@@ -33,7 +33,7 @@ public class MapTest extends LibGdxTest {
         assertTrue("Failed to add stations", map.getStations().size() - previousSize == 2);
 
         map.addConnection(connection);
-        assertTrue("Connection addition failed", map.doesConnectionExist(station1.getName(), station2.getName()));
+        assertTrue("Connection addition failed", map.doesConnectionExist(station1, station2));
 
         // Should throw an error by itself
         map.getStationByPosition(new Position(9999, 9999));
@@ -45,13 +45,13 @@ public class MapTest extends LibGdxTest {
         Station paris = map.getStationByName("Paris");
         Station prague = map.getStationByName("Prague");
 
-        assertEquals(0f, map.getShortestRouteDistance(london, london), 0.0001f);
+        assertEquals(0f, map.getLengthOfShortestRoute(london, london), 0.0001f);
 
-        assertEquals(101.1187f, map.getShortestRouteDistance(london, paris), 0.0001f);
-        assertEquals(101.1187f, map.getShortestRouteDistance(paris, london), 0.0001f);
+        assertEquals(101.1187f, map.getLengthOfShortestRoute(london, paris), 0.0001f);
+        assertEquals(101.1187f, map.getLengthOfShortestRoute(paris, london), 0.0001f);
 
-        assertEquals(275.3817f, map.getShortestRouteDistance(london, prague), 0.0001f);
-        assertEquals(174.2630f, map.getShortestRouteDistance(prague, paris), 0.0001f);
+        assertEquals(275.3817f, map.getLengthOfShortestRoute(london, prague), 0.0001f);
+        assertEquals(174.2630f, map.getLengthOfShortestRoute(prague, paris), 0.0001f);
 
     }
 

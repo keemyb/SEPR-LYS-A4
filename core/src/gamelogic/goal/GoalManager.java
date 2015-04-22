@@ -49,7 +49,7 @@ public abstract class GoalManager {
         if (destinationDifferentZone){
             String zoneA = map.getZone(origin);
             String zoneB = map.getZone(destination);
-            if (!map.areZonesConnected(zoneA, zoneB)) {
+            if (!map.pathBetweenZonesExist(zoneA, zoneB)) {
                 goal.setWereZonesConnected(false);
             }
         }
@@ -89,7 +89,7 @@ public abstract class GoalManager {
     }
 
     private static int computeTurnLimit(Station origin, Station destination) {
-        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+        int distance = (int) Game.getInstance().getMap().getLengthOfShortestRoute(origin, destination);
         return distance / TrainManager.getRandomTrain().getSpeed() + 5;
     }
 

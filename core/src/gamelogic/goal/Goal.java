@@ -89,7 +89,7 @@ public class Goal {
     }
 
     private void setReward(){
-        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+        int distance = (int) Game.getInstance().getMap().getLengthOfShortestRoute(origin, destination);
 
         if (quantifiable){
             float t = distance * 5 * (1 - 1f / turnLimit);

@@ -147,17 +147,20 @@ public class ResourceController {
                 continue;
             }
 
+            DiscardClicked discardListener =  new DiscardClicked(context, train);
+            
+            TextButton discardButton = new TextButton(" X ", context.getSkin());
+            discardButton.setPosition(x, y);
+            discardButton.setColor(Color.RED);
+            discardButton.addListener(discardListener);
+            
             TrainClicked listener = new TrainClicked(context, train);
 
             TextButton button = new TextButton(train.toString(), context.getSkin());
-            button.setPosition(x, y);
+            button.setPosition(x+discardButton.getWidth()+5, y);
             button.addListener(listener);
 
-            DiscardClicked discardListener =  new DiscardClicked(context, train);
             
-            TextButton discardButton = new TextButton("X", context.getSkin());
-            discardButton.setPosition(x+button.getWidth()+5, y);
-            discardButton.addListener(discardListener);
             
             resourceButtons.addActor(button);
             resourceButtons.addActor(discardButton);

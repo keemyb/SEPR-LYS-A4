@@ -21,7 +21,6 @@ public class Map {
 	private Junction lastBroken;
 	private List<Station> stations;
 	private java.util.Map<String, List<Station>> zones;
-	private List<Station> islandStations;
 	private List<Junction> junctions;
 	private List<Connection> connections;
 	private List<Set<String>> invalidConnections;
@@ -33,7 +32,6 @@ public class Map {
 	public Map() {
 		stations = new ArrayList<>();
 		zones = new HashMap<>();
-		islandStations = new ArrayList<>();
 		junctions = new ArrayList<>();
 		connections = new ArrayList<>();
 		invalidConnections = new ArrayList<>();
@@ -42,7 +40,6 @@ public class Map {
 		JsonReader jsonReader = new JsonReader();
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
-		parseIslandStations(jsonVal);
 		parseZones(jsonVal);
 		parseConnections(jsonVal);
 		parseInvalidConnection(jsonVal);
@@ -54,17 +51,6 @@ public class Map {
         computeDistances();
         initialised = true;
     }
-
-	private void parseIslandStations(JsonValue jsonVal){
-		for (JsonValue islandStation = jsonVal.getChild("islandStations"); islandStation != null; islandStation = islandStation.next) {
-			String name = "";
-			for (JsonValue val = islandStation.child; val != null; val = val.next) {
-				if (val.name.equalsIgnoreCase("name"))
-					name = val.asString();
-			}
-			islandStations.add(getStationByName(name));
-		}
-	}
 
 	private void parseZones(JsonValue jsonVal){
 		for (JsonValue zonesJson = jsonVal.getChild("zones"); zonesJson != null; zonesJson = zonesJson.next) {
@@ -225,10 +211,6 @@ public class Map {
 		return stations.get(random.nextInt(stations.size()));
 	}
 
-	public Station getRandomIslandStation(){
-		return islandStations.get(random.nextInt(islandStations.size()));
-	}
-
 	public void addStation(Station station) {
 		stations.add(station);
 	}
@@ -281,17 +263,6 @@ public class Map {
 		return connections;
 	}
 
-	public List<Station> getAdjacentStations(Station station) {
-		List<Station> adjacentStations = new ArrayList<>();
-		for (Connection c : connections) {
-			if (c.getStation1() == station)
-				adjacentStations.add(c.getStation2());
-			else if (c.getStation2() == station)
-				adjacentStations.add(c.getStation1());
-		}
-		return adjacentStations;
-	}
-
 	public void addConnection(Connection connection) {
 		connections.add(connection);
         /* Don't want to keep recomputing distances whilst we are adding
@@ -330,9 +301,6 @@ public class Map {
 			}
 		}
 		return null;
-	}
-	public boolean isIslandStation (Station station){
-		return islandStations.contains(station);
 	}
 
 	/**
@@ -416,7 +384,7 @@ public class Map {
 		return false;
 	}
 
-	private String getZone(Station station) {
+	public String getZone(Station station) {
 		for (java.util.Map.Entry<String, List<Station>> entry : zones.entrySet()) {
 			String zone = entry.getKey();
 			List<Station> stations = entry.getValue();

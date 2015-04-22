@@ -24,18 +24,19 @@ public class Goal {
         this.origin = origin;
         this.destination = destination;
         this.turnIssued = turnIssued;
+        setReward();
         updateGoal();
     }
 
     public void addTrainConstraint(Train train) {
         requiredTrain = train;
-        updateGoal();
+        setReward();
     }
 
     public void addTurnLimitConstraint(int turns) {
         quantifiable = true;
         turnLimit = turns;
-        updateGoal();
+        setReward();
     }
 
     public void resetComplete() {
@@ -76,14 +77,20 @@ public class Goal {
     }
 
     public void updateGoal() {
-        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
         if (quantifiable) {
             if (turnIssued != PlayerManager.getTurnNumber()) {
                 turnLimit--;
+                reward -= ((int)(Math.round((double) reward/100))*15);
             }
+        }
+    }
+
+    private void setReward(){
+        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+        if (quantifiable){
             float t = distance * 5 * (1 - 1f / turnLimit);
             reward = Math.max(50, (int) t - (int) t % 50);
-        } else {
+        }else{
             reward = Math.max(50, distance - distance % 50);
         }
     }

@@ -1,10 +1,9 @@
 package gamelogic.map;
 
+import com.badlogic.gdx.graphics.Color;
 import gamelogic.player.Player;
 import gamelogic.resource.Train;
-import gamelogic.resource.TrainManager;
 
-import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,9 +122,9 @@ public class Connection {
     }
 
     public enum Material {
-        GOLD("Gold", 50, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
-        SILVER("Silver", 30, 0.2f, 0.8f, Color.GRAY),
-        BRONZE("Bronze", 10, 0.1f, 0.5f, new Color(153/255f, 73/255f, 40/255f, 1f));
+        GOLD("Gold", 5, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
+        SILVER("Silver", 3, 0.2f, 0.8f, Color.GRAY),
+        BRONZE("Bronze", 1, 0.1f, 0.5f, new Color(153/255f, 73/255f, 40/255f, 1f));
 
         private String name;
         private int costPerUnitLength;

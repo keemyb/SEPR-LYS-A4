@@ -23,7 +23,7 @@ public abstract class GoalManager {
 
     public final static int CONFIG_MAX_PLAYER_GOALS = 3;
     private final static Random random = new Random();
-    private final static float ISLAND_PROB = 1f;
+    private final static float PROBABILITY_STATIONS_ARE_IN_DIFFERENT_ZONES = 0.3f;
 
     /**
      * Returns a random goal. The type of goal is dependent on phase of the game.
@@ -33,26 +33,25 @@ public abstract class GoalManager {
      */
     private static Goal generateRandom(int turn) {
         Map map = Game.getInstance().getMap();
-        boolean hasIslandStation;
         Station origin, destination;
         do {
-            if (random.nextFloat() < ISLAND_PROB) {
-                origin = map.getRandomIslandStation();
-                hasIslandStation = true;
-            }
-            else {
-                origin = map.getRandomStation();
-                hasIslandStation = false;
-            }
-
-
+            origin = map.getRandomStation();
         } while (origin instanceof Junction);
+
+        boolean destinationDifferentZone = random.nextFloat() < PROBABILITY_STATIONS_ARE_IN_DIFFERENT_ZONES;
         do {
             destination = map.getRandomStation();
-        } while (destination == origin || destination instanceof Junction);
+        } while (destination == origin || destination instanceof Junction ||
+                (destinationDifferentZone && map.getZone(origin).equals(map.getZone(destination))));
+
         Goal goal = new Goal(origin, destination, turn);
-        if (hasIslandStation){
-            goal.setHasIslandStation(true);
+
+        if (destinationDifferentZone){
+            String zoneA = map.getZone(origin);
+            String zoneB = map.getZone(destination);
+            if (!map.areZonesConnected(zoneA, zoneB)) {
+                goal.setWereZonesConnected(false);
+            }
         }
 
         // Goal with a specific train; pretty much hardcoded configuration

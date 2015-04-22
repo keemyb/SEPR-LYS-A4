@@ -11,6 +11,8 @@ import gamelogic.resource.Train;
  * quantifiable).
  */
 public class Goal {
+    private static final int ZONE_BONUS = 200;
+
     private int reward = 0;
     private Station origin;
     private Station destination;
@@ -19,7 +21,7 @@ public class Goal {
     private Train requiredTrain = null;            // Train constraint
     private boolean quantifiable = false;       // Quantifiable or not
     private int turnLimit = 0;                  // If quantifiable: turn limits constraint
-    private boolean hasIslandStation;
+    private boolean wereZonesConnected = true;
 
     public Goal(Station origin, Station destination, int turnIssued) {
         this.origin = origin;
@@ -87,18 +89,17 @@ public class Goal {
     }
 
     private void setReward(){
-        int distance;
-        if (hasIslandStation){
-            distance = (int) Station.getDistance(origin, destination);
-            reward = 300;
-        }else{
-            distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
-        }
+        int distance = (int) Game.getInstance().getMap().getShortestRouteDistance(origin, destination);
+
         if (quantifiable){
             float t = distance * 5 * (1 - 1f / turnLimit);
             reward += Math.max(50, (int) t - (int) t % 50);
-        }else{
+        } else {
             reward += Math.max(50, distance - distance % 50);
+        }
+
+        if (!wereZonesConnected){
+            reward += ZONE_BONUS;
         }
     }
 
@@ -123,8 +124,8 @@ public class Goal {
         return turnLimit;
     }
 
-    public void setHasIslandStation(boolean hasIslandStation) {
-        this.hasIslandStation = hasIslandStation;
+    public void setWereZonesConnected(boolean wereZonesConnected) {
+        this.wereZonesConnected = wereZonesConnected;
     }
 
 }

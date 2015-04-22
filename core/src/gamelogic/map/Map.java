@@ -20,7 +20,7 @@ public class Map {
 	private final int JUNCTION_FAILURE_DURATION = 4;
 	private Junction lastBroken;
 	private List<Station> stations;
-	private List<Station> islandStations;
+	private java.util.Map<String, List<Station>> zones;
 	private List<Junction> junctions;
 	private List<Connection> connections;
 	private List<Set<String>> invalidConnections;
@@ -31,7 +31,7 @@ public class Map {
 
 	public Map() {
 		stations = new ArrayList<>();
-		islandStations = new ArrayList<>();
+		zones = new HashMap<>();
 		junctions = new ArrayList<>();
 		connections = new ArrayList<>();
 		invalidConnections = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Map {
 		JsonReader jsonReader = new JsonReader();
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
-		parseIslandStations(jsonVal);
+		parseZones(jsonVal);
 		parseConnections(jsonVal);
 		parseInvalidConnection(jsonVal);
         for (Station s : stations)
@@ -51,14 +51,17 @@ public class Map {
         computeDistances();
         initialised = true;
     }
-	private void parseIslandStations(JsonValue jsonVal){
-		for (JsonValue islandStation = jsonVal.getChild("islandStations"); islandStation != null; islandStation = islandStation.next) {
-			String name = "";
-			for (JsonValue val = islandStation.child; val != null; val = val.next) {
-				if (val.name.equalsIgnoreCase("name"))
-					name = val.asString();
+
+	private void parseZones(JsonValue jsonVal){
+		for (JsonValue zonesJson = jsonVal.getChild("zones"); zonesJson != null; zonesJson = zonesJson.next) {
+			for (JsonValue zone = zonesJson.child; zone != null; zone = zone.next) {
+				String zoneName = zone.name;
+				zones.put(zoneName, new ArrayList<Station>());
+				for (JsonValue stationName = zone.child; stationName != null; stationName = stationName.next) {
+					Station station = getStationByName(stationName.asString());
+					zones.get(zoneName).add(station);
+				}
 			}
-			islandStations.add(getStationByName(name));
 		}
 	}
 
@@ -208,10 +211,6 @@ public class Map {
 		return stations.get(random.nextInt(stations.size()));
 	}
 
-	public Station getRandomIslandStation(){
-		return islandStations.get(random.nextInt(islandStations.size()));
-	}
-
 	public void addStation(Station station) {
 		stations.add(station);
 	}
@@ -264,17 +263,6 @@ public class Map {
 		return connections;
 	}
 
-	public List<Station> getAdjacentStations(Station station) {
-		List<Station> adjacentStations = new ArrayList<>();
-		for (Connection c : connections) {
-			if (c.getStation1() == station)
-				adjacentStations.add(c.getStation2());
-			else if (c.getStation2() == station)
-				adjacentStations.add(c.getStation1());
-		}
-		return adjacentStations;
-	}
-
 	public void addConnection(Connection connection) {
 		connections.add(connection);
         /* Don't want to keep recomputing distances whilst we are adding
@@ -313,9 +301,6 @@ public class Map {
 			}
 		}
 		return null;
-	}
-	public boolean isIslandStation (Station station){
-		return islandStations.contains(station);
 	}
 
 	/**
@@ -364,7 +349,48 @@ public class Map {
 	 * @return length of shortest route between a and b.
 	 */
 	public float getShortestRouteDistance(Station a, Station b) {
-		return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
+		String zoneA = getZone(a);
+		String zoneB = getZone(b);
+
+		if (areZonesConnected(zoneA, zoneB)) {
+			return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
+		}
+
+		float shortestCrossZoneDistance = Float.MAX_VALUE;
+		Station closestStationA = null;
+		Station closestStationB = null;
+		for (Station stationZone1 : zones.get(zoneA)) {
+			for (Station stationZone2 : zones.get(zoneB)) {
+				float distance = Station.getDistance(stationZone1, stationZone2);
+				if (distance < shortestCrossZoneDistance) {
+					closestStationA = stationZone1;
+					closestStationB = stationZone2;
+					shortestCrossZoneDistance = distance;
+				}
+			}
+		}
+
+		return getShortestRouteDistance(a, closestStationA)
+				+ shortestCrossZoneDistance
+				+ getShortestRouteDistance(b, closestStationB);
+	}
+
+	public boolean areZonesConnected(String zone1, String zone2) {
+		for (Station station1 : zones.get(zone1)) {
+			for (Station station2 : zones.get(zone2)) {
+				if (doesConnectionExist(station1.getName(), station2.getName())) return true;
+			}
+		}
+		return false;
+	}
+
+	public String getZone(Station station) {
+		for (java.util.Map.Entry<String, List<Station>> entry : zones.entrySet()) {
+			String zone = entry.getKey();
+			List<Station> stations = entry.getValue();
+			if (stations.contains(station)) return zone;
+		}
+		return "";
 	}
 
 }

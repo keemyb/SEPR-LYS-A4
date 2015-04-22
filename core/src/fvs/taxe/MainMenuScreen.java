@@ -38,9 +38,9 @@ public class MainMenuScreen extends ScreenAdapter {
 				TaxeGame.WORLD_HEIGHT));
 		Gdx.input.setInputProcessor(stage);
 
-		playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 350, 400,
+		playBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, TaxeGame.WORLD_HEIGHT/2 + 25, 400,
 				100);
-		exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, 200, 400,
+		exitBounds = new Rectangle(TaxeGame.WORLD_WIDTH / 2 - 200, TaxeGame.WORLD_HEIGHT/2 - 125, 400,
 				100);
 		touchPoint = new Vector3();
 		mapSprite = new Sprite(new Texture(Gdx.files.internal("game-map.png")));
@@ -96,17 +96,17 @@ public class MainMenuScreen extends ScreenAdapter {
 			game.shapeRenderer.setProjectionMatrix(camera.combined);
 			game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-			game.shapeRenderer.setColor(Color.GREEN);
+			game.shapeRenderer.setColor(Color.DARK_GRAY);
 			game.shapeRenderer.rect(playBounds.getX(), playBounds.getY(),
 					playBounds.getWidth(), playBounds.getHeight());
-			game.shapeRenderer.setColor(Color.RED);
+			game.shapeRenderer.setColor(Color.DARK_GRAY);
 			game.shapeRenderer.rect(exitBounds.getX(), exitBounds.getY(),
 					exitBounds.getWidth(), exitBounds.getHeight());
 			game.shapeRenderer.end();
 
 			// Draw text into rectangles
 			game.batch.begin();
-			String startGameString = "Start game";
+			String startGameString = "Start Game";
 			game.font.draw(
 					game.batch,
 					startGameString,

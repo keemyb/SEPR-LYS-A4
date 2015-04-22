@@ -53,7 +53,7 @@ public class Goal {
         if (turnOriginWasVisited > turnDestinationWasVisited) return false;
 
         if (requiredTrain != null) {
-            if (!train.equals(requiredTrain)) return false;
+            if (!train.getName().equals(requiredTrain.getName())) return false;
         }
 
         return true;

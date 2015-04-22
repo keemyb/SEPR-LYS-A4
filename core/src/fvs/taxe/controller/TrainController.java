@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.actor.TrainActor;
-import fvs.taxe.dialog.DialogClickedTrain;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;

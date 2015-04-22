@@ -415,4 +415,21 @@
       "station2": "Hamburg"
     }
   ]
+
+  "islandStations": [
+    {
+      "name": "Madrid"
+
+    },
+
+    {
+      "name": "Athens"
+
+    },
+
+    {
+      "name": "Ankara"
+
+    }
+  ]
 }

@@ -20,6 +20,7 @@ public class Map {
 	private final int JUNCTION_FAILURE_DURATION = 4;
 	private Junction lastBroken;
 	private List<Station> stations;
+	private List<Station> islandStations;
 	private List<Junction> junctions;
 	private List<Connection> connections;
 	private List<Set<String>> invalidConnections;
@@ -30,6 +31,7 @@ public class Map {
 
 	public Map() {
 		stations = new ArrayList<>();
+		islandStations = new ArrayList<>();
 		junctions = new ArrayList<>();
 		connections = new ArrayList<>();
 		invalidConnections = new ArrayList<>();
@@ -38,6 +40,7 @@ public class Map {
 		JsonReader jsonReader = new JsonReader();
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
+		parseIslandStations(jsonVal);
 		parseConnections(jsonVal);
 		parseInvalidConnection(jsonVal);
         for (Station s : stations)
@@ -48,6 +51,16 @@ public class Map {
         computeDistances();
         initialised = true;
     }
+	private void parseIslandStations(JsonValue jsonVal){
+		for (JsonValue islandStation = jsonVal.getChild("islandStations"); islandStation != null; islandStation = islandStation.next) {
+			String name = "";
+			for (JsonValue val = islandStation.child; val != null; val = val.next) {
+				if (val.name.equalsIgnoreCase("name"))
+					name = val.asString();
+			}
+			islandStations.add(getStationByName(name));
+		}
+	}
 
 	private void parseConnections(JsonValue jsonVal) {
 		for (JsonValue connection = jsonVal.getChild("connections"); connection != null; connection = connection.next) {
@@ -193,6 +206,10 @@ public class Map {
 
 	public Station getRandomStation() {
 		return stations.get(random.nextInt(stations.size()));
+	}
+
+	public Station getRandomIslandStation(){
+		return islandStations.get(random.nextInt(islandStations.size()));
 	}
 
 	public void addStation(Station station) {

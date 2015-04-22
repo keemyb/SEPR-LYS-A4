@@ -23,6 +23,7 @@ public abstract class GoalManager {
 
     public final static int CONFIG_MAX_PLAYER_GOALS = 3;
     private final static Random random = new Random();
+    private final static float ISLAND_PROB = 0.4f;
 
     /**
      * Returns a random goal. The type of goal is dependent on phase of the game.
@@ -35,7 +36,14 @@ public abstract class GoalManager {
 
         Station origin, destination;
         do {
-            origin = map.getRandomStation();
+            if (random.nextFloat() < ISLAND_PROB) {
+                origin = map.getRandomIslandStation();
+            }
+            else {
+                origin = map.getRandomStation();
+            }
+
+
         } while (origin instanceof Junction);
         do {
             destination = map.getRandomStation();

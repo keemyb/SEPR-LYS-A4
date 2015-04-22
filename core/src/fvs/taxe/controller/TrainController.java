@@ -52,9 +52,6 @@ public class TrainController {
                 if (event == GameEvent.SELECTED_TRAIN) {
                     Train train = (Train) object;
                     selected(train);
-                } else if (event == GameEvent.SELECTED_TRAIN_PLACE_TRAIN) {
-                    Train train = (Train) object;
-                    placeTrain(train);
                 } else if (event == GameEvent.CANCEL_PLACE_TRAIN) {
                     cancelPlaceTrain();
                 } else if (event == GameEvent.SELECTED_TRAIN_DISCARD_TRAIN) {
@@ -105,8 +102,6 @@ public class TrainController {
     }
 
     public void placeTrain(Train train) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN_PLACE_TRAIN, train));
-
         placedTrain = train;
 
         Pixmap pixmap = new Pixmap(Gdx.files.internal(TrainManager.getCursorImageFileName(train)));
@@ -138,12 +133,12 @@ public class TrainController {
 	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
 	    }
 	
-	    if (train.getPosition() == null){
-	    	placeTrain(train);
-	    } else {
-	        context.getRouteController().beginRouting(train);
-	    }
-	}
+	    if (train.getPosition() == null) {
+            placeTrain(train);
+        } else {
+            context.getRouteController().beginRouting(train);
+        }
+    }
 
 	private void selectStationToPlace(Station station) {
         if (station instanceof Junction) {

@@ -2,23 +2,23 @@
   "trains": [
     {
       "name": "Bullet Train",
-      "speed": 100
+      "speed": 115
     },
     {
       "name": "Petrol Train",
-      "speed": 90
+      "speed": 105
     },
     {
       "name": "Diesel Train",
-      "speed": 80
+      "speed": 95
     },
     {
       "name": "Electric Train",
-      "speed": 70
+      "speed": 85
     },
     {
       "name": "Steam Train",
-      "speed": 50
+      "speed": 75
     }
 
   ]

@@ -381,7 +381,48 @@ public class Map {
 	 * @return length of shortest route between a and b.
 	 */
 	public float getShortestRouteDistance(Station a, Station b) {
-		return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
+		String zoneA = getZone(a);
+		String zoneB = getZone(b);
+
+		if (areZonesConnected(zoneA, zoneB)) {
+			return distances.get(stations.indexOf(a)).get(stations.indexOf(b));
+		}
+
+		float shortestCrossZoneDistance = Float.MAX_VALUE;
+		Station closestStationA = null;
+		Station closestStationB = null;
+		for (Station stationZone1 : zones.get(zoneA)) {
+			for (Station stationZone2 : zones.get(zoneB)) {
+				float distance = Station.getDistance(stationZone1, stationZone2);
+				if (distance < shortestCrossZoneDistance) {
+					closestStationA = stationZone1;
+					closestStationB = stationZone2;
+					shortestCrossZoneDistance = distance;
+				}
+			}
+		}
+
+		return getShortestRouteDistance(a, closestStationA)
+				+ shortestCrossZoneDistance
+				+ getShortestRouteDistance(b, closestStationB);
+	}
+
+	public boolean areZonesConnected(String zone1, String zone2) {
+		for (Station station1 : zones.get(zone1)) {
+			for (Station station2 : zones.get(zone2)) {
+				if (doesConnectionExist(station1.getName(), station2.getName())) return true;
+			}
+		}
+		return false;
+	}
+
+	private String getZone(Station station) {
+		for (java.util.Map.Entry<String, List<Station>> entry : zones.entrySet()) {
+			String zone = entry.getKey();
+			List<Station> stations = entry.getValue();
+			if (stations.contains(station)) return zone;
+		}
+		return "";
 	}
 
 }

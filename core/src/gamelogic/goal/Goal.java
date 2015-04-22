@@ -13,9 +13,11 @@ import gamelogic.resource.Train;
 public class Goal {
     // The bonus granted when a goal crosses a zone, and there is no existing path
     // between the two zones.
-    private static final int INTER_ZONE_GOAL_BONUS = 200;
+    private static final int INTER_ZONE_GOAL_BONUS = 500;
+    private static final int BASE_REWARD = 100;
+    private static final float REWARD_DEPRECIATION = 0.15f;
 
-    private int reward = 0;
+    private int reward;
     private Station origin;
     private Station destination;
     private int turnIssued;
@@ -85,16 +87,17 @@ public class Goal {
         if (quantifiable) {
             if (turnIssued != PlayerManager.getTurnNumber()) {
                 turnLimit--;
-                reward -= ((int)(Math.round((double) reward/100))*15);
+                reward -= Math.round((float) reward / 100f) * REWARD_DEPRECIATION * 100;
             }
         }
     }
 
     private void setReward(){
+        reward = BASE_REWARD;
         int distance = (int) Game.getInstance().getMap().getLengthOfShortestRoute(origin, destination);
 
         if (quantifiable){
-            float t = distance * 5 * (1 - 1f / turnLimit);
+            float t = distance * 3 * (1 - 1f / turnLimit);
             reward += Math.max(50, (int) t - (int) t % 50);
         } else {
             reward += Math.max(50, distance - distance % 50);
@@ -128,6 +131,7 @@ public class Goal {
 
     public void setPathBetweenStationsExist(boolean pathBetweenStationsExist) {
         this.pathBetweenStationsExist = pathBetweenStationsExist;
+        setReward();
     }
 
 }

@@ -92,7 +92,7 @@ public abstract class GoalManager {
 
     private static int computeTurnLimit(Station origin, Station destination) {
         int distance = (int) Game.getInstance().getMap().getLengthOfShortestRoute(origin, destination);
-        return distance / TrainManager.getRandomTrain().getSpeed() + 5;
+        return distance / TrainManager.getRandomTrain().getSpeed() + 3;
     }
 
     public static void addRandomGoalToPlayer(Player player) {

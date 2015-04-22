@@ -105,33 +105,6 @@ public class TrainController {
         }
     }
 
-    public void selected(Train train) {
-        EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN, train));
-
-        if (Game.getInstance().getState() != GameState.NORMAL) return;
-
-        // current player can't be passed in as it changes so find out current player at this instant
-        Player currentPlayer = PlayerManager.getCurrentPlayer();
-
-        if (!train.isOwnedBy(currentPlayer)) {
-            context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
-            return;
-        }
-
-        if (train.getFinalStation() == null) {
-            context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
-        } else {
-            context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
-        }
-
-        if (train.getPosition() == null){
-            DialogClickedTrain dialogClickedTrain = new DialogClickedTrain(train, context);
-            dialogClickedTrain.show(context.getStage());
-        } else {
-            context.getRouteController().beginRouting(train);
-        }
-    }
-
     public void placeTrain(Train train) {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN_PLACE_TRAIN, train));
 
@@ -147,7 +120,33 @@ public class TrainController {
         StationController.subscribeStationClick(stationClickListener);
     }
 
-    private void selectStationToPlace(Station station) {
+    public void selected(Train train) {
+	    EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN, train));
+	
+	    if (Game.getInstance().getState() != GameState.NORMAL) return;
+	
+	    // current player can't be passed in as it changes so find out current player at this instant
+	    Player currentPlayer = PlayerManager.getCurrentPlayer();
+	
+	    if (!train.isOwnedBy(currentPlayer)) {
+	        context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
+	        return;
+	    }
+	
+	    if (train.getFinalStation() == null) {
+	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
+	    } else {
+	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
+	    }
+	
+	    if (train.getPosition() == null){
+	    	placeTrain(train);
+	    } else {
+	        context.getRouteController().beginRouting(train);
+	    }
+	}
+
+	private void selectStationToPlace(Station station) {
         if (station instanceof Junction) {
             context.getTopBarController().displayFlashMessage("Trains cannot be placed at junctions.", Color.RED);
             return;

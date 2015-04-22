@@ -11,7 +11,9 @@ import gamelogic.resource.Train;
  * quantifiable).
  */
 public class Goal {
-    private static final int ZONE_BONUS = 200;
+    // The bonus granted when a goal crosses a zone, and there is no existing path
+    // between the two zones.
+    private static final int INTER_ZONE_GOAL_BONUS = 200;
 
     private int reward = 0;
     private Station origin;
@@ -21,7 +23,7 @@ public class Goal {
     private Train requiredTrain = null;            // Train constraint
     private boolean quantifiable = false;       // Quantifiable or not
     private int turnLimit = 0;                  // If quantifiable: turn limits constraint
-    private boolean wereZonesConnected = true;
+    private boolean pathBetweenStationsExist = true;
 
     public Goal(Station origin, Station destination, int turnIssued) {
         this.origin = origin;
@@ -98,8 +100,8 @@ public class Goal {
             reward += Math.max(50, distance - distance % 50);
         }
 
-        if (!wereZonesConnected){
-            reward += ZONE_BONUS;
+        if (!pathBetweenStationsExist){
+            reward += INTER_ZONE_GOAL_BONUS;
         }
     }
 
@@ -124,8 +126,8 @@ public class Goal {
         return turnLimit;
     }
 
-    public void setWereZonesConnected(boolean wereZonesConnected) {
-        this.wereZonesConnected = wereZonesConnected;
+    public void setPathBetweenStationsExist(boolean pathBetweenStationsExist) {
+        this.pathBetweenStationsExist = pathBetweenStationsExist;
     }
 
 }

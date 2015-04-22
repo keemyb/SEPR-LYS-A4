@@ -23,7 +23,8 @@ public abstract class GoalManager {
 
     public final static int CONFIG_MAX_PLAYER_GOALS = 3;
     private final static Random random = new Random();
-    private final static float PROBABILITY_STATIONS_ARE_IN_DIFFERENT_ZONES = 0.3f;
+    // how often to generate a goal that goes from one zone to another.
+    private final static float PROBABILITY_OF_CROSSING_ZONES = 0.7f;
 
     /**
      * Returns a random goal. The type of goal is dependent on phase of the game.
@@ -32,32 +33,33 @@ public abstract class GoalManager {
      * @return random goal
      */
     private static Goal generateRandom(int turn) {
+        int phase = Game.getInstance().getPhase();
         Map map = Game.getInstance().getMap();
         Station origin, destination;
+
         do {
             origin = map.getRandomStation();
         } while (origin instanceof Junction);
 
-        boolean destinationDifferentZone = random.nextFloat() < PROBABILITY_STATIONS_ARE_IN_DIFFERENT_ZONES;
+        boolean crossingZones = random.nextFloat() < PROBABILITY_OF_CROSSING_ZONES;
         do {
             destination = map.getRandomStation();
         } while (destination == origin || destination instanceof Junction ||
-                (destinationDifferentZone && map.getZone(origin).equals(map.getZone(destination))));
+                crossingZones == map.getZone(origin).equals(map.getZone(destination)));
 
         Goal goal = new Goal(origin, destination, turn);
 
-        if (destinationDifferentZone){
+        if (crossingZones){
             String zoneA = map.getZone(origin);
             String zoneB = map.getZone(destination);
             if (!map.pathBetweenZonesExist(zoneA, zoneB)) {
-                goal.setWereZonesConnected(false);
+                goal.setPathBetweenStationsExist(false);
             }
         }
 
         // Goal with a specific train; pretty much hardcoded configuration
         double randDouble = random.nextDouble();
         if (random.nextInt(3) == 1) {
-            int phase = Game.getInstance().getPhase();
             if (phase == 0) {
                 if (randDouble < 0.9) {
                     goal.addTrainConstraint(TrainManager.trains.get(4));

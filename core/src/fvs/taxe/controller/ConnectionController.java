@@ -59,7 +59,7 @@ public class ConnectionController {
         this.context = context;
         game = context.getTaxeGame();
         createConnectionButton = new TextButton("Create Connection", context.getSkin());
-        doneButton = new TextButton("Done", context.getSkin());
+        doneButton = new TextButton("Cancel", context.getSkin());
 
         map = context.getGameLogic().getMap();
 

@@ -186,10 +186,6 @@
     },
     {
       "station1": "Zurich",
-      "station2": "Paris"
-    },
-    {
-      "station1": "Zurich",
       "station2": "Rome"
     },
     {
@@ -209,10 +205,6 @@
       "station2": "Copenhagen"
     },
     {
-      "station1": "Copenhagen",
-      "station2": "Gothenburg"
-    },
-    {
       "station1": "Gothenburg",
       "station2": "Oslo"
     },
@@ -225,16 +217,8 @@
       "station2": "Krakow"
     },
     {
-      "station1": "Krakow",
-      "station2": "Minsk"
-    },
-    {
       "station1": "Warsaw",
       "station2": "Krakow"
-    },
-    {
-      "station1": "Krakow",
-      "station2": "Bucharest"
     },
     {
       "station1": "Bucharest",

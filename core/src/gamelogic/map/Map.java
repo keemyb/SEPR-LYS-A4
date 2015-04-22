@@ -314,6 +314,9 @@ public class Map {
 		}
 		return null;
 	}
+	public boolean isIslandStation (Station station){
+		return islandStations.contains(station);
+	}
 
 	/**
 	 * Uses Floyd-Warshall algorithm to compute shortest distances between every

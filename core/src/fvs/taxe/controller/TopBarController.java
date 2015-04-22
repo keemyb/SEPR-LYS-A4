@@ -188,7 +188,7 @@ public class TopBarController {
 
     private void addCancelPlaceTrainButton() {
         cancelPlaceTrainButton = new TextButton("Cancel Placement", context.getSkin());
-        cancelPlaceTrainButton.setPosition(TaxeGame.WORLD_WIDTH - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
+        cancelPlaceTrainButton.setPosition(TaxeGame.WORLD_WIDTH - cancelPlaceTrainButton.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
         cancelPlaceTrainButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -416,18 +416,19 @@
 
     }
   ],
-"Zones":[
-  {
-    "West": ["Madrid", "Lisbon", "Paris", "London", "York"]
-  },
-  {
-    "Central": ["Luxembourg", "Zurich", "Rome","Copenhagen", "Hamburg", "Berlin", "Prague", "Krakow", "Warsaw"]
-  },
-  {
-    "East": ["Kiev", "Bucharest", "Kosovo", "Athens", "Istanbul", "Ankara"]
-  },
-  {
-    "North": ["Oslo", "Gothenburg", "Stockholm", "Boden", "Helsinki", "Minsk", "Moscow"]
-  }
-]
+
+  "zones":[
+    {
+      "West": ["Madrid", "Lisbon", "Paris", "London", "York"]
+    },
+    {
+      "Central": ["Luxembourg", "Zurich", "Rome","Copenhagen", "Hamburg", "Berlin", "Prague", "Krakow", "Warsaw"]
+    },
+    {
+      "East": ["Kiev", "Bucharest", "Kosovo", "Athens", "Istanbul", "Ankara"]
+    },
+    {
+      "North": ["Oslo", "Gothenburg", "Stockholm", "Boden", "Helsinki", "Minsk", "Moscow"]
+    }
+  ]
 }

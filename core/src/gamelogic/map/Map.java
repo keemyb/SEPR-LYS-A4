@@ -20,6 +20,7 @@ public class Map {
 	private final int JUNCTION_FAILURE_DURATION = 4;
 	private Junction lastBroken;
 	private List<Station> stations;
+	private java.util.Map<String, List<Station>> zones;
 	private List<Station> islandStations;
 	private List<Junction> junctions;
 	private List<Connection> connections;
@@ -31,6 +32,7 @@ public class Map {
 
 	public Map() {
 		stations = new ArrayList<>();
+		zones = new HashMap<>();
 		islandStations = new ArrayList<>();
 		junctions = new ArrayList<>();
 		connections = new ArrayList<>();
@@ -41,6 +43,7 @@ public class Map {
 		JsonValue jsonVal = jsonReader.parse(Gdx.files.local("stations.json"));
 		parseStations(jsonVal);
 		parseIslandStations(jsonVal);
+		parseZones(jsonVal);
 		parseConnections(jsonVal);
 		parseInvalidConnection(jsonVal);
         for (Station s : stations)
@@ -51,6 +54,7 @@ public class Map {
         computeDistances();
         initialised = true;
     }
+
 	private void parseIslandStations(JsonValue jsonVal){
 		for (JsonValue islandStation = jsonVal.getChild("islandStations"); islandStation != null; islandStation = islandStation.next) {
 			String name = "";
@@ -59,6 +63,19 @@ public class Map {
 					name = val.asString();
 			}
 			islandStations.add(getStationByName(name));
+		}
+	}
+
+	private void parseZones(JsonValue jsonVal){
+		for (JsonValue zonesJson = jsonVal.getChild("zones"); zonesJson != null; zonesJson = zonesJson.next) {
+			for (JsonValue zone = zonesJson.child; zone != null; zone = zone.next) {
+				String zoneName = zone.name;
+				zones.put(zoneName, new ArrayList<Station>());
+				for (JsonValue stationName = zone.child; stationName != null; stationName = stationName.next) {
+					Station station = getStationByName(stationName.asString());
+					zones.get(zoneName).add(station);
+				}
+			}
 		}
 	}
 

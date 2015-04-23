@@ -162,7 +162,7 @@ public class Map {
             double dist1 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
                     p2.getY(), a.getX(), a.getY());
             double dist2 = Line2D.ptSegDist(p1.getX(), p1.getY(), p2.getX(),
-                    p2.getY(), b.getX(), b.getY());
+					p2.getY(), b.getX(), b.getY());
             if (dist1 <= 0.0001 && dist2 <= 0.0001)
                 return connection;
         }
@@ -189,6 +189,14 @@ public class Map {
             Line2D existingLine = connectionToLine(connection);
             if (existingLine.intersectsLine(prospectiveLine)) return true;
         }
+
+		for (Station station : stations) {
+			if (station == prospectiveConnection.getStation1()) continue;
+			if (station == prospectiveConnection.getStation2()) continue;
+			double stationFromTrack = Line2D.ptSegDist(prospectiveLine.getP1().getX(), prospectiveLine.getP1().getY(),
+					prospectiveLine.getP2().getX(), prospectiveLine.getP2().getY(), station.getLocation().getX(), station.getLocation().getY());
+			if (stationFromTrack < 10) return true;
+		}
         return false;
     }
 

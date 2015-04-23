@@ -69,7 +69,7 @@ public class Connection {
     public int calculateAdjustedTrainSpeed(Train train) {
         /* We always want the train to be atleast this fast
         (as a % of it's usual speed) */
-        float lowerBound = 0.5f;
+        float lowerBound = 0.2f;
 
         int trainSpeed = train.getSpeed();
         float variableSpeedScale = (1f - lowerBound) * health;

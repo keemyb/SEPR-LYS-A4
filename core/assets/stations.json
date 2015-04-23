@@ -121,6 +121,12 @@
       "y": 82
     },
     {
+      "name": "Zagreb",
+      "junction": false,
+      "x": 660,
+      "y": 190
+    },
+    {
       "name": "Zurich",
       "junction": true,
       "x": 513,
@@ -255,6 +261,10 @@
     {
       "station1": "Boden",
       "station2": "Oslo"
+    }  ,
+    {
+      "station1": "Zagreb",
+      "station2": "Kosovo"
     }
   ],
   "invalidConnections": [
@@ -379,6 +389,10 @@
       "station2": "Copenhagen"
     },
     {
+      "station1": "Minsk",
+      "station2": "Boden"
+    },
+    {
       "station1": "Helsinki",
       "station2": "Oslo"
     },
@@ -397,24 +411,160 @@
     {
       "station1": "Helsinki",
       "station2": "Hamburg"
-    }
-  ],
-
-  "islandStations": [
-    {
-      "name": "Madrid"
-
     },
-
     {
-      "name": "Athens"
-
+      "station1": "Zagreb",
+      "station2": "Rome"
     },
-
     {
-      "name": "Ankara"
-
+      "station1": "York",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "York",
+      "station2": "Boden"
+    },
+    {
+      "station1": "Warsaw",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Warsaw",
+      "station2": "Boden"
+    },
+    {
+      "station1": "Warsaw",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Warsaw",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Warsaw",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Rome"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Boden"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Krakow",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Prague",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Prague",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Prague",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Kosovo",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Bucharest",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Zurich",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "Oslo"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "Helsinki"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "York"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "London"
+    },
+    {
+      "station1": "Berlin",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Rome",
+      "station2": "London"
+    },
+    {
+      "station1": "Rome",
+      "station2": "York"
+    },
+    {
+      "station1": "Zurich",
+      "station2": "London"
+    },
+    {
+      "station1": "Zurich",
+      "station2": "York"
+    },
+    {
+      "station1": "Luxembourg",
+      "station2": "London"
+    },
+    {
+      "station1": "Luxembourg",
+      "station2": "Oslo"
+    },
+    {
+      "station1": "Kiev",
+      "station2": "Copenhagen"
+    },
+    {
+      "station1": "Kiev",
+      "station2": "Gothenburg"
+    },
+    {
+      "station1": "Kiev",
+      "station2": "Stockholm"
+    },
+    {
+      "station1": "Athens",
+      "station2": "Zurich"
+    },
+    {
+      "station1": "Luxembourg",
+      "station2": "York"
     }
+
   ],
 
   "zones":[
@@ -425,7 +575,7 @@
       "Central": ["Luxembourg", "Zurich", "Rome","Copenhagen", "Hamburg", "Berlin", "Prague", "Krakow", "Warsaw"]
     },
     {
-      "East": ["Kiev", "Bucharest", "Kosovo", "Athens", "Istanbul", "Ankara"]
+      "East": ["Kiev", "Bucharest", "Kosovo", "Athens", "Istanbul", "Ankara", "Zagreb"]
     },
     {
       "North": ["Oslo", "Gothenburg", "Stockholm", "Boden", "Helsinki", "Minsk", "Moscow"]

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->  
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
+<head>
+    <title>LYS Next Train Game 2015</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Next Train Game 2015">
+    <meta name="author" content="LYS">    
+    <link rel="shortcut icon" href="favicon.ico">  
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head> 
+
+<body data-spy="scroll">
+    
+    <!-- ******HEADER****** --> 
+    <header id="header" class="header">  
+        <div class="container">            
+            <h1 class="logo pull-left">
+                <a class="scrollto" href="#promo">
+                    <span class="logo-title">LYS</span>
+                </a>
+            </h1><!--//logo-->              
+            <nav id="main-nav" class="main-nav navbar-right" role="navigation">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button><!--//nav-toggle-->
+                </div><!--//navbar-header-->            
+                <div class="navbar-collapse collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active nav-item sr-only"><a class="scrollto" href="#promo">Home</a></li>
+                        <li class="nav-item"><a class="scrollto" href="#features">Why LYS?</a></li>
+                        <li class="nav-item"><a class="scrollto" href="#docs">The Code</a></li>
+                        <li class="nav-item last"><a class="scrollto" href="#contact">Contact Us</a></li>
+                    </ul><!--//nav-->
+                </div><!--//navabr-collapse-->
+            </nav><!--//main-nav-->
+        </div>
+    </header><!--//header-->
+    
+    <!-- ******PROMO****** -->
+    <section id="promo" class="promo section offset-header">
+        <div class="container text-center">
+            <h2 class="title">Train Game 2015<span class="highlight"> Beta</span></h2>
+            <p class="intro">No name, awesome game.</p>
+            <div class="btns">
+                <a class="btn btn-cta-secondary" href="taxe.jar" target="_blank">Play the Game!</a>
+                <a class="btn btn-cta-primary" href="Manual3.pdf" target="_blank">Read the Manual!</a>
+                <a class="btn btn-cta-primary scrollto" href="#docs2">Get the Docs!</a>
+            </div>
+            <ul class="meta list-inline">
+                <li><a href="https://github.com/keemyb/SEPR-LYS-A3" target="_blank">View on GitHub</a></li>
+            </ul><!--//meta-->
+        </div><!--//container-->
+    </section><!--//promo-->
+    
+    <!-- ******ABOUT****** --> 
+    <section id="features" class="about section">
+        <div class="container">
+            <h2 class="title text-center">Why LYS?</h2>
+            <p class="intro text-center">Train Game 2015 is the culmination of many months work from both team
+            LYS and <a href="https://github.com/SEPRFVS/FVS2">team FVS</a>. It is an exicting game that pits players
+            against one another in order to fulfill different contracts.</p>
+            <div class="row">
+                <div class="item col-md-4 col-sm-6 col-xs-12">
+                    <div class="icon-holder">
+                        <i class="fa fa-code-fork"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">Familiarity</h3>
+                        <p>Even if you are not familiar with Team FVS' first implementation,
+                        LibGDX has been used so it is easy to get to grips with the codebase sooner,
+                        using similar patterns to those you used in the previous two assessments.
+                        </p>
+                    </div><!--//content-->
+                </div><!--//item-->
+                <div class="item col-md-4 col-sm-6 col-xs-12">
+                    <div class="icon-holder">
+                        <i class="fa fa-eye"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">Foresight</h3>
+                        <p>Whilst team LYS were not fortunate enough to have any members with Chronokinesis,
+                        we have paid attention to key areas in our codebase that are likely candidates
+                        for extension. Some classes have been refactored to improve readability, Whilst
+                        our pathfinding implementation gives you the power to create routes that inspire
+                        interesting gameplay.
+                        </p>
+                    </div><!--//content-->
+                </div><!--//item-->
+                <div class="item col-md-4 col-sm-6 col-xs-12">
+                    <div class="icon-holder">
+                        <i class="fa fa-gear"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">Constants, for Flexibility</h3>
+                        <p>We do not believe in 'magic numbers', and so have leveraged Java's keyword
+                        modifiers to provide an easy way to inspect and change the behaviour of this game.
+                        No longer do you have to Ctrl+F everywhere when you want to tweak something.
+                        </p>
+                    </div><!--//content-->
+                </div><!--//item-->           
+                <div class="clearfix visible-md"></div>    
+                <div class="item col-md-12 col-sm-12 col-xs-12">
+                    <div class="icon-holder">
+                        <i class="fa fa-check"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">That's all folks!</h3>
+                        <p>No really, we mean it. By focusing on meeting the assessment 3 brief and little more,
+                        we have not pushed the game in a specific direction, so whatever the next assessment requires,
+                        you will not have to fight against the design decisions we have made.
+                        <br/>Think of team LYS as Vanilla, or Unsalted nachos. You can do anything with our codebase, the possibilities are endless.</p>
+                    </div><!--//content-->
+                </div><!--//item-->                           
+            </div><!--//row-->            
+        </div><!--//container-->
+    </section><!--//about-->
+    
+    <!-- ******DOCS****** --> 
+    <section id="docs" class="docs section">
+        <div class="container">
+            <div class="docs-inner">
+            <h2 class="title text-center">The Code</h2>
+
+            <div class="block">
+                <p>Train Game 2015 is written in Java and powered by libGDX, a lightweight 2d game development library, so that
+                developers spend less time writing boilerplate code, and more time implementing awesome
+                gameplay.</p>
+            </div><!--//block-->
+            
+            <div class="block">
+                <h3 class="sub-title text-center">Sample Code</h3>
+                <p>All code that team LYS have added or modified has been commented and given JavaDocs where appropriate.
+                </b>This means that you always know how, and why things have been implemented, making our game easy to extend.</p>
+                <div class="code-block">
+                    <pre><code class="language-java">
+    /**
+     * This generates a hard goal from A to B via C, with a particular train.
+     * @param turn The turn that this goal will be issued
+     * @return a difficult goal.
+     */
+    public Goal generateDifficultGoal(int turn) {
+        Map map = Game.getInstance().getMap();
+
+        // Using a medium goal, then adding a via constraint.
+        // We need a goal that has at-least one station between them
+        /* Note this check isn't strictly necessary unless the
+        MINIMUM_AMOUNT_OF_STATIONS_IN_SHORTEST_ROUTE is set &lt;= 2 for some reason
+        */
+        Goal mediumGoal;
+        List<Station> shortestRoute;
+        do {
+            mediumGoal = generateMediumGoal(turn);
+            shortestRoute = map.getShortestRoute(mediumGoal.getOrigin(), 
+                mediumGoal.getDestination());
+        } while (shortestRoute.size() &lt; 2);
+
+        // Making sure the via isn't one of the endpoints
+        int index = 1 + random.nextInt(shortestRoute.size() - 2);
+        Station via = shortestRoute.get(index);
+
+        mediumGoal.addConstraint(via);
+
+        return mediumGoal;
+    }
+                    </code></pre>
+                </div><!--//code-block-->
+            </div><!--//block-->   
+            <div class="block">
+            <section id= "docs2">
+                <h3 class="sub-title text-center">Documentation</h3>
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="TestPlan.pdf" target="_blank">Test Plan</a>
+                </p>
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="TestCaseReport.pdf" target="_blank">Test Report</a>
+                </p>
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="ExtRep.pdf" target="_blank">Challenges and Changes</a>
+                </p>
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="Manual3.pdf" target="_blank">User Manual</a>
+                </p>
+<!--                 <p class="text-center">
+                    <a class="btn btn-cta-primary" href="#" target="_blank">Configuring our Project (Eclipse)</a>
+                </p>
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="#" target="_blank">Configuring our Project (Intellij)</a>
+                </p> -->
+            </section>
+            </div><!--//block-->
+            
+            </div><!--//docs-inner-->         
+        </div><!--//container-->
+    </section><!--//features-->
+    
+    <!-- ******CONTACT****** --> 
+    <section id="contact" class="contact section has-pattern">
+        <div class="container">
+            <div class="contact-inner">
+                <h2 class="title  text-center">Contact & Support</h2>
+                <p class="intro  text-center">LYS promise to support developers who choose to extend our game for the 4th part of the assessment. <br />Please get in touch with us if you have any questions about our game.</p>
+                <div class="clearfix"></div>
+                <div class="info text-center">
+                    <h4 class="sub-title">Email us!</h4>
+                    <ul class="social-icons list-inline">
+                        <li class="last"><a href="mailto: purplecobratrains@gmail.com"><i class="fa fa-envelope"></i></a></li>              
+                    </ul>
+                </div><!--//info-->
+            </div><!--//contact-inner-->
+        </div><!--//container-->
+    </section><!--//contact-->  
+      
+    <!-- ******FOOTER****** --> 
+    <footer class="footer">
+        <div class="container text-center">
+            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers</small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+     
+    <!-- Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/jquery-migrate-1.2.1.min.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery.easing.1.3.js"></script>   
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>     
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script> 
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>    
+    <script type="text/javascript" src="assets/js/main.js"></script>       
+</body>
+</html> 
+

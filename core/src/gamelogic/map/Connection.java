@@ -77,7 +77,7 @@ public class Connection {
     }
 
     public int getRentPayable() {
-        return material.calculateRentPayable(length);
+        return (int) (material.calculateRentPayable(length) * health);
     }
 
     public boolean hasCommonStation(Connection connection) {
@@ -122,9 +122,9 @@ public class Connection {
     }
 
     public enum Material {
-        GOLD("Gold", 8, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
-        SILVER("Silver", 3, 0.2f, 0.8f, Color.GRAY),
-        BRONZE("Bronze", 1, 0.1f, 0.5f, new Color(153/255f, 73/255f, 40/255f, 1f));
+        GOLD("Gold", 8, 0.6f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
+        SILVER("Silver", 3, 0.45f, 0.85f, Color.GRAY),
+        BRONZE("Bronze", 1, 0.20f, 0.65f, new Color(153/255f, 73/255f, 40/255f, 1f));
 
         private String name;
         private int costPerUnitLength;
@@ -156,7 +156,7 @@ public class Connection {
         }
 
         private int calculateRepairCost(float length) {
-            return (int) (length * Math.log10(costPerUnitLength));
+            return (int) (length * costPerUnitLength * 0.75);
         }
 
         public int calculateTotalCost(float length) {
@@ -172,9 +172,7 @@ public class Connection {
         }
 
         private float calculateDamageInflicted(Train train) {
-            // Can't use TrainManager methods here, causes problems with tests
-//            return (1f - strength) * (float) train.getSpeed() / TrainManager.getFastestTrainSpeed();
-            return (1f - strength) * (float) train.getSpeed() / 75;
+            return (1f - strength) * (train.getSpeed() / 115f) * 0.75f; //115, fastest train speed
         }
 
         public String getName() {

@@ -71,7 +71,14 @@ public class StationController {
     private void clickedStation(Station station) {
         EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_STATION, station));
 
-        if (context.getGameLogic().getState() == GameState.NORMAL) {
+        // Saving the state in case it is changed by a listener.
+        GameState gameState = context.getGameLogic().getState();
+
+        for (StationClickListener listener : stationClickListeners) {
+            listener.clicked(station);
+        }
+
+        if (gameState == GameState.NORMAL) {
             Player currentPlayer = PlayerManager.getCurrentPlayer();
 
             List<Train> trainsAtStation = station.getTrainsAtStation();
@@ -89,9 +96,6 @@ public class StationController {
             }
         }
 
-        for (StationClickListener listener : stationClickListeners) {
-            listener.clicked(station);
-        }
     }
 
     private void renderStation(final Station station) {

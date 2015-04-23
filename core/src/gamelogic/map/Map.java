@@ -365,6 +365,8 @@ public class Map {
     }
 
     public boolean pathBetweenZonesExist(String zone1, String zone2) {
+        if (zone1.equals(zone2)) return true;
+
         for (Station station1 : zones.get(zone1)) {
             for (Station station2 : zones.get(zone2)) {
                 if (doesConnectionExist(station1, station2)) return true;

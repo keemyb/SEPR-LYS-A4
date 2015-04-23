@@ -7,6 +7,9 @@ import gamelogic.map.Station;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,31 +44,59 @@ public class MapTest extends LibGdxTest {
 
     @Test
     public void computeDistancesTest() throws Exception {
-        Station london = map.getStationByName("London");
-        Station paris = map.getStationByName("Paris");
-        Station prague = map.getStationByName("Prague");
+        Map testMap = new Map();
 
-        assertEquals(0f, map.getLengthOfShortestRoute(london, london), 0.0001f);
+        Station start = new Station("Station 1", new Position(0, 0));
+        Station shorter = new Station("Station 2", new Position(1, 1));
+        Station longer = new Station("Station 2", new Position(1.1f, 1.1f));
+        Station end = new Station("Station 3", new Position(2, 2));
 
-        assertEquals(101.1187f, map.getLengthOfShortestRoute(london, paris), 0.0001f);
-        assertEquals(101.1187f, map.getLengthOfShortestRoute(paris, london), 0.0001f);
+        testMap.getStations().clear();
+        testMap.addStation(start);
+        testMap.addStation(shorter);
+        testMap.addStation(longer);
+        testMap.addStation(end);
 
-        assertEquals(275.3817f, map.getLengthOfShortestRoute(london, prague), 0.0001f);
-        assertEquals(174.2630f, map.getLengthOfShortestRoute(prague, paris), 0.0001f);
+        Connection shortPart1 = new Connection(start, shorter, Connection.Material.GOLD);
+        Connection shortPart2 = new Connection(shorter, end, Connection.Material.GOLD);
+        Connection longPart1 = new Connection(start, longer, Connection.Material.GOLD);
+        Connection longPart2 = new Connection(longer, end, Connection.Material.GOLD);
 
+        testMap.getConnections().clear();
+        testMap.addConnection(shortPart1);
+        testMap.addConnection(shortPart2);
+        testMap.addConnection(longPart1);
+        testMap.addConnection(longPart2);
+
+        assertEquals(2 * Math.sqrt(2), testMap.getLengthOfShortestRoute(start, end), 0.0001f);
     }
 
     @Test
     public void connectionIntersectionTest() throws Exception {
-        Station paris = map.getStationByName("Paris");
-        Station berlin = map.getStationByName("Berlin");
-        Connection overlappingConnection = new Connection(paris, berlin, Connection.Material.GOLD);
+        Map testMap = new Map();
 
-        Station madrid = map.getStationByName("Madrid");
-        Station rome = map.getStationByName("Rome");
-        Connection nonOverlappingConnection = new Connection(madrid, rome, Connection.Material.GOLD);
+        Station a1 = new Station("a1", new Position(0, 0));
+        Station a2 = new Station("a2", new Position(1, 1));
+        Connection nonOverlappingConnection = new Connection(a1, a2, Connection.Material.GOLD);
 
-        assertTrue(map.doesProspectiveConnectionIntersectExisting(overlappingConnection));
-        assertFalse(map.doesProspectiveConnectionIntersectExisting(nonOverlappingConnection));
+        Station b1 = new Station("b1", new Position(2, 2));
+        Station b2 = new Station("b2", new Position(3, 3));
+        Connection overlappingConnection1 = new Connection(b1, b2, Connection.Material.GOLD);
+
+        Station c1 = new Station("c1", new Position(2, 3));
+        Station c2 = new Station("c2", new Position(3, 2));
+        Connection overlappingConnection2 = new Connection(c1, c2, Connection.Material.GOLD);
+
+        // Not clearing this may give false positives with the json stations/connections
+        testMap.getStations().clear();
+
+        testMap.getConnections().clear();
+        testMap.addConnection(nonOverlappingConnection);
+        testMap.addConnection(overlappingConnection1);
+        testMap.addConnection(overlappingConnection2);
+
+        assertFalse(testMap.doesProspectiveConnectionIntersectExisting(nonOverlappingConnection));
+        assertTrue(testMap.doesProspectiveConnectionIntersectExisting(overlappingConnection1));
+        assertTrue(testMap.doesProspectiveConnectionIntersectExisting(overlappingConnection2));
     }
 }

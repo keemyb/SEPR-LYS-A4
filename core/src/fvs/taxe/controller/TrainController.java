@@ -116,8 +116,8 @@ public class TrainController {
 
     public void selected(Train train) {
 	    EventReplayer.saveReplayEvent(new ReplayEvent(GameEvent.SELECTED_TRAIN, train));
-	
-	    if (Game.getInstance().getState() != GameState.NORMAL) return;
+
+        if (Game.getInstance().getState() != GameState.NORMAL) return;
 	
 	    // current player can't be passed in as it changes so find out current player at this instant
 	    Player currentPlayer = PlayerManager.getCurrentPlayer();
@@ -126,8 +126,8 @@ public class TrainController {
 	        context.getTopBarController().displayFlashMessage("Opponent's " + train.getName() + ". Speed: " + train.getSpeed(), Color.RED, 2);
 	        return;
 	    }
-	
-	    if (train.getFinalStation() == null) {
+
+        if (train.getFinalStation() == null) {
 	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed(), Color.BLACK, 2);
 	    } else {
 	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);

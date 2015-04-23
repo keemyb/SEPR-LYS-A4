@@ -156,7 +156,7 @@ public class ResourceController {
             
             TrainClicked listener = new TrainClicked(context, train);
 
-            TextButton button = new TextButton(train.toString(), context.getSkin());
+            TextButton button = new TextButton(train.getName(), context.getSkin());
             button.setPosition(x+discardButton.getWidth()+5, y);
             button.addListener(listener);
 

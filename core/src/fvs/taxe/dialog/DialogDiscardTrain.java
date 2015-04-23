@@ -16,7 +16,7 @@ public class DialogDiscardTrain extends Dialog {
     private Train train;
 
     public DialogDiscardTrain(Context context, Train train) {
-        super(train.toString(), context.getSkin());
+        super(train.getName(), context.getSkin());
 
         this.context = context;
         this.train = train;

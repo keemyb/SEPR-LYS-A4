@@ -145,13 +145,6 @@ public class Train extends Resource {
         }
     }
 
-    @Override
-    public int hashCode() {
-        int result = speed;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
-
     public Station getLocation() {
         return location;
     }
@@ -167,5 +160,4 @@ public class Train extends Resource {
     public void setAtStation(boolean isAtStation) {
         this.isAtStation = isAtStation;
     }
-
 }

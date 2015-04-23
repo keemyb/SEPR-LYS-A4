@@ -15,10 +15,10 @@ public abstract class Resource implements Disposable {
         return player == this.player;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
 
     protected void changed() {
         player.changed();

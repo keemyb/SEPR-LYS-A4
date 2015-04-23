@@ -17,11 +17,11 @@ public abstract class PlayerManager {
     private static List<PlayerChangedListener> playerListeners = new ArrayList<>();
 
     public static void reset() {
-        startingPlayer = players.size() - 1;
-        currentPlayerNumber = startingPlayer;
+        startingPlayer = 0;
+        currentPlayerNumber = 0;
         turnNumber = 0;
 
-        turnOver();
+        playerChanged();
     }
 
     public static void createPlayers(int count) {

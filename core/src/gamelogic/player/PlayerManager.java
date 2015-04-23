@@ -58,6 +58,8 @@ public abstract class PlayerManager {
 
         List<Goal> goalsToRemove = new ArrayList<>();
         for (Player player : players) {
+            // Giving players a small top-up.
+            player.spendMoney(-Player.MONEY_PER_TURN);
             for (Goal goal : player.getGoals()) {
                 goal.updateGoal();
                 if (goal.isExpired())

@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class Player {
     public static final int INITIAL_AMOUNT_OF_MONEY = 500;
+    public static final int MONEY_PER_TURN = 100;
 
     private List<Train> trains = new ArrayList<>();
     private Set<Connection> connectionsOwned = new HashSet<>();
@@ -122,10 +123,5 @@ public class Player {
 
     public Set<Connection> getConnectionsOwned() {
         return connectionsOwned;
-    }
-
-    public void setTrains(List<Train> trains) {
-        this.trains = trains;
-        changed();
     }
 }

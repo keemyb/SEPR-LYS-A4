@@ -16,9 +16,9 @@ import fvs.taxe.dialog.*;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
+import gamelogic.game.TurnListener;
 import gamelogic.map.*;
 import gamelogic.player.Player;
-import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
@@ -128,7 +128,7 @@ public class ConnectionController {
             }
         });
 
-        PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
+        PlayerManager.subscribeTurnChanged(new TurnListener() {
             @Override
             public void changed() {
                 numberOfNewConnectionsThisTurn = 0;

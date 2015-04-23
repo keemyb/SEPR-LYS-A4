@@ -22,9 +22,11 @@ public class Goal {
     private Station destination;
     private int turnIssued;
     private boolean complete = false;
-    private Train requiredTrain = null;            // Train constraint
-    private boolean quantifiable = false;       // Quantifiable or not
-    private int turnLimit = 0;                  // If quantifiable: turn limits constraint
+    private Train requiredTrain = null;
+    private boolean quantifiable = false;
+    private int originalTurnLimit = 0;
+    private int turnLimit = 0;                  // If quantifiable
+    // If there was no path at the time a goal was created, we give a bonus
     private boolean pathBetweenStationsExist = true;
 
     public Goal(Station origin, Station destination, int turnIssued) {
@@ -40,14 +42,17 @@ public class Goal {
         setReward();
     }
 
-    public void addTurnLimitConstraint(int turns) {
+    public void addTurnLimitConstraint(int turnLimit) {
         quantifiable = true;
-        turnLimit = turns;
+        originalTurnLimit = turnLimit;
+        this.turnLimit = turnLimit;
         setReward();
     }
 
-    public void resetComplete() {
+    public void reset() {
         complete = false;
+        turnLimit = originalTurnLimit;
+        setReward();
     }
 
     public boolean isComplete(Train train) {

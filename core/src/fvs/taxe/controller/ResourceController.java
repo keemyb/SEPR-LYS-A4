@@ -70,7 +70,7 @@ public class ResourceController {
         Player player = (Player) playerAndGoal.get(0);
         Goal goal = (Goal) playerAndGoal.get(1);
 
-        goal.resetComplete();
+        goal.reset();
         goal.updateGoal();
 
         if (!player.getGoals().contains(goal)) {

@@ -15,6 +15,7 @@ public abstract class PlayerManager {
     private static int turnNumber = 0;
     private static List<TurnListener> turnListeners = new ArrayList<>();
     private static List<PlayerChangedListener> playerListeners = new ArrayList<>();
+    private static List<CurrentPlayerChangedListener> currentPlayerListeners = new ArrayList<>();
 
     public static void reset() {
         startingPlayer = 0;
@@ -39,6 +40,7 @@ public abstract class PlayerManager {
     }
 
     public static void turnOver() {
+        currentPlayerChanged();
         if (currentPlayerNumber == startingPlayer) {
             currentPlayerNumber = startingPlayer == 0 ? 1 : 0;
             playerChanged();
@@ -69,6 +71,19 @@ public abstract class PlayerManager {
                 player.getGoals().remove(goal);
         }
         for (TurnListener listener : turnListeners) {
+            listener.changed();
+        }
+    }
+
+    public static void subscribeCurrentPlayerChanged(CurrentPlayerChangedListener listener) {
+        currentPlayerListeners.add(listener);
+    }
+
+    /**
+     * A general event which is fired when player's goals / resources are changed
+     */
+    public static void currentPlayerChanged() {
+        for (CurrentPlayerChangedListener listener : currentPlayerListeners) {
             listener.changed();
         }
     }

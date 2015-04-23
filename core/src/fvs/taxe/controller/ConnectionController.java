@@ -18,6 +18,7 @@ import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.TurnListener;
 import gamelogic.map.*;
+import gamelogic.player.CurrentPlayerChangedListener;
 import gamelogic.player.Player;
 import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
@@ -128,7 +129,7 @@ public class ConnectionController {
             }
         });
 
-        PlayerManager.subscribeTurnChanged(new TurnListener() {
+        PlayerManager.subscribeCurrentPlayerChanged(new CurrentPlayerChangedListener() {
             @Override
             public void changed() {
                 numberOfNewConnectionsThisTurn = 0;

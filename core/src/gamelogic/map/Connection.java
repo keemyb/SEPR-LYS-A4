@@ -122,7 +122,7 @@ public class Connection {
     }
 
     public enum Material {
-        GOLD("Gold", 5, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
+        GOLD("Gold", 8, 0.3f, 1, new Color(255/255f, 139/255f, 25/255f, 1f)),
         SILVER("Silver", 3, 0.2f, 0.8f, Color.GRAY),
         BRONZE("Bronze", 1, 0.1f, 0.5f, new Color(153/255f, 73/255f, 40/255f, 1f));
 

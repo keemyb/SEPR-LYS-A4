@@ -22,13 +22,11 @@ public class TrainClicked extends ClickListener {
 
     @Override
     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        System.out.println("in");
         context.getRouteController().setHoveredTrain(train);
     }
 
     @Override
     public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        System.out.println("out");
         context.getRouteController().setHoveredTrain(null);
     }
 }

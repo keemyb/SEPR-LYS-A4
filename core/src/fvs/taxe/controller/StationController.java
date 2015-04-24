@@ -79,18 +79,12 @@ public class StationController {
         }
 
         if (gameState == GameState.NORMAL) {
-            Player currentPlayer = PlayerManager.getCurrentPlayer();
-
             List<Train> trainsAtStation = station.getTrainsAtStation();
             int numberOfTrains = trainsAtStation.size();
 
             if (numberOfTrains == 1) {
                 Train onlyTrain = trainsAtStation.get(0);
-                if (onlyTrain.isOwnedBy(currentPlayer)){
-                    context.getRouteController().beginRouting(onlyTrain);
-                } else {
-                    context.getTopBarController().displayFlashMessage("Opponent's " + onlyTrain.getName() + ". Speed: " + onlyTrain.getSpeed(), Color.RED, 2);
-                }
+                context.getTrainController().selected(onlyTrain);
             } else if (numberOfTrains > 1) {
                 new DialogMultipleTrain(station, context).show(context.getStage());
             }

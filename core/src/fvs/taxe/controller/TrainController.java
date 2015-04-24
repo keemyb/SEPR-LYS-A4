@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.actor.TrainActor;
+import fvs.taxe.dialog.DialogTrainClicked;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
@@ -132,9 +133,11 @@ public class TrainController {
 	    } else {
 	        context.getTopBarController().displayFlashMessage("Your " + train.getName() + ". Speed: " + train.getSpeed() + ". Destination: " + train.getFinalStation().getName(), Color.BLACK, 2);
 	    }
-	
-	    if (train.getPosition() == null) {
+
+        if (train.getPosition() == null) {
             placeTrain(train);
+        } else if (!train.getRoute().isEmpty()) {
+            new DialogTrainClicked(train, context).show(context.getStage());
         } else {
             context.getRouteController().beginRouting(train);
         }

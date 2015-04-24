@@ -147,10 +147,19 @@ public class GameScreen extends ScreenAdapter {
 
         game.batch.begin();
         float x = 10, y = 80;
-        for (Player p: PlayerManager.getAllPlayers()) {
-            game.fontSmall.draw(game.batch, "Player " + p.getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + p.getMoney(), x, y);
+        Player currentPlayer = PlayerManager.getCurrentPlayer();
+        Color originalColor = game.fontSmall.getColor();
+        for (Player player: PlayerManager.getAllPlayers()) {
+            if (player.equals(currentPlayer)) {
+                game.fontSmall.setColor(Color.WHITE);
+            } else {
+                game.fontSmall.setColor(Color.BLACK);
+            }
+            game.fontSmall.draw(game.batch, "Player " + player.getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + player.getMoney() + "  ", x, y);
             y -= 20;
         }
+        game.fontSmall.setColor(originalColor);
+
         int turn = PlayerManager.getTurnNumber() + 1;
         if (turn > gameLogic.totalTurns) turn = gameLogic.totalTurns;
         game.fontSmall.draw(game.batch, "Turn " + turn + "/" + gameLogic.totalTurns, x, y);

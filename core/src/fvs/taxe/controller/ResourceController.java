@@ -10,6 +10,7 @@ import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.DiscardClicked;
+import fvs.taxe.dialog.TrainButtonClicked;
 import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
@@ -154,7 +155,7 @@ public class ResourceController {
             discardButton.setColor(Color.RED);
             discardButton.addListener(discardListener);
             
-            TrainClicked listener = new TrainClicked(context, train);
+            TrainButtonClicked listener = new TrainButtonClicked(context, train);
 
             TextButton button = new TextButton(train.getName(), context.getSkin());
             button.setPosition(x+discardButton.getWidth()+5, y);

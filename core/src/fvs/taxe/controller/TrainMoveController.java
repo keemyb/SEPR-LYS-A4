@@ -85,7 +85,7 @@ public class TrainMoveController {
             public void run() {
                 ArrayList<String> completedGoals = GoalManager.trainArrived(train, train.getPlayer());
                 for (String message : completedGoals) {
-                    context.getTopBarController().displayFlashMessage(message, Color.WHITE, 2);
+                    context.getTopBarController().displayFlashMessage(message, Color.BLUE, 2);
                 }
                 train.setPosition(train.getFinalStation().getLocation());
                 train.getActor().setVisible(false);

@@ -16,7 +16,6 @@ import gamelogic.game.GameStateListener;
 import gamelogic.game.TurnListener;
 import gamelogic.map.Map;
 import gamelogic.player.Player;
-import gamelogic.player.PlayerChangedListener;
 import gamelogic.player.PlayerManager;
 
 /**
@@ -78,10 +77,12 @@ public class GameScreen extends ScreenAdapter {
             public void changed() {
                 map.handleJunctionFailures();
                 gameLogic.setState(GameState.ANIMATING);
-                topBarController.displayFlashMessage("Time is passing...", Color.BLACK, 0.9f);
                 if (map.getLastBroken() != null) {
                     topBarController.displayFlashMessage("There is a junction failure at " + map.getLastBroken().getName(), Color.RED, 0.9f);
+                }else {
+                    topBarController.displayFlashMessage("Time is passing...", Color.BLACK, 0.9f);
                 }
+
             }
         });
 
@@ -92,15 +93,6 @@ public class GameScreen extends ScreenAdapter {
                     DialogGameOver dialogGameOver = new DialogGameOver(context, skin);
                     dialogGameOver.show(stage);
                 }
-                if (state != GameState.ANIMATING) {
-                    topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
-                }
-            }
-        });
-        PlayerManager.subscribePlayerChanged(new PlayerChangedListener() {
-            @Override
-            public void changed() {
-                topBarController.displayMessage("Player " + PlayerManager.getCurrentPlayer().getPlayerNumber() + ": " + Game.CURRENCY_SYMBOL + PlayerManager.getCurrentPlayer().getMoney(), Color.BLACK);
             }
         });
     }

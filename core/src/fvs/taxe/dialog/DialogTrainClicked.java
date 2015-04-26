@@ -20,7 +20,7 @@ public class DialogTrainClicked extends Dialog {
     private Train train;
 
     public DialogTrainClicked(Train train, Context context) {
-        super(train.getName() + " to " + train.getFinalStation().getName(), context.getSkin());
+        super(train.getName() + " to " + train.getRoute().get(train.getRoute().size() - 1).getName(), context.getSkin());
 
         this.context = context;
         this.train = train;

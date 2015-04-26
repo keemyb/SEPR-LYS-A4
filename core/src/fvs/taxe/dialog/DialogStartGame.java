@@ -13,7 +13,7 @@ public class DialogStartGame extends Dialog {
     public DialogStartGame(TaxeGame game, Skin skin) {
         super("Select Game Length:", skin);
         this.game = game;
-        
+
         button("15 Turns", 15);
         button("30 Turns", 30);
         button("45 Turns", 45);

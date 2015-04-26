@@ -67,7 +67,7 @@ public class MainMenuScreen extends ScreenAdapter {
 				dia.show(stage);
 				return;
 			}
-			if (exitBounds.contains(touchPoint.x, touchPoint.y)) {
+			if (exitBounds.contains(touchPoint.x, touchPoint.y) && !hideButtons) {
 				Gdx.app.exit();
 			}
 		}

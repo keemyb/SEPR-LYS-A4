@@ -13,11 +13,11 @@ public class DesktopLauncher {
         config.height = 600;
         config.title = "TaxE";
         config.resizable = true;
-        config.addIcon("icon/xyg256.png", FileType.Internal);
-        config.addIcon("icon/xyg128.png", FileType.Internal);
-        config.addIcon("icon/xyg64.png", FileType.Internal);
-        config.addIcon("icon/xyg32.png", FileType.Internal);
-        config.addIcon("icon/xyg16.png", FileType.Internal);
+        config.addIcon("icon/lys256.png", FileType.Internal);
+        config.addIcon("icon/lys128.png", FileType.Internal);
+        config.addIcon("icon/lys64.png", FileType.Internal);
+        config.addIcon("icon/lys32.png", FileType.Internal);
+        config.addIcon("icon/lys16.png", FileType.Internal);
        // config.fullscreen = true;
         new LwjglApplication(new TaxeGame(), config);
     }

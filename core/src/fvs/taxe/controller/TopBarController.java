@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
+import fvs.taxe.dialog.DialogEndGame;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
@@ -30,6 +31,8 @@ public class TopBarController {
     private Color controlsColor = Color.LIGHT_GRAY;
     private Label flashMessage;
     private TextButton endTurnButton;
+    private TextButton endGameButton;
+
     private TextButton createConnectionButton;
 
     private TextButton cancelPlaceTrainButton;
@@ -72,6 +75,7 @@ public class TopBarController {
         });
 
         addEndTurnButton();
+        addEndGameButton();
         addCreateConnectionButton();
         addCancelPlaceTrainButton();
         addPlayReplayButton();
@@ -113,6 +117,7 @@ public class TopBarController {
 
     public void refreshButtons(boolean isReplaying) {
         endTurnButton.setVisible(!isReplaying);
+        endGameButton.setVisible(!isReplaying);
         createConnectionButton.setVisible(!isReplaying);
         cancelPlaceTrainButton.setVisible(!isReplaying && context.getGameLogic().getState() == GameState.PLACING);
         playReplayButton.setVisible(isReplaying);
@@ -146,6 +151,33 @@ public class TopBarController {
         });
 
         context.getStage().addActor(endTurnButton);
+    }
+
+    private void addEndGameButton() {
+        endGameButton = new TextButton("End Game", context.getSkin());
+        endGameButton.setPosition(GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33.0f);
+        endGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                DialogEndGame dialogEndGame = new DialogEndGame(context);
+                dialogEndGame.show(context.getStage());
+            }
+        });
+
+        context.getGameLogic().subscribeStateChanged(new GameStateListener() {
+            @Override
+            public void changed(GameState state) {
+                if (EventReplayer.isReplaying()) return;
+
+                if (state == GameState.NORMAL) {
+                    endGameButton.setVisible(true);
+                } else {
+                    endGameButton.setVisible(false);
+                }
+            }
+        });
+
+        context.getStage().addActor(endGameButton);
     }
 
     private void addCreateConnectionButton() {

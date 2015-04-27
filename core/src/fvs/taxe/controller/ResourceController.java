@@ -1,17 +1,13 @@
 package fvs.taxe.controller;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
 import fvs.taxe.GameScreen;
 import fvs.taxe.TaxeGame;
 import fvs.taxe.dialog.ConnectionClicked;
 import fvs.taxe.dialog.DiscardClicked;
 import fvs.taxe.dialog.TrainButtonClicked;
-import fvs.taxe.dialog.TrainClicked;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.game.GameStateListener;
@@ -23,6 +19,8 @@ import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayListener;
 import gamelogic.resource.Train;
+
+import java.util.List;
 
 public class ResourceController {
     private static final float MY_TRAINS_Y = (float) TaxeGame.WORLD_HEIGHT - 175.0f;

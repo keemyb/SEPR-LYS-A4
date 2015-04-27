@@ -9,10 +9,7 @@ import gamelogic.player.Player;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Abstract class providing functions for manipulating trains.
@@ -92,7 +89,18 @@ public abstract class TrainManager {
      */
     public static void addRandomTrainToPlayer(Player player) {
         Train train = getRandomTrain();
-        addTrainToPlayer(player, train);
+        int count = 0;
+        for (Train testTrain : player.getTrains()){
+            if (testTrain.getName().equals(train.getName())){
+                count++;
+            }
+        }
+        if (count < 3){
+            addTrainToPlayer(player, train);
+        }else{
+            addRandomTrainToPlayer(player);
+        }
+
     }
 
     public static void addTrainToPlayer(Player player, Train train) {

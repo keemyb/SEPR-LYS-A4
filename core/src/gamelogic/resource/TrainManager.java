@@ -85,6 +85,8 @@ public abstract class TrainManager {
      * Steam; 20% Electric; 10% Diesel</li> <li>Phase one: 25% Steam; 35% Electric; 25% Diesel; 15% Petrol</li>
      * <li>Phase two: 0% Steam; 10% Electric; 20% Diesel; 40% Petrol; 30% Bullet</li> </ol>
      *
+     * A player can own a maximum of 3 trains of a single type
+     *
      * @param player the player that will receive the train
      */
     public static void addRandomTrainToPlayer(Player player) {

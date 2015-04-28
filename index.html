@@ -69,7 +69,7 @@
                 <a class="btn btn-cta-primary scrollto" href="#docs2">Get the Docs!</a>
             </div>
             <ul class="meta list-inline">
-                <li><a href="https://github.com/keemyb/SEPR-LYS-A3" target="_blank">View on GitHub</a></li>
+                <li><a href="https://github.com/keemyb/SEPR-LYS-A4" target="_blank">View on GitHub</a></li>
             </ul><!--//meta-->
         </div><!--//container-->
     </section><!--//promo-->
@@ -78,59 +78,72 @@
     <section id="features" class="about section">
         <div class="container">
             <h2 class="title text-center">Why LYS?</h2>
-            <p class="intro text-center">Train Game 2015 is the culmination of many months work from both team
-            LYS and <a href="https://github.com/SEPRFVS/FVS2">team FVS</a>. It is an exicting game that pits players
-            against one another in order to fulfill different contracts.</p>
+            <p class="intro text-center">Train Game 2015 is the culmination of many months work from team
+            LYS, <a href="https://github.com/vldaglis/FVS-3">team XJG</a> and <a href="https://github.com/SEPRFVS/FVS2">team FVS</a>.
+			It is an exciting turn based game that pits players against one another in order to fulfil different contracts with trains.</p>
             <div class="row">
-                <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="item col-md-6 col-sm-6 col-xs-12">
                     <div class="icon-holder">
-                        <i class="fa fa-code-fork"></i>
+						<i class="fa fa-money"></i>
                     </div>
                     <div class="content">
-                        <h3 class="sub-title">Familiarity</h3>
-                        <p>Even if you are not familiar with Team FVS' first implementation,
-                        LibGDX has been used so it is easy to get to grips with the codebase sooner,
-                        using similar patterns to those you used in the previous two assessments.
+                        <h3 class="sub-title">Build Connections, Create Rivalries</h3>
+						<p>Not every station in the map is connected, so use your cash to build new connections in order to fulfil your goals.
+						Using an adversaries connection means you will have to pay them rent, so plan your
+						route carefully to maximise your payoff!
+						</p>
+                    </div><!--//content-->
+                </div><!--//item-->
+                <div class="item col-md-6 col-sm-6 col-xs-12">
+                    <div class="icon-holder">
+						<i class="fa fa-shield"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">Protect yourself!</h3>
+						<p>You can buy connections that are made out of Gold, Silver or Bronze.
+						</br>
+						Gold connections are the most expensive connections to buy and repair, but they do not take any damage from passing trains.
+						</br>
+						The health of your connection affect the speed of passing trains, so keep your connections in tip-top shape to get your trains
+						further, faster!
+						Connections can even be upgraded from one material to another!
+						</p>
+                    </div><!--//content-->
+                </div><!--//item-->
+                <div class="item col-md-6 col-sm-6 col-xs-12">
+                    <div class="icon-holder">
+                        <i class="fa fa-info-circle"></i>
+                    </div>
+                    <div class="content">
+                        <h3 class="sub-title">Complete Control</h3>
+                        <p>The Heads Up Display always provides you with the information you need to make tactical decisions.
+						Hover over a train to see where it is going, Select multiple stations to see if a connection is viable.
+						Check the health of your connections in a pinch.
                         </p>
                     </div><!--//content-->
                 </div><!--//item-->
-                <div class="item col-md-4 col-sm-6 col-xs-12">
+				<div class="item col-md-6 col-sm-6 col-xs-12">
                     <div class="icon-holder">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-exclamation-triangle"></i>
                     </div>
                     <div class="content">
-                        <h3 class="sub-title">Foresight</h3>
-                        <p>Whilst team LYS were not fortunate enough to have any members with Chronokinesis,
-                        we have paid attention to key areas in our codebase that are likely candidates
-                        for extension. Some classes have been refactored to improve readability, Whilst
-                        our pathfinding implementation gives you the power to create routes that inspire
-                        interesting gameplay.
+                        <h3 class="sub-title">Stay on your toes</h3>
+                        <p>You have contracts to fulfil, some of which need to be completed in a limited number of trains.
+						Watch out for junction failures, and collisions with other trains. A mishap could send you back to the drawing board!
                         </p>
                     </div><!--//content-->
                 </div><!--//item-->
-                <div class="item col-md-4 col-sm-6 col-xs-12">
-                    <div class="icon-holder">
-                        <i class="fa fa-gear"></i>
-                    </div>
-                    <div class="content">
-                        <h3 class="sub-title">Constants, for Flexibility</h3>
-                        <p>We do not believe in 'magic numbers', and so have leveraged Java's keyword
-                        modifiers to provide an easy way to inspect and change the behaviour of this game.
-                        No longer do you have to Ctrl+F everywhere when you want to tweak something.
-                        </p>
-                    </div><!--//content-->
-                </div><!--//item-->           
                 <div class="clearfix visible-md"></div>    
                 <div class="item col-md-12 col-sm-12 col-xs-12">
                     <div class="icon-holder">
-                        <i class="fa fa-check"></i>
+                        <i class="fa fa-thumbs-up"></i>
                     </div>
                     <div class="content">
-                        <h3 class="sub-title">That's all folks!</h3>
-                        <p>No really, we mean it. By focusing on meeting the assessment 3 brief and little more,
-                        we have not pushed the game in a specific direction, so whatever the next assessment requires,
-                        you will not have to fight against the design decisions we have made.
-                        <br/>Think of team LYS as Vanilla, or Unsalted nachos. You can do anything with our codebase, the possibilities are endless.</p>
+                        <h3 class="sub-title">Code Quality</h3>
+						<p> We have taken great care in re-factoring , and adding features to our inherited codebase, making it easy to read and extend.
+                        Using LibGDX, a very intuitive and powerful game framework that does the heavy lifting for you, means you can focus on implementing cool new features!
+						It uses Gradle, for dependency management, helping your team organise any external libraries you wish to use.
+                        </p>
                     </div><!--//content-->
                 </div><!--//item-->                           
             </div><!--//row-->            
@@ -142,47 +155,36 @@
         <div class="container">
             <div class="docs-inner">
             <h2 class="title text-center">The Code</h2>
-
-            <div class="block">
-                <p>Train Game 2015 is written in Java and powered by libGDX, a lightweight 2d game development library, so that
-                developers spend less time writing boilerplate code, and more time implementing awesome
-                gameplay.</p>
-            </div><!--//block-->
             
             <div class="block">
-                <h3 class="sub-title text-center">Sample Code</h3>
-                <p>All code that team LYS have added or modified has been commented and given JavaDocs where appropriate.
-                </b>This means that you always know how, and why things have been implemented, making our game easy to extend.</p>
+				<p>Team LYS have worked very hard to ensure that our code is idiomatic, and easy to read.
+				Don't just take our word for it though, have a look! Our repo is available on <a href="https://github.com/keemyb/SEPR-LYS-A4" target="_blank">GitHub</a>.
                 <div class="code-block">
                     <pre><code class="language-java">
-    /**
-     * This generates a hard goal from A to B via C, with a particular train.
-     * @param turn The turn that this goal will be issued
-     * @return a difficult goal.
-     */
-    public Goal generateDifficultGoal(int turn) {
-        Map map = Game.getInstance().getMap();
 
-        // Using a medium goal, then adding a via constraint.
-        // We need a goal that has at-least one station between them
-        /* Note this check isn't strictly necessary unless the
-        MINIMUM_AMOUNT_OF_STATIONS_IN_SHORTEST_ROUTE is set &lt;= 2 for some reason
-        */
-        Goal mediumGoal;
-        List<Station> shortestRoute;
-        do {
-            mediumGoal = generateMediumGoal(turn);
-            shortestRoute = map.getShortestRoute(mediumGoal.getOrigin(), 
-                mediumGoal.getDestination());
-        } while (shortestRoute.size() &lt; 2);
+    public void play() {
+        if (!anyMoreEventsToPlay()) return;
 
-        // Making sure the via isn't one of the endpoints
-        int index = 1 + random.nextInt(shortestRoute.size() - 2);
-        Station via = shortestRoute.get(index);
+        playBackReplayEvent(eventInstanceToPlayNext);
+        eventInstanceLastPlayed = eventInstanceToPlayNext;
 
-        mediumGoal.addConstraint(via);
-
-        return mediumGoal;
+        int nextEventIndex = eventInstances.indexOf(eventInstanceLastPlayed) + 1;
+        if (nextEventIndex < eventInstances.size()) {
+            /*
+            If there is an event to play, set up the timer to wait for the time
+            specified by it's appropriate gameEvent, after which time the event
+            will be fired.
+             */
+            eventInstanceToPlayNext = eventInstances.get(nextEventIndex);
+            timer.scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
+                @Override
+                public void run() {
+                    play();
+                }
+            }, eventInstanceToPlayNext.gameEvent.delay / playBackSpeed);
+        } else {
+            eventInstanceToPlayNext = null;
+        }
     }
                     </code></pre>
                 </div><!--//code-block-->
@@ -200,7 +202,7 @@
                     <a class="btn btn-cta-primary" href="ExtRep.pdf" target="_blank">Challenges and Changes</a>
                 </p>
                 <p class="text-center">
-                    <a class="btn btn-cta-primary" href="Manual3.pdf" target="_blank">User Manual</a>
+                    <a class="btn btn-cta-primary" href="Manual4.pdf" target="_blank">User Manual</a>
                 </p>
 <!--                 <p class="text-center">
                     <a class="btn btn-cta-primary" href="#" target="_blank">Configuring our Project (Eclipse)</a>
@@ -220,7 +222,7 @@
         <div class="container">
             <div class="contact-inner">
                 <h2 class="title  text-center">Contact & Support</h2>
-                <p class="intro  text-center">LYS promise to support developers who choose to extend our game for the 4th part of the assessment. <br />Please get in touch with us if you have any questions about our game.</p>
+                <p class="intro  text-center">Please get in touch with us if you have any questions about our game.</p>
                 <div class="clearfix"></div>
                 <div class="info text-center">
                     <h4 class="sub-title">Email us!</h4>

@@ -31,9 +31,7 @@ public class GoalClicked extends ClickListener {
     }
 
     @Override
-    public void clicked(InputEvent event, float x, float y) {
-        context.getGoalController().selectedGoal(goal);
-    }
+    public void clicked(InputEvent event, float x, float y) {}
 
     @Override
     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {

@@ -121,7 +121,7 @@ public class TopBarController {
         createConnectionButton.setVisible(!isReplaying);
         cancelPlaceTrainButton.setVisible(!isReplaying && context.getGameLogic().getState() == GameState.PLACING);
         playReplayButton.setVisible(isReplaying);
-        pauseReplayButton.setVisible(isReplaying);
+        pauseReplayButton.setVisible(false);
         replaySpeedSlider.setVisible(isReplaying);
         replaySpeedLabel.setVisible(isReplaying);
     }
@@ -260,7 +260,7 @@ public class TopBarController {
             }
         });
 
-        pauseReplayButton.setVisible(EventReplayer.isReplaying());
+        pauseReplayButton.setVisible(false);
 
         context.getStage().addActor(pauseReplayButton);
     }

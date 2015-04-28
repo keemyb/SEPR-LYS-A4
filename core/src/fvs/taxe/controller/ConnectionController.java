@@ -16,7 +16,6 @@ import fvs.taxe.dialog.*;
 import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
-import gamelogic.game.TurnListener;
 import gamelogic.map.*;
 import gamelogic.player.CurrentPlayerChangedListener;
 import gamelogic.player.Player;
@@ -24,6 +23,7 @@ import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
+import gamelogic.replay.ReplayModeListener;
 import gamelogic.resource.Train;
 
 import java.awt.geom.Line2D;
@@ -126,6 +126,13 @@ public class ConnectionController {
                     Connection connection = (Connection) object;
                     removeConnection(connection);
                 }
+            }
+        });
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                refreshButtons(isReplaying);
             }
         });
 
@@ -457,4 +464,11 @@ public class ConnectionController {
     public void setHoveredConnection(Connection hoveredConnection) {
         this.hoveredConnection = hoveredConnection;
     }
+
+    public void refreshButtons(boolean isReplaying) {
+        createConnectionButton.setVisible(!isReplaying);
+        doneButton.setVisible(!isReplaying);
+
+    }
+
 }

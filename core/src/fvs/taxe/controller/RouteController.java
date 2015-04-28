@@ -9,16 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fvs.taxe.GameScreen;
 import fvs.taxe.StationClickListener;
 import fvs.taxe.TaxeGame;
-import gamelogic.game.Game;
 import gamelogic.game.GameEvent;
 import gamelogic.game.GameState;
 import gamelogic.map.Junction;
 import gamelogic.map.Position;
 import gamelogic.map.Station;
-import gamelogic.player.PlayerManager;
 import gamelogic.replay.EventReplayer;
 import gamelogic.replay.ReplayEvent;
 import gamelogic.replay.ReplayListener;
+import gamelogic.replay.ReplayModeListener;
 import gamelogic.resource.Train;
 
 import java.util.ArrayList;
@@ -34,9 +33,17 @@ public class RouteController {
     private Train train;
     private boolean canEndRouting = true;
     private float totalRouteDistance;
+    private TextButton discardTrain;
+    private TextButton routeComplete;
+    private TextButton cancel;
+
 
     public RouteController(Context context) {
         this.context = context;
+
+        discardTrain = new TextButton("Discard Train", context.getSkin());
+        routeComplete = new TextButton("Route Complete", context.getSkin());
+        cancel = new TextButton("Cancel Route", context.getSkin());
 
         StationController.subscribeStationClick(new StationClickListener() {
             @Override
@@ -61,6 +68,15 @@ public class RouteController {
                 }
             }
         });
+
+        EventReplayer.subscribeReplayModeEvent(new ReplayModeListener() {
+            @Override
+            public void changed(boolean isReplaying) {
+                refreshButtons(isReplaying);
+            }
+        });
+
+
     }
 
     public void beginRouting(Train train) {
@@ -120,9 +136,7 @@ public class RouteController {
     }
 
     private void addRoutingButtons() {
-        TextButton discardTrain = new TextButton("Discard Train", context.getSkin());
-        TextButton routeComplete = new TextButton("Route Complete", context.getSkin());
-        TextButton cancel = new TextButton("Cancel Route", context.getSkin());
+
 
         cancel.setPosition(TaxeGame.WORLD_WIDTH - cancel.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
         routeComplete.setPosition(cancel.getX() - routeComplete.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
@@ -231,5 +245,13 @@ public class RouteController {
 
     public void setHoveredTrain(Train hoveredTrain) {
         this.hoveredTrain = hoveredTrain;
+    }
+
+
+    public void refreshButtons(boolean isReplaying) {
+        routeComplete.setVisible(!isReplaying);
+        cancel.setVisible(!isReplaying);
+        discardTrain.setVisible(!isReplaying);
+
     }
 }

@@ -183,6 +183,7 @@ public class Map {
 
     public boolean doesProspectiveConnectionIntersectExisting(Connection prospectiveConnection) {
         Line2D prospectiveLine = connectionToLine(prospectiveConnection);
+        // Checking that our prospective connection doesn't cross an existing one.
         for (Connection connection : connections) {
             if (connection.hasCommonStation(prospectiveConnection)) continue;
 
@@ -190,6 +191,14 @@ public class Map {
             if (existingLine.intersectsLine(prospectiveLine)) return true;
         }
 
+        /* Checking that the prospective connection isn't too close to a station.
+        This is to prevent players thinking a train can visit a station that is
+        not actually connected, but visually appears so
+        ex.        A      B      C
+        creating a connection directly from A to C should be invalid, as it would pass through B,
+        whilst not being connected to it, which could mislead players into thinking you can
+        get to B via A or C.
+         */
 		for (Station station : stations) {
 			if (station == prospectiveConnection.getStation1()) continue;
 			if (station == prospectiveConnection.getStation2()) continue;
@@ -345,6 +354,12 @@ public class Map {
             return distances.get(stations.indexOf(station1)).get(stations.indexOf(station2));
         }
 
+        /*
+        If no path between the zones exist, look for pairs of stations, to find the
+        shortest distance across zones. We then know the distance by adding this
+        to the distance between the intra zone stations (the station queried and the
+        station closest to the other zone).
+         */
         float shortestDistanceAcrossZones = Float.MAX_VALUE;
         Station closestStationToZone2InZone1 = null;
         Station closestStationToZone1InZone2 = null;

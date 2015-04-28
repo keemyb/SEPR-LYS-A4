@@ -88,6 +88,7 @@ public class Player {
 
     public void payConnectionRent(Connection connection) {
         Player connectionOwner = connection.getOwner();
+        // If I own the connection or nobody does, there is no-one to pay
         if (connectionOwner == null || connectionOwner == this) return;
         int amount = connection.getRentPayable();
         System.out.println("Player " + playerNumber + " paid Player " + connectionOwner.playerNumber + " " + Game.CURRENCY_SYMBOL + amount +

@@ -49,7 +49,9 @@ public class ResourceController {
             }
         });
 
-
+        // The addition of goals, trains and connections need to be handled here in replay mode.
+        // This is because normal awarding has been suspended, so that game objects can be
+        // reset to their original new state before being re-awarded
         EventReplayer.subscribeReplayEvent(new ReplayListener() {
             @Override
             public void replay(GameEvent event, Object object) {

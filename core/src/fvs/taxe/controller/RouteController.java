@@ -191,6 +191,7 @@ public class RouteController {
 
     private void confirmRoute() {
         if (stations.isEmpty() || stations.get(0) == train.getLocation()) {
+            // If the route is empty or ends where it starts, we have no route to set, so cancel
             cancelRouting();
         } else {
             train.setRoute(stations);

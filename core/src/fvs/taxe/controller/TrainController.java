@@ -135,6 +135,7 @@ public class TrainController {
 	    }
 
         if (train.getPosition() == null) {
+            // If a train has no position it hasn't been placed.
             placeTrain(train);
         } else if (!train.getRoute().isEmpty()) {
             new DialogTrainClicked(train, context).show(context.getStage());

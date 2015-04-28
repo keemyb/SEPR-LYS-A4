@@ -68,6 +68,11 @@ public class EventReplayer {
 
         int nextEventIndex = eventInstances.indexOf(eventInstanceLastPlayed) + 1;
         if (nextEventIndex < eventInstances.size()) {
+            /*
+            If there is an event to play, set up the timer to wait for the time
+            specified by it's appropriate gameEvent, after which time the event
+            will be fired.
+             */
             eventInstanceToPlayNext = eventInstances.get(nextEventIndex);
             timer.scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
                 @Override
@@ -110,6 +115,8 @@ public class EventReplayer {
     }
 
     public static void replayModeChanged() {
+        /* Certain controllers need to know if we are replaying or not so that they can
+        hide their buttons. */
         for (ReplayModeListener listener : new ArrayList<>(replayModeListeners)) {
             listener.changed(isReplaying);
         }

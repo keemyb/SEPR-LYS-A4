@@ -67,6 +67,8 @@ public class Connection {
     }
 
     public int calculateAdjustedTrainSpeed(Train train) {
+        // The speed a train will travel at, taking into account the health of the connection.
+
         /* We always want the train to be atleast this fast
         (as a % of it's usual speed) */
         float lowerBound = 0.2f;

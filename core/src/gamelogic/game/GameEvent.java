@@ -1,6 +1,10 @@
 package gamelogic.game;
 
 public enum GameEvent {
+    /* Certain events have a delay of 0 as they need to be pushed
+    to the screen instantly. For example time would be wasted
+    if there was a second delay between the addition of each
+    train, as players are aware that this happens every turn */
     SELECTED_TRAIN,
     SELECTED_MULTIPLE_TRAIN_CANCEL(0),
     SELECTED_TRAIN_DISCARD_TRAIN,

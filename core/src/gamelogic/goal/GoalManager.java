@@ -46,6 +46,7 @@ public abstract class GoalManager {
             destination = map.getRandomStation();
         } while (destination == origin || destination instanceof Junction ||
                 crossingZones == map.getZone(origin).equals(map.getZone(destination)));
+        // if the goal should cross zones, ensure that the two zones are distinct ^^
 
         Goal goal = new Goal(origin, destination, turn);
 

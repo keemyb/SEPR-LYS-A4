@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class Game {
     public static final char CURRENCY_SYMBOL = '$';
-    public static final boolean CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS = true;
+    public static final boolean CAN_PLAYER_PURCHASE_WITH_INSUFFICIENT_FUNDS = false;
     private static Game instance;
     private final int CONFIG_PLAYERS = 2;
     public int totalTurns = 30;

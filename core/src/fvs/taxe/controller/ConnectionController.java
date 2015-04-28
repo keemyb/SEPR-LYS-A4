@@ -371,8 +371,8 @@ public class ConnectionController {
 
         connection.upgrade(material);
         int connectionCost = connection.calculateCost();
-        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                currentPlayer.getMoney() <= connectionCost) {
+        if (currentPlayer.getMoney() < connectionCost &&
+                !Game.CAN_PLAYER_PURCHASE_WITH_INSUFFICIENT_FUNDS) {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to create connection", Color.BLACK, 1000);
         } else {
@@ -392,8 +392,8 @@ public class ConnectionController {
 
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         int repairCost = connection.calculateRepairCost(repairThreshold);
-        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                currentPlayer.getMoney() <= repairCost) {
+        if (currentPlayer.getMoney() < repairCost &&
+                !Game.CAN_PLAYER_PURCHASE_WITH_INSUFFICIENT_FUNDS) {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to repair connection", Color.BLACK, 1000);
         } else {
@@ -411,8 +411,8 @@ public class ConnectionController {
 
         Player currentPlayer = PlayerManager.getCurrentPlayer();
         int upgradeCost = connection.calculateUpgradeCost(material);
-        if (!Game.CAN_PLAYER_PURCHASE_WITH_NEGATIVE_FUNDS &&
-                currentPlayer.getMoney() <= upgradeCost) {
+        if (currentPlayer.getMoney() < upgradeCost &&
+                !Game.CAN_PLAYER_PURCHASE_WITH_INSUFFICIENT_FUNDS) {
             context.getTopBarController().displayFlashMessage(
                     "Not enough money to upgrade connection", Color.BLACK, 1000);
         } else {

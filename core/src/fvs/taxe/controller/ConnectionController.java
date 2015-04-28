@@ -60,7 +60,7 @@ public class ConnectionController {
     public ConnectionController(Context context) {
         this.context = context;
         game = context.getTaxeGame();
-        createConnectionButton = new TextButton("Create Connection", context.getSkin());
+        createConnectionButton = new TextButton("Confirm", context.getSkin());
         doneButton = new TextButton("Cancel", context.getSkin());
 
         map = context.getGameLogic().getMap();
@@ -167,7 +167,7 @@ public class ConnectionController {
 
         if (state.equals(GameState.CONNECTION_CREATE) && (selectedConnection != null)) {
             if (map.prospectiveConnectionIsValid(selectedConnection)) {
-                createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 230, TaxeGame.WORLD_HEIGHT - 33);
+                createConnectionButton.setPosition(TaxeGame.WORLD_WIDTH - 155, TaxeGame.WORLD_HEIGHT - 33);
                 connectionButtons.addActor(createConnectionButton);
             }
         }

@@ -84,8 +84,7 @@ public class RouteController {
 
         this.train = train;
         isRouting = true;
-        stations.clear();
-        //initialise route distance
+        stations = new ArrayList<>();
         totalRouteDistance = 0;
         context.getGameLogic().setState(GameState.ROUTING);
         addRoutingButtons();
@@ -136,8 +135,6 @@ public class RouteController {
     }
 
     private void addRoutingButtons() {
-
-
         cancel.setPosition(TaxeGame.WORLD_WIDTH - cancel.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
         routeComplete.setPosition(cancel.getX() - routeComplete.getWidth() - GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
         discardTrain.setPosition(GameScreen.BUTTON_PADDING_X, TaxeGame.WORLD_HEIGHT - 33);
@@ -146,6 +143,7 @@ public class RouteController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 doneRouting();
+                routeComplete.removeListener(this);
             }
         });
 
@@ -196,7 +194,6 @@ public class RouteController {
             cancelRouting();
         } else {
             train.setRoute(stations);
-
             new TrainMoveController(context, train).addMoveActionsForRoute();
         }
     }
@@ -213,7 +210,7 @@ public class RouteController {
         setHoveredTrain(null);
     }
 
-    public void drawRoute(Color color, List<Station> stations, int width) {
+    public void drawRoute(Train train, Color color, List<Station> stations, int width) {
         TaxeGame game = context.getTaxeGame();
 
         Station previousStation = null;
@@ -235,12 +232,12 @@ public class RouteController {
     }
 
     public void drawPlannedRoute() {
-        drawRoute(Color.BLACK, stations, ConnectionController.CONNECTION_LINE_WIDTH);
+        drawRoute(train, Color.BLACK, stations, ConnectionController.CONNECTION_LINE_WIDTH);
     }
 
     public void drawHoveredRoute() {
         if (hoveredTrain == null) return;
-        drawRoute(Color.WHITE, hoveredTrain.getRoute(), (int) (ConnectionController.CONNECTION_LINE_WIDTH * 2));
+        drawRoute(hoveredTrain, Color.WHITE, hoveredTrain.getRoute(), (int) (ConnectionController.CONNECTION_LINE_WIDTH * 2));
     }
 
     public void setHoveredTrain(Train hoveredTrain) {
